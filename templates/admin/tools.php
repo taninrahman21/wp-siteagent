@@ -1,0 +1,172 @@
+<?php
+/**
+ * Tools page template.
+ *
+ * @package WP_SiteAgent
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+$plugin   = \WP_SiteAgent\Plugin::get_instance();
+$registry = $plugin->get_abilities_registry();
+$nonce    = wp_create_nonce( 'siteagent_admin' );
+?>
+<div class="sa-wrap">
+	<?php require SITEAGENT_PATH . 'templates/partials/header.php'; ?>
+
+	<div class="sa-main-content">
+		<div class="sa-container">
+			<div class="sa-page-header">
+				<h2><?php esc_html_e( 'Diagnostics & Tools', 'wp-siteagent' ); ?></h2>
+				<p class="sa-page-desc"><?php esc_html_e( 'System health checks, connection tests, and troubleshooting utilities for your MCP server.', 'wp-siteagent' ); ?></p>
+			</div>
+
+			<div class="sa-tools-grid" style="display: grid; grid-template-columns: 1fr; gap: 32px;">
+
+				<!-- System Environment -->
+				<div class="sa-card">
+					<div class="sa-card-header">
+						<h3><?php esc_html_e( 'System Environment', 'wp-siteagent' ); ?></h3>
+					</div>
+					<div class="sa-card-body sa-card--no-pad">
+						<div class="sa-check-list">
+							<div class="sa-check-row" style="display:flex; justify-content:space-between; align-items: center; padding:20px 24px; border-bottom:1px solid var(--sa-border);">
+								<div style="display: flex; align-items: center; gap: 12px;">
+									<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sa-bg); display: flex; align-items: center; justify-content: center; color: var(--sa-text-muted);">
+										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+									</div>
+									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'PHP Version', 'wp-siteagent' ); ?></span>
+								</div>
+								<div style="display: flex; align-items: center; gap: 12px;">
+									<code style="background: var(--sa-bg); padding: 4px 8px; border-radius: 4px;"><?php echo esc_html( PHP_VERSION ); ?></code>
+									<?php $php_pass = version_compare( PHP_VERSION, '8.1', '>=' ); ?>
+									<span class="sa-badge sa-badge--<?php echo $php_pass ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
+										<?php echo $php_pass ? esc_html__( 'Pass', 'wp-siteagent' ) : esc_html__( 'Critical', 'wp-siteagent' ); ?>
+									</span>
+								</div>
+							</div>
+
+							<div class="sa-check-row" style="display:flex; justify-content:space-between; align-items: center; padding:20px 24px; border-bottom:1px solid var(--sa-border);">
+								<div style="display: flex; align-items: center; gap: 12px;">
+									<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sa-bg); display: flex; align-items: center; justify-content: center; color: var(--sa-text-muted);">
+										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+									</div>
+									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'WordPress Version', 'wp-siteagent' ); ?></span>
+								</div>
+								<div style="display: flex; align-items: center; gap: 12px;">
+									<code style="background: var(--sa-bg); padding: 4px 8px; border-radius: 4px;"><?php echo esc_html( get_bloginfo( 'version' ) ); ?></code>
+									<?php $wp_pass = version_compare( get_bloginfo( 'version' ), '6.0', '>=' ); ?>
+									<span class="sa-badge sa-badge--<?php echo $wp_pass ? 'success' : 'warning'; ?>" style="min-width: 80px; text-align: center;">
+										<?php echo $wp_pass ? esc_html__( 'Pass', 'wp-siteagent' ) : esc_html__( 'Warn', 'wp-siteagent' ); ?>
+									</span>
+								</div>
+							</div>
+
+							<div class="sa-check-row" style="display:flex; justify-content:space-between; align-items: center; padding:20px 24px; border-bottom:1px solid var(--sa-border);">
+								<div style="display: flex; align-items: center; gap: 12px;">
+									<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sa-bg); display: flex; align-items: center; justify-content: center; color: var(--sa-text-muted);">
+										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+									</div>
+									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'HTTPS Status', 'wp-siteagent' ); ?></span>
+								</div>
+								<div style="display: flex; align-items: center; gap: 12px;">
+									<span style="font-size: 13px; color: var(--sa-text-secondary);"><?php echo is_ssl() ? esc_html__( 'Encrypted', 'wp-siteagent' ) : esc_html__( 'Unsecured', 'wp-siteagent' ); ?></span>
+									<span class="sa-badge sa-badge--<?php echo is_ssl() ? 'success' : 'warning'; ?>" style="min-width: 80px; text-align: center;">
+										<?php echo is_ssl() ? esc_html__( 'Pass', 'wp-siteagent' ) : esc_html__( 'Warn', 'wp-siteagent' ); ?>
+									</span>
+								</div>
+							</div>
+
+							<div class="sa-check-row" style="display:flex; justify-content:space-between; align-items: center; padding:20px 24px; border-bottom:1px solid var(--sa-border);">
+								<div style="display: flex; align-items: center; gap: 12px;">
+									<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sa-bg); display: flex; align-items: center; justify-content: center; color: var(--sa-text-muted);">
+										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+									</div>
+									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'Abilities Registry', 'wp-siteagent' ); ?></span>
+								</div>
+								<div style="display: flex; align-items: center; gap: 12px;">
+									<span style="font-size: 13px; color: var(--sa-text-secondary);"><?php printf( esc_html__( '%d registered', 'wp-siteagent' ), count( $registry->get_all() ) ); ?></span>
+									<?php $reg_pass = count( $registry->get_all() ) > 0; ?>
+									<span class="sa-badge sa-badge--<?php echo $reg_pass ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
+										<?php echo $reg_pass ? esc_html__( 'Pass', 'wp-siteagent' ) : esc_html__( 'Empty', 'wp-siteagent' ); ?>
+									</span>
+								</div>
+							</div>
+
+							<div class="sa-check-row" style="display:flex; justify-content:space-between; align-items: center; padding:20px 24px;">
+								<div style="display: flex; align-items: center; gap: 12px;">
+									<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sa-bg); display: flex; align-items: center; justify-content: center; color: var(--sa-text-muted);">
+										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+									</div>
+									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'Database Schema', 'wp-siteagent' ); ?></span>
+								</div>
+								<div style="display: flex; align-items: center; gap: 12px;">
+									<?php
+									global $wpdb;
+									$table_exists = (bool) $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->prefix . 'siteagent_audit_log' ) );
+									?>
+									<span style="font-size: 13px; color: var(--sa-text-secondary);"><?php echo $table_exists ? esc_html__( 'Synchronized', 'wp-siteagent' ) : esc_html__( 'Incomplete', 'wp-siteagent' ); ?></span>
+									<span class="sa-badge sa-badge--<?php echo $table_exists ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
+										<?php echo $table_exists ? esc_html__( 'Pass', 'wp-siteagent' ) : esc_html__( 'Error', 'wp-siteagent' ); ?>
+									</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Functional Tests -->
+				<div style="display:grid; grid-template-columns: 1fr 1fr; gap:32px;">
+					<div class="sa-card">
+						<div class="sa-card-header">
+							<h3><?php esc_html_e( 'Connection Tests', 'wp-siteagent' ); ?></h3>
+						</div>
+						<div class="sa-card-body" style="padding: 24px;">
+							<div class="sa-test-box" style="margin-bottom: 24px;">
+								<strong style="display: block; margin-bottom: 8px;"><?php esc_html_e( 'REST API Loopback', 'wp-siteagent' ); ?></strong>
+								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary); line-height: 1.5;"><?php esc_html_e( 'Validates that your server can communicate with its own MCP endpoints.', 'wp-siteagent' ); ?></p>
+								<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" style="width: 100%;" onclick="siteagent.runDiagnostic('loopback')">
+									<?php esc_html_e( 'Run Loopback Test', 'wp-siteagent' ); ?>
+								</button>
+							</div>
+							<div class="sa-test-box">
+								<strong style="display: block; margin-bottom: 8px;"><?php esc_html_e( 'MCP Discovery', 'wp-siteagent' ); ?></strong>
+								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary); line-height: 1.5;"><?php esc_html_e( 'Simulates a client handshake to verify tool registration and metadata.', 'wp-siteagent' ); ?></p>
+								<button type="button" class="sa-btn sa-btn--ghost sa-btn--sm" style="width: 100%;" onclick="siteagent.runDiagnostic('discovery')">
+									<?php esc_html_e( 'Simulate Discovery', 'wp-siteagent' ); ?>
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="sa-card">
+						<div class="sa-card-header">
+							<h3><?php esc_html_e( 'System Recovery', 'wp-siteagent' ); ?></h3>
+						</div>
+						<div class="sa-card-body" style="padding: 24px;">
+							<div style="margin-bottom: 24px;">
+								<strong style="display: block; margin-bottom: 4px;"><?php esc_html_e( 'Ability Cache', 'wp-siteagent' ); ?></strong>
+								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary);"><?php esc_html_e( 'Clear registry cache and force-scan all active modules.', 'wp-siteagent' ); ?></p>
+								<button type="button" class="sa-btn sa-btn--ghost sa-btn--sm" style="width: 100%;" onclick="siteagent.fixAction('regen_cache')">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+									<?php esc_html_e( 'Regenerate Registry', 'wp-siteagent' ); ?>
+								</button>
+							</div>
+							<div>
+								<strong style="display: block; margin-bottom: 4px;"><?php esc_html_e( 'Database Repair', 'wp-siteagent' ); ?></strong>
+								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary);"><?php esc_html_e( 'Verify and re-create any missing plugin tables or columns.', 'wp-siteagent' ); ?></p>
+								<button type="button" class="sa-btn sa-btn--ghost sa-btn--sm" style="width: 100%;" onclick="siteagent.fixAction('repair_tables')">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+									<?php esc_html_e( 'Repair Tables', 'wp-siteagent' ); ?>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<?php require SITEAGENT_PATH . 'templates/partials/footer.php'; ?>
+	</div>
+</div>

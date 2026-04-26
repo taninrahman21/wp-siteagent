@@ -1,0 +1,46 @@
+{
+    "name": "yourname/wp-siteagent",
+    "description": "AI Agent Command Layer for WordPress using MCP",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "you@example.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpunit/phpunit": "^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "WP_SiteAgent\\Admin\\": "admin/",
+            "WP_SiteAgent\\Api\\": "api/",
+            "WP_SiteAgent\\Modules\\": "includes/modules/",
+            "WP_SiteAgent\\": "includes/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "WP_SiteAgent\\Tests": "tests/"
+        }
+    },
+    "scripts": {
+        "install-codestandards": [
+            "phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs"
+        ]
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
