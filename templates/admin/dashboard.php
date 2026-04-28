@@ -166,7 +166,7 @@ $enabled_mods = $plugin->get_enabled_modules();
 											<?php
 											foreach ($recent_logs['logs'] as $log):
 												$token_data = $auth->get_token($log['token_id']);
-												$token_name = $token_data ? $token_data['name'] : '—';
+												$token_name = $token_data ? ($token_data['label'] ?? '—') : '—';
 												?>
 												<tr>
 													<td style="font-size: 13px;">
@@ -240,123 +240,97 @@ $enabled_mods = $plugin->get_enabled_modules();
 				</div>
 
 				<div class="sa-dashboard-sidebar">
-					<!-- AI Client Setup -->
+					<!-- Connect AI Client -->
 					<div class="sa-card" style="margin-bottom: 24px;">
 						<div class="sa-card-header" style="border-bottom: none; padding-bottom: 8px;">
 							<h2 style="font-size: 14px; font-weight: 600;">
-								<?php esc_html_e('Connect AI Clients', 'wp-siteagent'); ?>
+								<?php esc_html_e('Connect AI Client', 'wp-siteagent'); ?>
 							</h2>
 						</div>
 						<div class="sa-card-body" style="padding-top: 8px;">
+							
+							<!-- Token Input -->
+							<div class="sa-form-group" style="margin-bottom: 20px;">
+								<label for="sa-dash-token" style="font-size: 11px; font-weight: 700; margin-bottom: 8px; display: block; color: var(--sa-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;"><?php esc_html_e('Your API Token', 'wp-siteagent'); ?></label>
+								<input type="password" id="sa-dash-token" class="sa-input" placeholder="<?php esc_attr_e('Paste your token here...', 'wp-siteagent'); ?>" />
+								<p class="sa-hint" style="margin-top: 8px; font-size: 12px;">
+									<?php printf(
+										esc_html__('Don\'t have a token yet? %s', 'wp-siteagent'),
+										'<a href="' . esc_url(admin_url('admin.php?page=wp-siteagent-tokens')) . '" class="sa-link" style="color: var(--sa-primary); text-decoration: none; font-weight: 600;">' . esc_html__('Generate one →', 'wp-siteagent') . '</a>'
+									); ?>
+								</p>
+							</div>
 
-							<div class="sa-tab-nav">
-								<button type="button" class="sa-tab-btn sa-tab-btn--active" data-client="claude"
-									onclick="window.siteagent.switchClientTab('claude')">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-										stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<path d="M12 8V4H8" />
-										<rect width="16" height="12" x="4" y="8" rx="2" />
-										<path d="M2 14h2" />
-										<path d="M20 14h2" />
-										<path d="M15 13v2" />
-										<path d="M9 13v2" />
-									</svg>
-									Claude
+							<!-- Client Tabs -->
+							<div class="sa-tab-nav" style="margin-bottom: 20px;">
+								<button type="button" id="sa-dash-client-tab-claude" class="sa-tab-btn sa-tab-btn--active" onclick="siteagentDash.switchClient('claude')">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+									Claude Desktop
 								</button>
-								<button type="button" class="sa-tab-btn" data-client="chatgpt"
-									onclick="window.siteagent.switchClientTab('chatgpt')">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-										stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-										<path d="M12 7v10" />
-										<path d="M8 12h8" />
-									</svg>
-									ChatGPT
-								</button>
-								<button type="button" class="sa-tab-btn" data-client="ide"
-									onclick="window.siteagent.switchClientTab('ide')">
-									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-										stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-										<polyline points="16 18 22 12 16 6" />
-										<polyline points="8 6 2 12 8 18" />
-									</svg>
-									Cursor/IDEs
+								<button type="button" id="sa-dash-client-tab-cursor" class="sa-tab-btn" onclick="siteagentDash.switchClient('cursor')">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+									Cursor / IDEs
 								</button>
 							</div>
 
-							<!-- Claude Setup -->
-							<div class="sa-tab-content sa-tab-content--active" data-client="claude">
-								<div class="sa-setup-guide">
-									<ol class="sa-setup-steps">
-										<li><?php esc_html_e('Open Claude Desktop settings.', 'wp-siteagent'); ?></li>
-										<li><?php esc_html_e('Paste the bridge command below into your config file.', 'wp-siteagent'); ?>
-										</li>
-										<li><?php esc_html_e('Once saved, restart Claude Desktop to see the new tools.', 'wp-siteagent'); ?>
-										</li>
-									</ol>
+							<!-- Claude Desktop Panel -->
+							<div id="sa-dash-claude-panel">
+								<div class="sa-os-tabs" style="margin-bottom: 16px;">
+									<button type="button" id="sa-dash-os-tab-windows" class="sa-os-tab" onclick="siteagentDash.switchOs('windows')">Windows</button>
+									<button type="button" id="sa-dash-os-tab-mac" class="sa-os-tab" onclick="siteagentDash.switchOs('mac')">macOS</button>
+									<button type="button" id="sa-dash-os-tab-linux" class="sa-os-tab" onclick="siteagentDash.switchOs('linux')">Linux</button>
 								</div>
-								<?php
-								$claude_config = json_encode([
-									'mcpServers' => [
-										'wp-siteagent' => [
-											'command' => 'node',
-											'args' => ['/usr/local/lib/node_modules/mcp-remote/dist/proxy.js', $mcp_endpoint, '--header', 'Authorization: Bearer YOUR_TOKEN'],
-										],
-									],
-								], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-								?>
-								<div class="sa-mcp-block">
-									<button type="button" class="sa-copy-btn"
-										onclick="window.siteagent.copyText('sa-mcp-config-claude')">
-										<span
-											id="sa-copy-config-text-claude"><?php esc_html_e('Copy Configuration', 'wp-siteagent'); ?></span>
-									</button>
-									<pre><code id="sa-mcp-config-claude"><?php echo esc_html($claude_config); ?></code></pre>
+
+								<div class="sa-tab-content sa-tab-content--active">
+									<div class="sa-mcp-block" style="margin-top: 0; margin-bottom: 16px;">
+										<button type="button" class="sa-copy-btn" onclick="siteagentDash.copyCommand()">
+											<?php esc_html_e('Copy Command', 'wp-siteagent'); ?>
+										</button>
+										<pre style="margin: 0; padding: 16px;"><code id="sa-dash-command-block" style="font-size: 11px; color: #94a3b8;"><?php esc_html_e('Paste your token above to generate the command', 'wp-siteagent'); ?></code></pre>
+									</div>
+								</div>
+
+								<div class="sa-node-note">
+									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+									<span><?php printf( esc_html__( 'No Node.js? Download LTS from %s first.', 'wp-siteagent' ), '<a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a>' ); ?></span>
 								</div>
 							</div>
 
-							<!-- ChatGPT Setup -->
-							<div class="sa-tab-content" data-client="chatgpt">
-								<div class="sa-setup-guide">
-									<ol class="sa-setup-steps">
-										<li><?php esc_html_e('Open ChatGPT Desktop > Settings > Connected Apps.', 'wp-siteagent'); ?>
-										</li>
-										<li><?php esc_html_e('Click "Add Server" and select MCP.', 'wp-siteagent'); ?>
-										</li>
-										<li><?php esc_html_e('Paste the command below and add your API Token.', 'wp-siteagent'); ?>
-										</li>
-									</ol>
+							<!-- Cursor Panel -->
+							<div id="sa-dash-cursor-panel" style="display:none;">
+								<div class="sa-form-group" style="margin-bottom: 12px;">
+									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e('MCP Server URL', 'wp-siteagent'); ?></label>
+									<div class="sa-token-value-wrap" style="margin-bottom: 0;">
+										<input type="text" id="sa-dash-cursor-url" class="sa-token-value" style="width: 100%; padding: 8px; font-size: 12px; border-color: var(--sa-border);" readonly value="<?php echo esc_url($mcp_endpoint); ?>" />
+										<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-dash-cursor-url')">
+											<?php esc_html_e('Copy', 'wp-siteagent'); ?>
+										</button>
+									</div>
 								</div>
-								<div class="sa-mcp-block">
-									<button type="button" class="sa-copy-btn"
-										onclick="window.siteagent.copyText('sa-mcp-config-chatgpt')">
-										<span
-											id="sa-copy-config-text-chatgpt"><?php esc_html_e('Copy Bridge Command', 'wp-siteagent'); ?></span>
-									</button>
-									<pre><code id="sa-mcp-config-chatgpt">npx -y mcp-remote \<br>  <?php echo esc_url($mcp_endpoint); ?> \<br>  --header "Authorization: Bearer YOUR_TOKEN"</code></pre>
-								</div>
-							</div>
 
-							<!-- IDE Setup (Cursor/Windsurf) -->
-							<div class="sa-tab-content" data-client="ide">
-								<div class="sa-setup-guide">
-									<ol class="sa-setup-steps">
-										<li><?php esc_html_e('Navigate to Editor Settings > MCP Servers.', 'wp-siteagent'); ?>
-										</li>
-										<li><?php esc_html_e('Create a new "command" server.', 'wp-siteagent'); ?>
-										</li>
-										<li><?php esc_html_e('Paste the following execution command:', 'wp-siteagent'); ?>
-										</li>
-									</ol>
+								<div class="sa-form-group" style="margin-bottom: 12px;">
+									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e('Type', 'wp-siteagent'); ?></label>
+									<div class="sa-token-value-wrap" style="margin-bottom: 0;">
+										<input type="text" id="sa-dash-cursor-type" class="sa-token-value" style="width: 100%; padding: 8px; font-size: 12px; border-color: var(--sa-border);" readonly value="http" />
+										<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-dash-cursor-type')">
+											<?php esc_html_e('Copy', 'wp-siteagent'); ?>
+										</button>
+									</div>
 								</div>
-								<div class="sa-mcp-block">
-									<button type="button" class="sa-copy-btn"
-										onclick="window.siteagent.copyText('sa-mcp-config-ide')">
-										<span
-											id="sa-copy-config-text-ide"><?php esc_html_e('Copy Entry Command', 'wp-siteagent'); ?></span>
-									</button>
-									<pre><code id="sa-mcp-config-ide">npx -y mcp-remote \<br>  <?php echo esc_url($mcp_endpoint); ?> \<br>  --header "Authorization: Bearer YOUR_TOKEN"</code></pre>
+
+								<div class="sa-form-group" style="margin-bottom: 12px;">
+									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e('Authorization Header', 'wp-siteagent'); ?></label>
+									<div class="sa-token-value-wrap" style="margin-bottom: 0;">
+										<input type="text" id="sa-dash-cursor-auth" class="sa-token-value" style="width: 100%; padding: 8px; font-size: 12px; border-color: var(--sa-border);" readonly placeholder="Bearer YOUR_TOKEN" />
+										<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-dash-cursor-auth')">
+											<?php esc_html_e('Copy', 'wp-siteagent'); ?>
+										</button>
+									</div>
 								</div>
+
+								<p class="sa-hint" style="margin-top: 16px; font-size: 12px; line-height: 1.4; color: var(--sa-text-secondary);">
+									<?php esc_html_e('In Cursor: Settings → Features → MCP Servers → Add new MCP server → set Type to HTTP, paste the URL and Authorization header.', 'wp-siteagent'); ?>
+								</p>
 							</div>
 
 						</div>

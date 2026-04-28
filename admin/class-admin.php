@@ -198,6 +198,17 @@ class Admin {
 			true
 		);
 
+		// Dashboard Connect JS.
+		if ( 'toplevel_page_wp-siteagent' === $hook ) {
+			wp_enqueue_script(
+				'wp-siteagent-dashboard-connect',
+				SITEAGENT_URL . 'assets/js/dashboard-connect.js',
+				[ 'wp-siteagent-admin' ],
+				SITEAGENT_VERSION,
+				true
+			);
+		}
+
 		// Localized data for JavaScript.
 		wp_localize_script(
 			'wp-siteagent-admin',
