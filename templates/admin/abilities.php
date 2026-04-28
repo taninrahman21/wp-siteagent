@@ -94,8 +94,9 @@ $module_labels = [
 								$is_enabled = !in_array($name, $disabled_abs, true);
 								?>
 								<div class="sa-ability-row">
-									<div class="sa-ability-info">
-										<div class="sa-ability-name"><?php echo esc_html($name); ?></div>
+									<div class="sa-ability-info" style="padding: 12px 0;">
+										<div class="sa-ability-label" style="font-weight: 600; font-size: 15px; color: var(--sa-secondary);"><?php echo esc_html($ability['label'] ?? $name); ?></div>
+										<div class="sa-ability-description" style="font-size: 13px; color: var(--sa-text-muted); margin-top: 6px; line-height: 1.5; max-width: 500px;"><?php echo esc_html($ability['description'] ?? ''); ?></div>
 									</div>
 									<div class="sa-ability-actions">
 										<div class="sa-ability-tags" style="display: flex; gap: 8px;">

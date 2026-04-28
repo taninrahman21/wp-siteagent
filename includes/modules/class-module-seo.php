@@ -63,6 +63,7 @@ class Module_Seo extends Module_Base {
 		$this->register(
 			'siteagent/analyze-seo',
 			[
+				'label'            => __( 'Analyze SEO', 'wp-siteagent' ),
 				'description'      => __( 'Analyze the SEO health of a post — keyword density, heading structure, link ratios, meta description, and more.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -272,6 +273,7 @@ class Module_Seo extends Module_Base {
 		$this->register(
 			'siteagent/set-meta-description',
 			[
+				'label'               => __( 'Set Meta Description', 'wp-siteagent' ),
 				'description'         => __( 'Set the SEO meta description for a post. Works with Yoast, RankMath, or raw meta.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -348,6 +350,7 @@ class Module_Seo extends Module_Base {
 		$this->register(
 			'siteagent/set-focus-keyword',
 			[
+				'label'               => __( 'Set Focus Keyword', 'wp-siteagent' ),
 				'description'         => __( 'Set the SEO focus keyword for a post. Works with Yoast or RankMath.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -420,6 +423,7 @@ class Module_Seo extends Module_Base {
 		$this->register(
 			'siteagent/bulk-seo-audit',
 			[
+				'label'            => __( 'Bulk SEO Audit', 'wp-siteagent' ),
 				'description'      => __( 'Run SEO audit across multiple posts and return sorted results (worst first).', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -507,6 +511,7 @@ class Module_Seo extends Module_Base {
 		$this->register(
 			'siteagent/get-sitemap-urls',
 			[
+				'label'            => __( 'Get Sitemap URLs', 'wp-siteagent' ),
 				'description'      => __( 'Get sitemap URLs for this WordPress site (Yoast, RankMath, or WordPress core).', 'wp-siteagent' ),
 				'execute_callback' => [ $this, 'execute_get_sitemap_urls' ],
 				'annotations'      => [
@@ -560,6 +565,7 @@ class Module_Seo extends Module_Base {
 		$this->register(
 			'siteagent/check-broken-links',
 			[
+				'label'            => __( 'Check Broken Links', 'wp-siteagent' ),
 				'description'      => __( 'Check all outgoing links in a post for broken URLs (returns HTTP status for each).', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',

@@ -63,6 +63,7 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/list-users',
 			[
+				'label'               => __( 'List Users', 'wp-siteagent' ),
 				'description'         => __( 'List WordPress users with filtering and sorting.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -151,6 +152,7 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/get-user',
 			[
+				'label'               => __( 'Get User', 'wp-siteagent' ),
 				'description'         => __( 'Get a WordPress user profile (password hash never included).', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -232,6 +234,7 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/create-user',
 			[
+				'label'               => __( 'Create User', 'wp-siteagent' ),
 				'description'         => __( 'Create a new WordPress user with a secure auto-generated password.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -341,6 +344,7 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/update-user-role',
 			[
+				'label'               => __( 'Update User Role', 'wp-siteagent' ),
 				'description'         => __( 'Change a WordPress user\'s role.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -427,6 +431,7 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/list-roles',
 			[
+				'label'            => __( 'List Roles', 'wp-siteagent' ),
 				'description'      => __( 'List all registered WordPress roles and their capabilities.', 'wp-siteagent' ),
 				'execute_callback' => [ $this, 'execute_list_roles' ],
 				'annotations'      => [
@@ -472,6 +477,7 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/get-user-stats',
 			[
+				'label'               => __( 'User Stats', 'wp-siteagent' ),
 				'description'         => __( 'Get aggregate user statistics including counts by role and registration trends.', 'wp-siteagent' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {

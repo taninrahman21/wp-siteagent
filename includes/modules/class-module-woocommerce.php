@@ -86,6 +86,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-list-products',
 			[
+				'label'            => __( 'List Products', 'wp-siteagent' ),
 				'description'      => __( 'List WooCommerce products with filtering options.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -196,6 +197,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-get-product',
 			[
+				'label'            => __( 'Get Product', 'wp-siteagent' ),
 				'description'      => __( 'Get a single WooCommerce product with all details.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -298,6 +300,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-update-product',
 			[
+				'label'            => __( 'Update Product', 'wp-siteagent' ),
 				'description'      => __( 'Update WooCommerce product fields.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -394,6 +397,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-create-product',
 			[
+				'label'               => __( 'Create Product', 'wp-siteagent' ),
 				'description'         => __( 'Create a new WooCommerce product.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -474,6 +478,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-delete-product',
 			[
+				'label'               => __( 'Delete Product', 'wp-siteagent' ),
 				'description'         => __( 'Delete or trash a WooCommerce product.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -536,6 +541,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-list-orders',
 			[
+				'label'            => __( 'List Orders', 'wp-siteagent' ),
 				'description'      => __( 'List WooCommerce orders with filtering.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -637,6 +643,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-get-order',
 			[
+				'label'               => __( 'Get Order', 'wp-siteagent' ),
 				'description'         => __( 'Get a WooCommerce order with all details.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -731,6 +738,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-update-order-status',
 			[
+				'label'               => __( 'Update Order Status', 'wp-siteagent' ),
 				'description'         => __( 'Update the status of a WooCommerce order.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -794,6 +802,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-store-summary',
 			[
+				'label'               => __( 'Store Summary', 'wp-siteagent' ),
 				'description'         => __( 'Get a WooCommerce store summary for a given time period.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -919,6 +928,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-list-coupons',
 			[
+				'label'               => __( 'List Coupons', 'wp-siteagent' ),
 				'description'         => __( 'List WooCommerce coupons.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -988,6 +998,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-create-coupon',
 			[
+				'label'               => __( 'Create Coupon', 'wp-siteagent' ),
 				'description'         => __( 'Create a new WooCommerce coupon code.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -1064,6 +1075,7 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-list-customers',
 			[
+				'label'               => __( 'List Customers', 'wp-siteagent' ),
 				'description'         => __( 'List WooCommerce customers.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',

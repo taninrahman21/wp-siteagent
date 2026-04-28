@@ -65,6 +65,7 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/site-health-report',
 			[
+				'label'               => __( 'Site Health Report', 'wp-siteagent' ),
 				'description'         => __( 'Get a comprehensive site health and environment report.', 'wp-siteagent' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
@@ -249,6 +250,7 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/list-plugin-updates',
 			[
+				'label'               => __( 'Plugin Update List', 'wp-siteagent' ),
 				'description'         => __( 'List all plugins that have available updates.', 'wp-siteagent' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
@@ -309,6 +311,7 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/get-error-logs',
 			[
+				'label'               => __( 'Error Logs', 'wp-siteagent' ),
 				'description'         => __( 'Read the last N lines from the WordPress debug error log.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -384,6 +387,7 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/list-cron-jobs',
 			[
+				'label'               => __( 'Cron Job List', 'wp-siteagent' ),
 				'description'         => __( 'List all scheduled WP-Cron events.', 'wp-siteagent' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
@@ -476,6 +480,7 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/get-site-options',
 			[
+				'label'               => __( 'Site Settings', 'wp-siteagent' ),
 				'description'         => __( 'Get WordPress site options (allowlisted safe options only — no passwords or secrets).', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -538,6 +543,7 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/list-transients',
 			[
+				'label'               => __( 'Transient List', 'wp-siteagent' ),
 				'description'         => __( 'List active WordPress transients.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -622,6 +628,7 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/get-db-table-sizes',
 			[
+				'label'               => __( 'Database Sizes', 'wp-siteagent' ),
 				'description'         => __( 'Get row count and size for every WordPress database table.', 'wp-siteagent' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {

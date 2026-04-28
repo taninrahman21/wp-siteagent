@@ -88,9 +88,13 @@ $nonce       = wp_create_nonce( 'siteagent_admin' );
 
 						<select name="ability" class="sa-select" style="max-width: 220px;" onchange="this.form.submit()">
 							<option value=""><?php esc_html_e( 'All Abilities', 'wp-siteagent' ); ?></option>
-							<?php foreach ( $ability_names as $ability ) : ?>
+							<?php 
+							$all_abilities = $registry->get_all();
+							foreach ( $ability_names as $ability ) : 
+								$label = $all_abilities[ $ability ]['label'] ?? $ability;
+							?>
 							<option value="<?php echo esc_attr( $ability ); ?>" <?php selected( $filters['ability_name'] ?? '', $ability ); ?>>
-								<?php echo esc_html( $ability ); ?>
+								<?php echo esc_html( $label ); ?>
 							</option>
 							<?php endforeach; ?>
 						</select>
@@ -140,7 +144,9 @@ $nonce       = wp_create_nonce( 'siteagent_admin' );
 								<td class="sa-td--time">
 									<?php echo esc_html( human_time_diff( strtotime( $log['executed_at'] ) ) . ' ' . __( 'ago', 'wp-siteagent' ) ); ?>
 								</td>
-								<td><code><?php echo esc_html( $log['ability_name'] ); ?></code></td>
+								<td>
+									<div style="font-weight: 500;"><?php echo esc_html( $all_abilities[ $log['ability_name'] ]['label'] ?? $log['ability_name'] ); ?></div>
+								</td>
 								<td>
 									<span class="sa-badge sa-badge--<?php echo esc_attr( $log['result_status'] ); ?>">
 										<?php echo esc_html( $log['result_status'] ); ?>

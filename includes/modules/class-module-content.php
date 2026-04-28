@@ -69,6 +69,7 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/list-posts',
 			[
+				'label'            => __( 'List Posts', 'wp-siteagent' ),
 				'description'      => __( 'List WordPress posts with filtering, sorting, and pagination.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -164,6 +165,7 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/get-post',
 			[
+				'label'            => __( 'Get Post', 'wp-siteagent' ),
 				'description'      => __( 'Get a single WordPress post with full content, meta, and SEO data.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -260,6 +262,7 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/create-post',
 			[
+				'label'               => __( 'Create Post', 'wp-siteagent' ),
 				'description'         => __( 'Create a new WordPress post, page, or custom post type entry.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -370,6 +373,7 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/update-post',
 			[
+				'label'               => __( 'Update Post', 'wp-siteagent' ),
 				'description'         => __( 'Update an existing WordPress post. Only provided fields are changed.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -495,6 +499,7 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/delete-post',
 			[
+				'label'               => __( 'Delete Post', 'wp-siteagent' ),
 				'description'         => __( 'Delete or trash a WordPress post.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -561,6 +566,7 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/bulk-update-posts',
 			[
+				'label'               => __( 'Bulk Update Posts', 'wp-siteagent' ),
 				'description'         => __( 'Apply the same updates to multiple posts at once.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -641,6 +647,7 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/list-post-types',
 			[
+				'label'            => __( 'List Post Types', 'wp-siteagent' ),
 				'description'      => __( 'List all registered public post types with their labels and capabilities.', 'wp-siteagent' ),
 				'execute_callback' => [ $this, 'execute_list_post_types' ],
 				'annotations'      => [
@@ -689,6 +696,7 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/list-taxonomies',
 			[
+				'label'            => __( 'List Taxonomies', 'wp-siteagent' ),
 				'description'      => __( 'List all registered taxonomies with term counts.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -748,6 +756,7 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/get-post-revisions',
 			[
+				'label'            => __( 'Get Post Revisions', 'wp-siteagent' ),
 				'description'      => __( 'Get revision history for a post.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',

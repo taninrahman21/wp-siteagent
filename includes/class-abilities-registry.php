@@ -40,8 +40,9 @@ class Abilities_Registry {
 	/**
 	 * Register an ability.
 	 *
-	 * @param string                $name The unique ability name (e.g. 'siteagent_list-posts').
+	 * @param string                $name The unique ability name (e.g. 'siteagent/list-posts').
 	 * @param array<string, mixed>  $args Ability definition:
+	 *   - label           (string, required) Human-friendly name.
 	 *   - description     (string, required)
 	 *   - execute_callback (callable, required)
 	 *   - input_schema    (array, optional) JSON Schema-style array
@@ -51,12 +52,12 @@ class Abilities_Registry {
 	 */
 	public function register( string $name, array $args ): bool {
 		// Validate required fields.
-		if ( empty( $args['description'] ) || ! is_callable( $args['execute_callback'] ?? null ) ) {
+		if ( empty( $args['label'] ) || empty( $args['description'] ) || ! is_callable( $args['execute_callback'] ?? null ) ) {
 			_doing_it_wrong(
 				__METHOD__,
 				sprintf(
 					/* translators: %s: ability name */
-					esc_html__( 'Ability "%s" must have a description and a callable execute_callback.', 'wp-siteagent' ),
+					esc_html__( 'Ability "%s" must have a label, description and a callable execute_callback.', 'wp-siteagent' ),
 					esc_html( $name )
 				),
 				'1.0.0'
@@ -95,6 +96,7 @@ class Abilities_Registry {
 		// Normalize the ability definition.
 		$this->abilities[ $name ] = [
 			'name'                => $name,
+			'label'               => (string) $args['label'],
 			'description'         => (string) $args['description'],
 			'execute_callback'    => $args['execute_callback'],
 			'input_schema'        => $args['input_schema'] ?? [],

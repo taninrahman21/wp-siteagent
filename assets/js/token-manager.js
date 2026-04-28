@@ -18,7 +18,18 @@
 
 	let generatedToken = null;
 
+	// Auto-detect OS once on load.
+	function detectOs() {
+		const ua = (navigator.userAgentData?.platform || navigator.platform || navigator.userAgent || '').toLowerCase();
+		if (ua.includes('mac') || ua.includes('darwin')) return 'mac';
+		if (ua.includes('linux') || ua.includes('android')) return 'linux';
+		return 'windows';
+	}
+
 	window.siteagentTokens = {
+
+		selectedOs: detectOs(),
+
 
 		/**
 		 * Open the generate token modal.
@@ -59,7 +70,9 @@
 			const label = document.getElementById('sa-token-label')?.value?.trim();
 
 			if (!label) {
-				siteagent._showToast('Label is required.', 'error');
+				if (window.siteagent && window.siteagent._showToast) {
+					window.siteagent._showToast('Label is required.', 'error');
+				}
 				document.getElementById('sa-token-label')?.focus();
 				return;
 			}
@@ -88,38 +101,74 @@
 				},
 				body: JSON.stringify(payload)
 			})
-			.then(r => {
-				if (!r.ok) return r.json().then(d => { throw new Error(d.message || 'Request failed'); });
-				return r.json();
-			})
-			.then(data => {
-				generatedToken = data.token;
-				this._revealToken(data.token);
-			})
-			.catch(err => {
-				siteagent._showToast(err.message || i18n.error || 'Error occurred.', 'error');
-				if (btn) { btn.disabled = false; btn.textContent = 'Generate Token'; }
-			});
+				.then(r => {
+					if (!r.ok) return r.json().then(d => { throw new Error(d.message || 'Request failed'); });
+					return r.json();
+				})
+				.then(data => {
+					generatedToken = data.token;
+					this._revealToken(data.token);
+				})
+				.catch(err => {
+					if (window.siteagent && window.siteagent._showToast) {
+						window.siteagent._showToast(err.message || i18n.error || 'Error occurred.', 'error');
+					}
+					if (btn) { btn.disabled = false; btn.textContent = 'Generate Token'; }
+				});
 		},
 
 		/**
-		 * Copy the newly generated token to clipboard.
+		 * Switch the active OS tab in the Claude connection section.
+		 * 
+		 * @param {string} os - 'windows', 'mac', 'linux'
 		 */
-		copyNewToken: function () {
-			if (!generatedToken) return;
+		switchOsTab: function (os) {
+			window.siteagentTokens.selectedOs = os;
 
-			navigator.clipboard.writeText(generatedToken).then(() => {
-				siteagent._showToast(i18n.copied || 'Copied!');
-			}).catch(() => {
-				const ta = document.createElement('textarea');
-				ta.value = generatedToken;
-				ta.style.cssText = 'position:fixed;opacity:0';
-				document.body.appendChild(ta);
-				ta.select();
-				document.execCommand('copy');
-				document.body.removeChild(ta);
-				siteagent._showToast(i18n.copied || 'Copied!');
+			// Update tab styles.
+			const tabs = ['windows', 'mac', 'linux'];
+			tabs.forEach(t => {
+				const el = document.getElementById('sa-os-tab-' + t);
+				if (el) {
+					if (t === os) el.classList.add('sa-os-tab--active');
+					else el.classList.remove('sa-os-tab--active');
+				}
 			});
+
+			// Update description and button label.
+			const desc = document.getElementById('sa-os-desc');
+			const label = document.getElementById('sa-copy-claude-label');
+
+			if (os === 'windows') {
+				if (desc) desc.textContent = 'Connect this site to Claude Desktop automatically by running a simple PowerShell command.';
+				if (label) label.textContent = 'Copy PowerShell Command';
+			} else {
+				const osName = os === 'mac' ? 'macOS' : 'Linux';
+				if (desc) desc.textContent = `Connect this site to Claude Desktop automatically by running a simple Terminal command on ${osName}.`;
+				if (label) label.textContent = 'Copy Terminal Command';
+			}
+
+			// Update the hidden copy source if a token exists.
+			if (generatedToken) {
+				const endpoint = cfg.mcpEndpoint || '';
+				const token = generatedToken;
+				let command = '';
+
+				if (os === 'windows') {
+					// Use node.exe to read/write JSON cleanly — avoids PowerShell ConvertFrom-Json/ConvertTo-Json mangling mcpServers into empty object.
+					command = `npm install -g mcp-remote; $npmRoot = (npm root -g).Trim().Replace('\\\\', '/'); node -e "const fs=require('fs'),os=require('os'),path=require('path');const p=path.join(os.homedir(),'AppData','Roaming','Claude','claude_desktop_config.json');const dir=path.dirname(p);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};if(!d.mcpServers)d.mcpServers={};d.mcpServers['wp-siteagent']={command:'node',args:[process.argv[1],'${endpoint}','--header','Authorization: Bearer ${token}']};fs.writeFileSync(p,JSON.stringify(d,null,2));console.log('Done!');" "$($npmRoot)/mcp-remote/dist/proxy.js"; Write-Host "Successfully connected! Restart Claude Desktop." -ForegroundColor Green`;
+				} else {
+					const configPath = os === 'mac'
+						? '$HOME/Library/Application\\ Support/Claude/claude_desktop_config.json'
+						: '$HOME/.config/Claude/claude_desktop_config.json';
+					command = `npm install -g mcp-remote && NPM_ROOT=$(npm root -g) && PROXY="$NPM_ROOT/mcp-remote/dist/proxy.js" && CONFIG=${configPath} && mkdir -p "$(dirname "$CONFIG")" && node -e "const fs=require('fs'),p=process.env.CONFIG||process.argv[2];let d={};try{d=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};if(!d.mcpServers)d.mcpServers={};d.mcpServers['wp-siteagent']={command:'node',args:[process.env.PROXY||process.argv[3],'${endpoint}','--header','Authorization: Bearer ${token}']};fs.writeFileSync(p,JSON.stringify(d,null,2));console.log('Done!');" "$CONFIG" "$PROXY" && echo "Successfully connected! Restart Claude Desktop."`;
+				}
+
+				const target = document.getElementById('sa-dynamic-copy-target');
+				if (target) {
+					target.value = command;
+				}
+			}
 		},
 
 		/**
@@ -138,16 +187,24 @@
 				method: 'DELETE',
 				headers: { 'X-WP-Nonce': restNonce }
 			})
-			.then(r => r.json())
-			.then(data => {
-				if (data.revoked) {
-					siteagent._showToast('Token revoked.');
-					setTimeout(() => window.location.reload(), 1000);
-				} else {
-					siteagent._showToast(data.message || i18n.error, 'error');
-				}
-			})
-			.catch(() => siteagent._showToast(i18n.error || 'Error.', 'error'));
+				.then(r => r.json())
+				.then(data => {
+					if (data.revoked) {
+						if (window.siteagent && window.siteagent._showToast) {
+							window.siteagent._showToast('Token revoked.');
+						}
+						setTimeout(() => window.location.reload(), 1000);
+					} else {
+						if (window.siteagent && window.siteagent._showToast) {
+							window.siteagent._showToast(data.message || i18n.error, 'error');
+						}
+					}
+				})
+				.catch(() => {
+					if (window.siteagent && window.siteagent._showToast) {
+						window.siteagent._showToast(i18n.error || 'Error.', 'error');
+					}
+				});
 		},
 
 		/**
@@ -160,20 +217,39 @@
 			// Hide the generate form / button.
 			const form = document.getElementById('sa-generate-token-form');
 			if (form) {
+				const exemptIds = ['sa-confirm-copied', 'sa-copy-token-btn', 'sa-copy-claude-btn'];
 				Array.from(form.elements).forEach(el => {
-					if (el.id !== 'sa-confirm-copied') el.disabled = true;
+					if (!exemptIds.includes(el.id)) {
+						el.disabled = true;
+					} else {
+						el.disabled = false;
+					}
 				});
 			}
 
 			const submitBtn = document.getElementById('sa-submit-token');
 			if (submitBtn) submitBtn.style.display = 'none';
 
-			// Show token.
-			const reveal = document.getElementById('sa-token-reveal');
-			if (reveal) reveal.style.display = 'block';
+			const revealArea = document.getElementById('sa-token-reveal');
+			if (revealArea) revealArea.style.display = 'block';
 
 			const tokenEl = document.getElementById('sa-new-token-value');
 			if (tokenEl) tokenEl.textContent = token;
+
+			// Attach copy handlers programmatically
+			const tokenBtn = document.getElementById('sa-copy-token-btn');
+			if (tokenBtn) {
+				tokenBtn.onclick = () => {
+					window.siteagent.copyText('sa-new-token-value');
+				};
+			}
+
+			const claudeBtn = document.getElementById('sa-copy-claude-btn');
+			if (claudeBtn) {
+				claudeBtn.onclick = () => {
+					window.siteagent.copyText('sa-dynamic-copy-target');
+				};
+			}
 
 			// Show done button; enable when checkbox is checked.
 			const doneBtn = document.getElementById('sa-close-after-copy');
@@ -185,6 +261,9 @@
 					if (doneBtn) doneBtn.disabled = !this.checked;
 				});
 			}
+
+			// Initialize the dynamic copy source for Claude command.
+			this.switchOsTab(window.siteagentTokens.selectedOs || detectOs());
 		},
 
 		/**
@@ -197,6 +276,10 @@
 
 			const form = document.getElementById('sa-generate-token-form');
 			if (form) form.reset();
+
+			// Reset OS selection to detected OS (not hardcoded windows).
+			this.switchOsTab(detectOs());
+
 
 			const reveal = document.getElementById('sa-token-reveal');
 			if (reveal) reveal.style.display = 'none';

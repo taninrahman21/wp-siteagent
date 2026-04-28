@@ -61,20 +61,36 @@
 				? el.value
 				: el.textContent;
 
-			navigator.clipboard.writeText(text).then(() => {
-				this._showToast(i18n.copied || 'Copied!');
-			}).catch(() => {
-				// Fallback for non-secure contexts.
-				const ta = document.createElement('textarea');
-				ta.value = text;
-				ta.style.position = 'fixed';
-				ta.style.opacity = '0';
-				document.body.appendChild(ta);
-				ta.select();
+			if (navigator.clipboard && window.isSecureContext) {
+				navigator.clipboard.writeText(text).then(() => {
+					this._showToast(i18n.copied || 'Copied!');
+				}).catch(() => {
+					this._fallbackCopy(text);
+				});
+			} else {
+				this._fallbackCopy(text);
+			}
+		},
+
+		/**
+		 * Fallback copy method for non-secure contexts.
+		 * 
+		 * @param {string} text Text to copy.
+		 */
+		_fallbackCopy: function(text) {
+			const ta = document.createElement('textarea');
+			ta.value = text;
+			ta.style.position = 'fixed';
+			ta.style.opacity = '0';
+			document.body.appendChild(ta);
+			ta.select();
+			try {
 				document.execCommand('copy');
-				document.body.removeChild(ta);
 				this._showToast(i18n.copied || 'Copied!');
-			});
+			} catch (err) {
+				console.error('Fallback copy failed', err);
+			}
+			document.body.removeChild(ta);
 		},
 
 		/**

@@ -63,6 +63,7 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/list-media',
 			[
+				'label'            => __( 'List Media', 'wp-siteagent' ),
 				'description'      => __( 'List media library items with filtering options.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -141,6 +142,7 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/get-unattached-media',
 			[
+				'label'            => __( 'List Unattached Media', 'wp-siteagent' ),
 				'description'      => __( 'List media items not attached to any post.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -183,6 +185,7 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/update-media-alt-text',
 			[
+				'label'               => __( 'Update Alt Text', 'wp-siteagent' ),
 				'description'         => __( 'Set the alt text for a media attachment.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -243,6 +246,7 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/bulk-update-alt-text',
 			[
+				'label'               => __( 'Bulk Update Alt Text', 'wp-siteagent' ),
 				'description'         => __( 'Set alt text for multiple media attachments at once.', 'wp-siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
@@ -324,6 +328,7 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/get-large-media',
 			[
+				'label'            => __( 'Find Large Media', 'wp-siteagent' ),
 				'description'      => __( 'Find media attachments whose file size exceeds a given threshold.', 'wp-siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
@@ -404,6 +409,7 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/get-media-library-stats',
 			[
+				'label'            => __( 'Media Library Stats', 'wp-siteagent' ),
 				'description'      => __( 'Get aggregate statistics about the WordPress media library.', 'wp-siteagent' ),
 				'execute_callback' => [ $this, 'execute_get_media_library_stats' ],
 				'annotations'      => [

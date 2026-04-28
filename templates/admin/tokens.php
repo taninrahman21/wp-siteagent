@@ -13,8 +13,9 @@ $registry = $plugin->get_abilities_registry();
 $tokens   = $auth->list_tokens( 0 );
 
 $disabled_abs = (array) get_option( 'siteagent_disabled_abilities', [] );
-$abilities = array_filter( array_keys( $registry->get_all() ), function( $name ) use ( $disabled_abs ) {
-	return ! in_array( $name, $disabled_abs, true );
+$all_abilities = $registry->get_all();
+$abilities = array_filter( $all_abilities, function( $ability ) use ( $disabled_abs ) {
+	return ! in_array( $ability['name'], $disabled_abs, true );
 } );
 ?>
 <div class="sa-wrap">
@@ -62,14 +63,23 @@ $abilities = array_filter( array_keys( $registry->get_all() ), function( $name )
 								$is_active  = (int) $token['is_active'] === 1;
 								$is_expired = ! empty( $token['expires_at'] ) && strtotime( $token['expires_at'] ) < time();
 								$status     = ! $is_active ? 'revoked' : ( $is_expired ? 'expired' : 'active' );
-								$abilities_list = empty( $token['abilities'] ) ? __( 'All abilities', 'wp-siteagent' ) : implode( ', ', array_slice( $token['abilities'], 0, 3 ) ) . ( count( $token['abilities'] ) > 3 ? ' +' . ( count( $token['abilities'] ) - 3 ) . ' more' : '' );
+								
+								$display_abilities = [];
+								if ( empty( $token['abilities'] ) ) {
+									$abilities_text = __( 'All abilities', 'wp-siteagent' );
+								} else {
+									foreach ( (array) $token['abilities'] as $ab_name ) {
+										$display_abilities[] = $all_abilities[ $ab_name ]['label'] ?? $ab_name;
+									}
+									$abilities_text = implode( ', ', array_slice( $display_abilities, 0, 3 ) ) . ( count( $display_abilities ) > 3 ? ' +' . ( count( $display_abilities ) - 3 ) . ' more' : '' );
+								}
 							?>
 							<tr>
 								<td><strong><?php echo esc_html( $token['label'] ); ?></strong></td>
 								<td class="sa-td--time"><?php echo esc_html( wp_date( get_option( 'date_format' ), strtotime( $token['created_at'] ) ) ); ?></td>
 								<td class="sa-td--time"><?php echo $token['expires_at'] ? esc_html( wp_date( get_option( 'date_format' ), strtotime( $token['expires_at'] ) ) ) : '<em>' . esc_html__( 'Never', 'wp-siteagent' ) . '</em>'; ?></td>
 								<td class="sa-td--time"><?php echo $token['last_used'] ? esc_html( human_time_diff( strtotime( $token['last_used'] ) ) . ' ' . __( 'ago', 'wp-siteagent' ) ) : '<em>' . esc_html__( 'Never', 'wp-siteagent' ) . '</em>'; ?></td>
-								<td class="sa-td--abilities" title="<?php echo isset( $token['abilities'] ) ? esc_attr( implode( ', ', $token['abilities'] ) ) : ''; ?>" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: var(--sa-text-secondary);"><?php echo esc_html( $abilities_list ); ?></td>
+								<td class="sa-td--abilities" title="<?php echo isset( $token['abilities'] ) ? esc_attr( implode( ', ', $token['abilities'] ) ) : ''; ?>" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: var(--sa-text-secondary);"><?php echo esc_html( $abilities_text ); ?></td>
 								<td><span class="sa-badge sa-badge--<?php echo esc_attr( $status ); ?>"><?php echo esc_html( $status ); ?></span></td>
 								<td class="sa-td--actions">
 									<?php if ( $is_active && ! $is_expired ) : ?>
@@ -117,10 +127,10 @@ $abilities = array_filter( array_keys( $registry->get_all() ), function( $name )
 						<label><?php esc_html_e( 'Ability Restrictions', 'wp-siteagent' ); ?></label>
 						<p class="sa-hint"><?php esc_html_e( 'Leave all unchecked to allow all abilities.', 'wp-siteagent' ); ?></p>
 						<div class="sa-abilities-check" style="margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 200px; overflow-y: auto; padding: 12px; border: 1px solid var(--sa-border); border-radius: 4px; background: var(--sa-bg);">
-							<?php foreach ( $abilities as $ability_name ) : ?>
-							<label class="sa-checkbox-label" style="padding: 4px 0;">
-								<input type="checkbox" name="abilities[]" value="<?php echo esc_attr( $ability_name ); ?>" />
-								<code style="font-size: 11px;"><?php echo esc_html( $ability_name ); ?></code>
+							<?php foreach ( $abilities as $ability ) : ?>
+							<label class="sa-checkbox-label" style="padding: 4px 0; display: flex; align-items: center; gap: 8px;">
+								<input type="checkbox" name="abilities[]" value="<?php echo esc_attr( $ability['name'] ); ?>" />
+								<span style="font-size: 13px; font-weight: 500;"><?php echo esc_html( $ability['label'] ); ?></span>
 							</label>
 							<?php endforeach; ?>
 						</div>
@@ -132,15 +142,48 @@ $abilities = array_filter( array_keys( $registry->get_all() ), function( $name )
 						</div>
 						<div class="sa-token-value-wrap">
 							<code id="sa-new-token-value" class="sa-token-value"></code>
-							<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="siteagentTokens.copyNewToken()">
+							<button type="button" id="sa-copy-token-btn" class="sa-btn sa-btn--primary sa-btn--sm">
 								<?php esc_html_e( 'Copy', 'wp-siteagent' ); ?>
 							</button>
 						</div>
-						<label class="sa-checkbox-label sa-confirm-copy" style="font-size: 12px; font-weight: 600;">
+
+						<div style="margin-top: 24px; padding: 20px; border: 1px solid rgba(13, 148, 136, 0.2); border-radius: 8px; background: rgba(13, 148, 136, 0.05);">
+							<h4 style="margin: 0 0 12px; font-size: 14px; font-weight: 700; color: var(--sa-primary);"><?php esc_html_e( 'Connect Claude Desktop', 'wp-siteagent' ); ?></h4>
+							
+							<div class="sa-os-tabs">
+								<button type="button" id="sa-os-tab-windows" class="sa-os-tab sa-os-tab--active" onclick="siteagentTokens.switchOsTab('windows')">
+									Windows
+								</button>
+								<button type="button" id="sa-os-tab-mac" class="sa-os-tab" onclick="siteagentTokens.switchOsTab('mac')">
+									macOS
+								</button>
+								<button type="button" id="sa-os-tab-linux" class="sa-os-tab" onclick="siteagentTokens.switchOsTab('linux')">
+									Linux
+								</button>
+							</div>
+
+							<div id="sa-os-desc" class="sa-os-description">
+								<?php esc_html_e( 'Connect this site to Claude Desktop automatically by running a simple PowerShell command.', 'wp-siteagent' ); ?>
+							</div>
+
+							<button type="button" id="sa-copy-claude-btn" class="sa-btn sa-btn--secondary sa-btn--sm" style="width: 100%; justify-content: center;">
+								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+								<span id="sa-copy-claude-label"><?php esc_html_e( 'Copy PowerShell Command', 'wp-siteagent' ); ?></span>
+							</button>
+
+							<div class="sa-node-note">
+								<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+								<span><?php printf( esc_html__( 'No Node.js? Download LTS from %s first.', 'wp-siteagent' ), '<a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a>' ); ?></span>
+							</div>
+						</div>
+
+						<label class="sa-checkbox-label sa-confirm-copy" style="font-size: 12px; font-weight: 600; margin-top: 24px;">
 							<input type="checkbox" id="sa-confirm-copied" />
 							<?php esc_html_e( 'I have saved it securely.', 'wp-siteagent' ); ?>
 						</label>
 					</div>
+					<!-- Hidden targets for siteagent.copyText() -->
+					<textarea id="sa-dynamic-copy-target" style="position:fixed; left:-9999px; top:0; opacity:0;" readonly></textarea>
 				</form>
 			</div>
 			<div class="sa-modal-footer">
