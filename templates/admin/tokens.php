@@ -148,32 +148,83 @@ $abilities = array_filter( $all_abilities, function( $ability ) use ( $disabled_
 						</div>
 
 						<div style="margin-top: 24px; padding: 20px; border: 1px solid rgba(13, 148, 136, 0.2); border-radius: 8px; background: rgba(13, 148, 136, 0.05);">
-							<h4 style="margin: 0 0 12px; font-size: 14px; font-weight: 700; color: var(--sa-primary);"><?php esc_html_e( 'Connect Claude Desktop', 'wp-siteagent' ); ?></h4>
-							
-							<div class="sa-os-tabs">
-								<button type="button" id="sa-os-tab-windows" class="sa-os-tab sa-os-tab--active" onclick="siteagentTokens.switchOsTab('windows')">
-									Windows
+							<div class="sa-os-tabs" style="margin-bottom: 20px; border-bottom: 1px solid rgba(13, 148, 136, 0.1); padding-bottom: 12px; display: flex; gap: 8px;">
+								<button type="button" id="sa-client-tab-claude" class="sa-os-tab sa-os-tab--active" onclick="siteagentTokens.switchClientTab('claude')">
+									Claude Desktop
 								</button>
-								<button type="button" id="sa-os-tab-mac" class="sa-os-tab" onclick="siteagentTokens.switchOsTab('mac')">
-									macOS
-								</button>
-								<button type="button" id="sa-os-tab-linux" class="sa-os-tab" onclick="siteagentTokens.switchOsTab('linux')">
-									Linux
+								<button type="button" id="sa-client-tab-cursor" class="sa-os-tab" onclick="siteagentTokens.switchClientTab('cursor')">
+									Cursor
 								</button>
 							</div>
 
-							<div id="sa-os-desc" class="sa-os-description">
-								<?php esc_html_e( 'Connect this site to Claude Desktop automatically by running a simple PowerShell command.', 'wp-siteagent' ); ?>
+							<!-- Claude Desktop Panel -->
+							<div id="sa-claude-panel">
+								<h4 style="margin: 0 0 12px; font-size: 14px; font-weight: 700; color: var(--sa-primary);"><?php esc_html_e( 'Connect Claude Desktop', 'wp-siteagent' ); ?></h4>
+								
+								<div class="sa-os-tabs">
+									<button type="button" id="sa-os-tab-windows" class="sa-os-tab sa-os-tab--active" onclick="siteagentTokens.switchOsTab('windows')">
+										Windows
+									</button>
+									<button type="button" id="sa-os-tab-mac" class="sa-os-tab" onclick="siteagentTokens.switchOsTab('mac')">
+										macOS
+									</button>
+									<button type="button" id="sa-os-tab-linux" class="sa-os-tab" onclick="siteagentTokens.switchOsTab('linux')">
+										Linux
+									</button>
+								</div>
+
+								<div id="sa-os-desc" class="sa-os-description">
+									<?php esc_html_e( 'Connect this site to Claude Desktop automatically by running a simple PowerShell command.', 'wp-siteagent' ); ?>
+								</div>
+
+								<button type="button" id="sa-copy-claude-btn" class="sa-btn sa-btn--secondary sa-btn--sm" style="width: 100%; justify-content: center;">
+									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+									<span id="sa-copy-claude-label"><?php esc_html_e( 'Copy PowerShell Command', 'wp-siteagent' ); ?></span>
+								</button>
+
+								<div class="sa-node-note">
+									<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+									<span><?php printf( esc_html__( 'No Node.js? Download LTS from %s first.', 'wp-siteagent' ), '<a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a>' ); ?></span>
+								</div>
 							</div>
 
-							<button type="button" id="sa-copy-claude-btn" class="sa-btn sa-btn--secondary sa-btn--sm" style="width: 100%; justify-content: center;">
-								<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
-								<span id="sa-copy-claude-label"><?php esc_html_e( 'Copy PowerShell Command', 'wp-siteagent' ); ?></span>
-							</button>
+							<!-- Cursor Panel -->
+							<div id="sa-cursor-panel" style="display:none;">
+								<h4 style="margin: 0 0 12px; font-size: 14px; font-weight: 700; color: var(--sa-primary);"><?php esc_html_e( 'Connect Cursor', 'wp-siteagent' ); ?></h4>
+								
+								<div class="sa-form-group" style="margin-bottom: 12px;">
+									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e( 'MCP Server URL', 'wp-siteagent' ); ?></label>
+									<div class="sa-token-value-wrap">
+										<input type="text" id="sa-cursor-url" class="sa-token-value" style="width: 100%; border-color: rgba(13, 148, 136, 0.2);" readonly />
+										<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-cursor-url')">
+											<?php esc_html_e( 'Copy', 'wp-siteagent' ); ?>
+										</button>
+									</div>
+								</div>
 
-							<div class="sa-node-note">
-								<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-								<span><?php printf( esc_html__( 'No Node.js? Download LTS from %s first.', 'wp-siteagent' ), '<a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a>' ); ?></span>
+								<div class="sa-form-group" style="margin-bottom: 12px;">
+									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e( 'Type', 'wp-siteagent' ); ?></label>
+									<div class="sa-token-value-wrap">
+										<input type="text" id="sa-cursor-type" class="sa-token-value" style="width: 100%; border-color: rgba(13, 148, 136, 0.2);" readonly value="http" />
+										<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-cursor-type')">
+											<?php esc_html_e( 'Copy', 'wp-siteagent' ); ?>
+										</button>
+									</div>
+								</div>
+
+								<div class="sa-form-group" style="margin-bottom: 12px;">
+									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e( 'Authorization Header', 'wp-siteagent' ); ?></label>
+									<div class="sa-token-value-wrap">
+										<input type="text" id="sa-cursor-auth" class="sa-token-value" style="width: 100%; border-color: rgba(13, 148, 136, 0.2);" readonly />
+										<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-cursor-auth')">
+											<?php esc_html_e( 'Copy', 'wp-siteagent' ); ?>
+										</button>
+									</div>
+								</div>
+
+								<p class="sa-hint" style="margin-top: 16px; font-size: 12px; line-height: 1.4; color: var(--sa-text-secondary);">
+									<?php esc_html_e( 'In Cursor: Settings → Features → MCP Servers → Add new MCP server → set Type to HTTP, paste the URL, and add the Authorization header.', 'wp-siteagent' ); ?>
+								</p>
 							</div>
 						</div>
 

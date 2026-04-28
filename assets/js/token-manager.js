@@ -30,6 +30,42 @@
 
 		selectedOs: detectOs(),
 
+		/**
+		 * Switch between AI clients (Claude, Cursor, etc.)
+		 * 
+		 * @param {string} client - 'claude', 'cursor'
+		 */
+		switchClientTab: function (client) {
+			const tabs = ['claude', 'cursor'];
+			tabs.forEach(t => {
+				const el = document.getElementById('sa-client-tab-' + t);
+				if (el) {
+					if (t === client) el.classList.add('sa-os-tab--active');
+					else el.classList.remove('sa-os-tab--active');
+				}
+			});
+
+			const claudePanel = document.getElementById('sa-claude-panel');
+			const cursorPanel = document.getElementById('sa-cursor-panel');
+
+			if (client === 'claude') {
+				if (claudePanel) claudePanel.style.display = 'block';
+				if (cursorPanel) cursorPanel.style.display = 'none';
+			} else {
+				if (claudePanel) claudePanel.style.display = 'none';
+				if (cursorPanel) cursorPanel.style.display = 'block';
+
+				// Populate Cursor fields if token exists.
+				if (generatedToken) {
+					const urlInput = document.getElementById('sa-cursor-url');
+					if (urlInput) urlInput.value = cfg.mcpEndpoint || '';
+
+					const authInput = document.getElementById('sa-cursor-auth');
+					if (authInput) authInput.value = 'Bearer ' + generatedToken;
+				}
+			}
+		},
+
 
 		/**
 		 * Open the generate token modal.
@@ -219,10 +255,11 @@
 			if (form) {
 				const exemptIds = ['sa-confirm-copied', 'sa-copy-token-btn', 'sa-copy-claude-btn'];
 				Array.from(form.elements).forEach(el => {
-					if (!exemptIds.includes(el.id)) {
-						el.disabled = true;
-					} else {
+					// Exempt everything inside the reveal area OR specific IDs.
+					if (el.closest('.sa-token-reveal') || exemptIds.includes(el.id)) {
 						el.disabled = false;
+					} else {
+						el.disabled = true;
 					}
 				});
 			}
@@ -264,6 +301,13 @@
 
 			// Initialize the dynamic copy source for Claude command.
 			this.switchOsTab(window.siteagentTokens.selectedOs || detectOs());
+
+			// Also populate Cursor fields for immediate use if user switches.
+			const urlInput = document.getElementById('sa-cursor-url');
+			if (urlInput) urlInput.value = cfg.mcpEndpoint || '';
+
+			const authInput = document.getElementById('sa-cursor-auth');
+			if (authInput) authInput.value = 'Bearer ' + token;
 		},
 
 		/**
@@ -277,8 +321,15 @@
 			const form = document.getElementById('sa-generate-token-form');
 			if (form) form.reset();
 
-			// Reset OS selection to detected OS (not hardcoded windows).
+			// Reset client and OS selection.
+			this.switchClientTab('claude');
 			this.switchOsTab(detectOs());
+
+			// Clear Cursor fields.
+			const cursorUrl = document.getElementById('sa-cursor-url');
+			if (cursorUrl) cursorUrl.value = '';
+			const cursorAuth = document.getElementById('sa-cursor-auth');
+			if (cursorAuth) cursorAuth.value = '';
 
 
 			const reveal = document.getElementById('sa-token-reveal');
