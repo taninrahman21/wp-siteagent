@@ -194,32 +194,43 @@ class Module_Seo extends Module_Base {
 		$suggestions = [];
 
 		if ( 'missing' === $meta_desc_status ) {
+			/* translators: No meta description error */
 			$issues[]      = __( 'No meta description set.', 'wp-siteagent' );
 			$suggestions[] = __( 'Add a 120-160 character meta description.', 'wp-siteagent' );
 		} elseif ( 'too_short' === $meta_desc_status ) {
+			/* translators: Meta description too short error */
 			$issues[]      = __( 'Meta description is too short.', 'wp-siteagent' );
 			$suggestions[] = __( 'Expand meta description to 120-160 characters.', 'wp-siteagent' );
 		} elseif ( 'too_long' === $meta_desc_status ) {
+			/* translators: Meta description too long error */
 			$issues[]      = __( 'Meta description is too long and may be truncated in SERPs.', 'wp-siteagent' );
 		}
 
 		if ( ! empty( $keyword ) && ! $keyword_in_meta ) {
+			/* translators: Focus keyword missing from meta description error */
 			$issues[]      = __( 'Focus keyword missing from meta description.', 'wp-siteagent' );
+			/* translators: Suggestion to add focus keyword to meta description */
 			$suggestions[] = __( 'Add focus keyword to meta description.', 'wp-siteagent' );
 		}
 
 		if ( $images_missing_alt > 0 ) {
+			/* translators: %d: number of images missing alt text */
 			$issues[]      = sprintf( _n( '%d image is missing alt text.', '%d images are missing alt text.', $images_missing_alt, 'wp-siteagent' ), $images_missing_alt );
+			/* translators: Suggestion to add alt text to images */
 			$suggestions[] = __( 'Add descriptive alt text to all images.', 'wp-siteagent' );
 		}
 
 		if ( empty( $headings['H2'] ) && $word_count > 300 ) {
+			/* translators: No H2 headings error */
 			$issues[]      = __( 'No H2 headings found in a long article.', 'wp-siteagent' );
+			/* translators: Suggestion to add H2 headings */
 			$suggestions[] = __( 'Add H2 subheadings to organize content.', 'wp-siteagent' );
 		}
 
 		if ( $word_count < 300 ) {
+			/* translators: Content too short error */
 			$issues[]      = __( 'Content is too short (under 300 words).', 'wp-siteagent' );
+			/* translators: Suggestion to expand content */
 			$suggestions[] = __( 'Expand content to at least 300 words.', 'wp-siteagent' );
 		}
 

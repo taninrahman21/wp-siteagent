@@ -139,23 +139,19 @@ class Audit_Logger {
 
 		$where_sql = $where ? 'WHERE ' . implode( ' AND ', $where ) : '';
 
-		// Count total.
-		$count_sql = "SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log {$where_sql}";
-		if ( $values ) {
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$total = (int) $wpdb->get_var( $wpdb->prepare( $count_sql, $values ) );
+		if ( $where ) {
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$total = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log $where_sql", $values ) );
 		} else {
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-			$total = (int) $wpdb->get_var( $count_sql );
+			$total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log" );
 		}
 
 		// Fetch rows.
 		$values[] = $per_page;
 		$values[] = $offset;
 
-		$logs_sql = "SELECT * FROM {$wpdb->prefix}siteagent_audit_log {$where_sql} ORDER BY executed_at DESC LIMIT %d OFFSET %d";
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-		$logs = $wpdb->get_results( $wpdb->prepare( $logs_sql, $values ), ARRAY_A );
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$logs = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}siteagent_audit_log $where_sql ORDER BY executed_at DESC LIMIT %d OFFSET %d", $values ), ARRAY_A );
 
 		return [
 			'logs'  => $logs ?: [],
@@ -190,55 +186,68 @@ class Audit_Logger {
 	public function get_stats(): array {
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'siteagent_audit_log';
+		$stats = wp_cache_get( 'audit_stats', 'siteagent' );
+		if ( false !== $stats ) {
+			return $stats;
+		}
 
 		// Calls today.
 		$calls_today = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$table} WHERE DATE(executed_at) = CURDATE()"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE DATE(executed_at) = CURDATE()"
 		);
 
 		// Calls this week.
 		$calls_week = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$table} WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)"
+		);
+
+		// Calls yesterday.
+		$calls_yesterday = (int) $wpdb->get_var(
+			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE DATE(executed_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)"
 		);
 
 		// Calls this month.
 		$calls_month = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$table} WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
 		);
 
 		// Errors in last 24h.
 		$errors_24h = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$table} WHERE result_status = 'error' AND executed_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE result_status = 'error' AND executed_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)"
 		);
 
 		// Top 5 abilities.
 		$top_abilities = $wpdb->get_results(
-			"SELECT ability_name, COUNT(*) as count FROM {$table} WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) GROUP BY ability_name ORDER BY count DESC LIMIT 5",
+			"SELECT ability_name, COUNT(*) as count FROM {$wpdb->prefix}siteagent_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) GROUP BY ability_name ORDER BY count DESC LIMIT 5",
 			ARRAY_A
 		);
 
 		// Error rate.
 		$total_month  = max( 1, $calls_month );
 		$errors_month = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$table} WHERE result_status = 'error' AND executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE result_status = 'error' AND executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
 		);
 		$error_rate = round( ( $errors_month / $total_month ) * 100, 2 );
 
 		// Average duration.
 		$avg_duration = (float) $wpdb->get_var(
-			"SELECT AVG(duration_ms) FROM {$table} WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) AND duration_ms IS NOT NULL"
+			"SELECT AVG(duration_ms) FROM {$wpdb->prefix}siteagent_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) AND duration_ms IS NOT NULL"
 		);
 
-		return [
-			'calls_today'   => $calls_today,
-			'calls_week'    => $calls_week,
-			'calls_month'   => $calls_month,
-			'errors_24h'    => $errors_24h,
-			'top_abilities' => $top_abilities ?: [],
-			'error_rate'    => $error_rate,
-			'avg_duration'  => round( $avg_duration, 2 ),
+		$stats = [
+			'calls_today'     => $calls_today,
+			'calls_yesterday' => $calls_yesterday,
+			'calls_week'      => $calls_week,
+			'calls_month'     => $calls_month,
+			'errors_24h'      => $errors_24h,
+			'top_abilities'   => $top_abilities ?: [],
+			'error_rate'      => $error_rate,
+			'avg_duration'    => round( $avg_duration, 2 ),
 		];
+
+		wp_cache_set( 'audit_stats', $stats, 'siteagent', 300 ); // Cache for 5 minutes.
+
+		return $stats;
 	}
 
 	/**

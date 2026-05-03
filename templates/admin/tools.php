@@ -85,7 +85,12 @@ $nonce    = wp_create_nonce( 'siteagent_admin' );
 									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'Abilities Registry', 'wp-siteagent' ); ?></span>
 								</div>
 								<div style="display: flex; align-items: center; gap: 12px;">
-									<span style="font-size: 13px; color: var(--sa-text-secondary);"><?php printf( esc_html__( '%d registered', 'wp-siteagent' ), count( $registry->get_all() ) ); ?></span>
+									<span style="font-size: 13px; color: var(--sa-text-secondary);"><?php
+										printf(
+											/* translators: %d: number of registered abilities */
+											esc_html__( '%d registered', 'wp-siteagent' ),
+											count( $registry->get_all() )
+										); ?></span>
 									<?php $reg_pass = count( $registry->get_all() ) > 0; ?>
 									<span class="sa-badge sa-badge--<?php echo $reg_pass ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
 										<?php echo $reg_pass ? esc_html__( 'Pass', 'wp-siteagent' ) : esc_html__( 'Empty', 'wp-siteagent' ); ?>

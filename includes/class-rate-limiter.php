@@ -95,12 +95,11 @@ class Rate_Limiter {
 		$hourly_key = gmdate( 'Y-m-d-H' );
 		$daily_key  = gmdate( 'Y-m-d' );
 		$now        = current_time( 'mysql' );
-		$table      = $wpdb->prefix . 'siteagent_rate_limits';
 
 		// Increment hourly window.
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO {$table} (token_id, window_key, request_count, window_start)
+				"INSERT INTO {$wpdb->prefix}siteagent_rate_limits (token_id, window_key, request_count, window_start)
 				VALUES (%d, %s, 1, %s)
 				ON DUPLICATE KEY UPDATE request_count = request_count + 1",
 				$token_id,
@@ -112,7 +111,7 @@ class Rate_Limiter {
 		// Increment daily window.
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO {$table} (token_id, window_key, request_count, window_start)
+				"INSERT INTO {$wpdb->prefix}siteagent_rate_limits (token_id, window_key, request_count, window_start)
 				VALUES (%d, %s, 1, %s)
 				ON DUPLICATE KEY UPDATE request_count = request_count + 1",
 				$token_id,
@@ -145,11 +144,10 @@ class Rate_Limiter {
 
 		$hourly_key = gmdate( 'Y-m-d-H' );
 		$daily_key  = gmdate( 'Y-m-d' );
-		$table      = $wpdb->prefix . 'siteagent_rate_limits';
 
 		$hourly_used = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT request_count FROM {$table} WHERE token_id = %d AND window_key = %s",
+				"SELECT request_count FROM {$wpdb->prefix}siteagent_rate_limits WHERE token_id = %d AND window_key = %s",
 				$token_id,
 				$hourly_key
 			)
@@ -157,7 +155,7 @@ class Rate_Limiter {
 
 		$daily_used = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT request_count FROM {$table} WHERE token_id = %d AND window_key = %s",
+				"SELECT request_count FROM {$wpdb->prefix}siteagent_rate_limits WHERE token_id = %d AND window_key = %s",
 				$token_id,
 				$daily_key
 			)

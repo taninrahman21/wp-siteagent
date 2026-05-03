@@ -697,46 +697,50 @@ class Module_Diagnostics extends Module_Base {
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Read the last N lines from a file efficiently using tail logic.
+	 * Read the last N lines from a file efficiently using WP_Filesystem.
 	 *
 	 * @param string $file_path Path to the file.
 	 * @param int    $lines     Number of lines to read.
 	 * @return array<int, string>
 	 */
 	private function read_last_lines( string $file_path, int $lines ): array {
-		$handle = fopen( $file_path, 'rb' );
+		global $wp_filesystem;
 
-		if ( ! $handle ) {
+		if ( empty( $wp_filesystem ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+			WP_Filesystem();
+		}
+
+		if ( ! $wp_filesystem->exists( $file_path ) ) {
 			return [];
 		}
 
-		fseek( $handle, 0, SEEK_END );
-		$file_size = ftell( $handle );
+		// Read the last 512KB of the file (should be enough for N lines).
+		$file_size = $wp_filesystem->size( $file_path );
+		$read_size = min( 512 * 1024, $file_size );
+		$offset    = max( 0, $file_size - $read_size );
 
-		if ( 0 === $file_size ) {
+		// WP_Filesystem doesn't support offsets in get_contents easily across all adapters.
+		// For local files (most common), we can use the direct path if needed, or just read the whole thing if it's small.
+		if ( $file_size < 1024 * 1024 ) { // < 1MB
+			$content = $wp_filesystem->get_contents( $file_path );
+		} else {
+			// If it's too big, we use PHP's native calls but ignore them for WPCS since there's no good WP alternative for tailing large files.
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
+			$handle = fopen( $file_path, 'rb' );
+			if ( ! $handle ) {
+				return [];
+			}
+			fseek( $handle, -$read_size, SEEK_END );
+			$content = fread( $handle, $read_size );
 			fclose( $handle );
+		}
+
+		if ( ! $content ) {
 			return [];
 		}
 
-		$buffer       = '';
-		$chunk_size   = 4096;
-		$lines_found  = 0;
-		$position     = 0;
-
-		while ( $lines_found <= $lines && $position < $file_size ) {
-			$read_size = min( $chunk_size, $file_size - $position );
-			$position += $read_size;
-
-			fseek( $handle, -$position, SEEK_END );
-			$chunk  = fread( $handle, $read_size );
-			$buffer = $chunk . $buffer;
-
-			$lines_found = substr_count( $buffer, "\n" );
-		}
-
-		fclose( $handle );
-
-		$all_lines = explode( "\n", trim( $buffer ) );
+		$all_lines = explode( "\n", trim( $content ) );
 
 		return array_slice( $all_lines, -$lines );
 	}

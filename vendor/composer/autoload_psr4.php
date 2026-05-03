@@ -6,8 +6,4 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'WP_SiteAgent\\Modules\\' => array($baseDir . '/includes/modules'),
-    'WP_SiteAgent\\Api\\' => array($baseDir . '/api'),
-    'WP_SiteAgent\\Admin\\' => array($baseDir . '/admin'),
-    'WP_SiteAgent\\' => array($baseDir . '/includes'),
 );

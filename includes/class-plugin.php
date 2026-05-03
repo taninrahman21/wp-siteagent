@@ -400,7 +400,8 @@ class Plugin {
 			wp_send_json_error( [ 'message' => __( 'Option not allowed via AJAX.', 'wp-siteagent' ) ], 400 );
 		}
 
-		$option_value = wp_unslash( $_POST['option_value'] ?? '' );
+		$option_value = wp_unslash( $_POST['option_value'] ?? '' ); // This will be sanitized below based on the option type.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		// Sanitize based on option type.
 		if ( in_array( $option_name, [ 'siteagent_enabled', 'siteagent_delete_data_on_uninstall' ], true ) ) {

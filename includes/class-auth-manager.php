@@ -216,6 +216,24 @@ class Auth_Manager {
 	}
 
 	/**
+	 * Get the count of active tokens expiring within a specific number of days.
+	 *
+	 * @param int $days Number of days to check.
+	 * @return int Count of expiring tokens.
+	 */
+	public function get_expiring_count( int $days = 30 ): int {
+		global $wpdb;
+
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_tokens WHERE is_active = 1 AND expires_at IS NOT NULL AND expires_at BETWEEN %s AND %s",
+				current_time( 'mysql', 1 ),
+				date( 'Y-m-d H:i:s', strtotime( '+' . $days . ' days', current_time( 'timestamp', 1 ) ) )
+			)
+		);
+	}
+
+	/**
 	 * Delete all expired tokens.
 	 *
 	 * @return int Number of tokens deleted.
@@ -254,6 +272,7 @@ class Auth_Manager {
 		}
 
 		// Fall back to query param (for SSE clients).
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_GET['token'] ) ) {
 			return sanitize_text_field( wp_unslash( $_GET['token'] ) );
 		}

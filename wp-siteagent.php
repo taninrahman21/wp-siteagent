@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: WP SiteAgent
- * Plugin URI:  https://example.com/wp-siteagent
+ * Plugin Name: SiteAgent for WordPress
+ * Plugin URI:  https://github.com/taninrahman21/wp-siteagent
  * Description: Turn your WordPress site into an AI agent-operable command layer using the Abilities API and Model Context Protocol (MCP). Let Claude Desktop, Cursor, VS Code, and other MCP-compatible AI clients discover, read, and safely operate your WordPress site through natural language.
  * Version:     1.0.0
- * Author:      Your Name
- * Author URI:  https://example.com
+ * Author:      BuiltByTanin
+ * Author URI:  https://github.com/taninrahman21
  * License:     GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: wp-siteagent
@@ -13,7 +13,7 @@
  * Requires at least: 6.0
  * Requires PHP: 8.1
  *
- * @package WP_SiteAgent
+ * @package SiteAgent_For_WordPress
  */
 
 defined('ABSPATH') || exit;

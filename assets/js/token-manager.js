@@ -171,35 +171,29 @@
 				}
 			});
 
-			// Update description and button label.
-			const desc = document.getElementById('sa-os-desc');
-			const label = document.getElementById('sa-copy-claude-label');
+			// Update commands if token exists.
+			const step1Input = document.getElementById('sa-claude-step-1');
+			const step2Input = document.getElementById('sa-claude-step-2');
 
-			if (os === 'windows') {
-				if (desc) desc.textContent = 'Connect this site to Claude Desktop automatically by running a simple PowerShell command.';
-				if (label) label.textContent = 'Copy PowerShell Command';
-			} else {
-				const osName = os === 'mac' ? 'macOS' : 'Linux';
-				if (desc) desc.textContent = `Connect this site to Claude Desktop automatically by running a simple Terminal command on ${osName}.`;
-				if (label) label.textContent = 'Copy Terminal Command';
+			if (step1Input) {
+				step1Input.value = (os === 'mac' ? 'sudo ' : '') + 'npm install -g mcp-remote';
 			}
 
-			// Update the hidden copy source if a token exists.
-			if (generatedToken) {
+			if (generatedToken && step2Input) {
 				const endpoint = cfg.mcpEndpoint || '';
 				const token = generatedToken;
 				let command = '';
 
 				if (os === 'windows') {
-					command = `npm install -g mcp-remote; node -e "const fs=require('fs'),os=require('os'),path=require('path'),cp=require('child_process');const home=os.homedir();const p=path.join(home,'AppData','Roaming','Claude','claude_desktop_config.json');const dir=path.dirname(p);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync('npm root -g').toString().trim(),'mcp-remote','dist','proxy.js');d.mcpServers['wp-siteagent']={command:'node',args:[proxy,'${endpoint}','--header','Authorization: Bearer ${token}']};fs.writeFileSync(p,JSON.stringify(d,null,2));console.log('Done');" ; Write-Host "Successfully connected. Restart Claude Desktop." -ForegroundColor Green`;
+					command = `node -e "const fs=require('fs'),os=require('os'),path=require('path'),cp=require('child_process');const home=os.homedir();const p=path.join(home,'AppData','Roaming','Claude','claude_desktop_config.json');const dir=path.dirname(p);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync('npm root -g').toString().trim(),'mcp-remote','dist','proxy.js');d.mcpServers['wp-siteagent']={command:'node',args:[proxy,'${endpoint}','--header','Authorization: Bearer ${token}']};fs.writeFileSync(p,JSON.stringify(d,null,2));console.log('Done');"`;
+				} else if (os === 'mac') {
+					command = `node -e 'const fs=require("fs"),os=require("os"),path=require("path"),cp=require("child_process");const home=os.homedir();const configPath=path.join(home,"Library","Application Support","Claude","claude_desktop_config.json");const dir=path.dirname(configPath);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(configPath,"utf8"))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync("npm root -g").toString().trim(),"mcp-remote","dist","proxy.js");d.mcpServers["wp-siteagent"]={command:"node",args:[proxy,"${endpoint}","--header","Authorization: Bearer ${token}"]};fs.writeFileSync(configPath,JSON.stringify(d,null,2));console.log("Done. Restart Claude Desktop.");'`;
 				} else {
-					command = `npm install -g mcp-remote && node -e "const fs=require('fs'),os=require('os'),path=require('path'),cp=require('child_process');const home=os.homedir();const configPath=process.platform==='darwin'?path.join(home,'Library','Application Support','Claude','claude_desktop_config.json'):path.join(home,'.config','Claude','claude_desktop_config.json');const dir=path.dirname(configPath);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(configPath,'utf8'))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync('npm root -g').toString().trim(),'mcp-remote','dist','proxy.js');d.mcpServers['wp-siteagent']={command:'node',args:[proxy,'${endpoint}','--header','Authorization: Bearer ${token}']};fs.writeFileSync(configPath,JSON.stringify(d,null,2));console.log('Connected. Restart Claude Desktop.');"`;
+					// Linux
+					command = `node -e 'const fs=require("fs"),os=require("os"),path=require("path"),cp=require("child_process");const home=os.homedir();const configPath=path.join(home,".config","Claude","claude_desktop_config.json");const dir=path.dirname(configPath);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(configPath,"utf8"))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync("npm root -g").toString().trim(),"mcp-remote","dist","proxy.js");d.mcpServers["wp-siteagent"]={command:"node",args:[proxy,"${endpoint}","--header","Authorization: Bearer ${token}"]};fs.writeFileSync(configPath,JSON.stringify(d,null,2));console.log("Done. Restart Claude Desktop.");'`;
 				}
 
-				const target = document.getElementById('sa-dynamic-copy-target');
-				if (target) {
-					target.value = command;
-				}
+				step2Input.value = command;
 			}
 		},
 
@@ -277,12 +271,8 @@
 				};
 			}
 
-			const claudeBtn = document.getElementById('sa-copy-claude-btn');
-			if (claudeBtn) {
-				claudeBtn.onclick = () => {
-					window.siteagent.copyText('sa-dynamic-copy-target');
-				};
-			}
+			// Initialize the dynamic copy source for Claude command.
+			this.switchOsTab(window.siteagentTokens.selectedOs || detectOs());
 
 			// Show done button; enable when checkbox is checked.
 			const doneBtn = document.getElementById('sa-close-after-copy');
@@ -326,6 +316,12 @@
 			if (cursorUrl) cursorUrl.value = '';
 			const cursorAuth = document.getElementById('sa-cursor-auth');
 			if (cursorAuth) cursorAuth.value = '';
+
+			const step1 = document.getElementById('sa-claude-step-1');
+			if (step1) step1.value = 'npm install -g mcp-remote';
+
+			const step2 = document.getElementById('sa-claude-step-2');
+			if (step2) step2.value = '';
 
 
 			const reveal = document.getElementById('sa-token-reveal');

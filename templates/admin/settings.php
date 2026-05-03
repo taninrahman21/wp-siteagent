@@ -7,10 +7,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$plugin        = \WP_SiteAgent\Plugin::get_instance();
-$enabled_mods  = $plugin->get_enabled_modules();
+$siteagent_plugin        = \WP_SiteAgent\Plugin::get_instance();
+$siteagent_enabled_mods  = $siteagent_plugin->get_enabled_modules();
 
-$all_modules = [
+$siteagent_all_modules = [
 	'content'     => [ 'label' => __( 'Content', 'wp-siteagent' ),     'desc' => __( 'Posts, pages, CPT management', 'wp-siteagent' ),         'count' => 9 ],
 	'seo'         => [ 'label' => __( 'SEO', 'wp-siteagent' ),         'desc' => __( 'SEO analysis and meta management', 'wp-siteagent' ),     'count' => 6 ],
 	'diagnostics' => [ 'label' => __( 'Diagnostics', 'wp-siteagent' ), 'desc' => __( 'Site health, error logs, cron', 'wp-siteagent' ),        'count' => 7 ],
@@ -72,24 +72,29 @@ $all_modules = [
 						</div>
 						<div class="sa-card-body">
 							<div class="sa-abilities-grid">
-								<?php foreach ( $all_modules as $slug => $mod ) :
-									$wc_available = $slug !== 'woocommerce' || class_exists( 'WooCommerce' );
-									$is_active = in_array( $slug, $enabled_mods, true );
+								<?php foreach ( $siteagent_all_modules as $siteagent_slug => $siteagent_mod ) :
+									$siteagent_wc_available = $siteagent_slug !== 'woocommerce' || class_exists( 'WooCommerce' );
+									$siteagent_is_active = in_array( $siteagent_slug, $siteagent_enabled_mods, true );
 								?>
-								<div class="sa-setting-item" style="padding: 16px; border: 1px solid var(--sa-border); border-radius: 8px; opacity: <?php echo $wc_available ? '1' : '0.5'; ?>;">
+								<div class="sa-setting-item" style="padding: 16px; border: 1px solid var(--sa-border); border-radius: 8px; opacity: <?php echo $siteagent_wc_available ? '1' : '0.5'; ?>;">
 									<div class="sa-setting-info">
 										<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
-											<span class="sa-setting-title" style="margin-bottom: 0;"><?php echo esc_html( $mod['label'] ); ?></span>
-											<span class="sa-tag sa-tag--public" style="font-size: 10px;"><?php printf( esc_html__( '%d tools', 'wp-siteagent' ), $mod['count'] ); ?></span>
+											<span class="sa-setting-title" style="margin-bottom: 0;"><?php echo esc_html( $siteagent_mod['label'] ); ?></span>
+											<span class="sa-tag sa-tag--public" style="font-size: 10px;"><?php
+												printf(
+													/* translators: %d: number of tools */
+													esc_html__( '%d tools', 'wp-siteagent' ),
+													(int) $siteagent_mod['count']
+												); ?></span>
 										</div>
-										<span class="sa-setting-desc" style="font-size: 12px;"><?php echo esc_html( $mod['desc'] ); ?></span>
-										<?php if ( ! $wc_available ) : ?>
+										<span class="sa-setting-desc" style="font-size: 12px;"><?php echo esc_html( $siteagent_mod['desc'] ); ?></span>
+										<?php if ( ! $siteagent_wc_available ) : ?>
 											<small style="color: var(--sa-danger); display: block; margin-top: 4px; font-weight: 700; font-size: 10px; text-transform: uppercase;"><?php esc_html_e( 'WooCommerce Missing', 'wp-siteagent' ); ?></small>
 										<?php endif; ?>
 									</div>
 									<label class="sa-switch">
-										<input type="checkbox" name="siteagent_enabled_modules[]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( $is_active ); ?> <?php echo ! $wc_available ? 'disabled' : ''; ?> 
-											onchange="siteagent.toggleModule('<?php echo esc_js( $slug ); ?>', this.checked)" />
+										<input type="checkbox" name="siteagent_enabled_modules[]" value="<?php echo esc_attr( $siteagent_slug ); ?>" <?php checked( $siteagent_is_active ); ?> <?php echo ! $siteagent_wc_available ? 'disabled' : ''; ?> 
+											onchange="siteagent.toggleModule('<?php echo esc_js( $siteagent_slug ); ?>', this.checked)" />
 										<span class="sa-slider"></span>
 									</label>
 								</div>

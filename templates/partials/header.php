@@ -7,9 +7,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : 'wp-siteagent';
+$siteagent_current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : 'wp-siteagent';
 
-$nav_items = [
+$siteagent_nav_items = [
 	'wp-siteagent'           => [
 		'label' => __( 'Dashboard', 'wp-siteagent' ),
 		'icon'  => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>',
@@ -35,22 +35,55 @@ $nav_items = [
 <header class="sa-header">
 	<div class="sa-header-brand">
 		<div class="sa-header-title">
-			<h1>WP SiteAgent</h1>
+			<h1>SiteAgent</h1>
 		</div>
 	</div>
 
 	<nav class="sa-nav">
-		<?php foreach ( $nav_items as $page => $item ) : ?>
-			<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $page ) ); ?>" class="sa-nav-link <?php echo $current_page === $page ? 'sa-nav-link--active' : ''; ?>">
-				<span class="sa-nav-icon"><?php echo $item['icon']; ?></span>
-				<span class="sa-nav-label"><?php echo esc_html( $item['label'] ); ?></span>
+		<?php foreach ( $siteagent_nav_items as $siteagent_page => $siteagent_item ) : ?>
+			<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $siteagent_page ) ); ?>" class="sa-nav-link <?php echo $siteagent_current_page === $siteagent_page ? 'sa-nav-link--active' : ''; ?>">
+				<span class="sa-nav-icon"><?php echo wp_kses( $siteagent_item['icon'], [
+					'svg'      => [
+						'width'           => [],
+						'height'          => [],
+						'viewbox'         => [],
+						'fill'            => [],
+						'stroke'          => [],
+						'stroke-width'    => [],
+						'stroke-linecap'  => [],
+						'stroke-linejoin' => [],
+					],
+					'path'     => [ 'd' => [] ],
+					'rect'     => [
+						'x'      => [],
+						'y'      => [],
+						'width'  => [],
+						'height' => [],
+						'rx'     => [],
+						'ry'     => [],
+					],
+					'polyline' => [ 'points' => [] ],
+					'line'     => [
+						'x1' => [],
+						'y1' => [],
+						'x2' => [],
+						'y2' => [],
+					],
+					'circle'   => [
+						'cx' => [],
+						'cy' => [],
+						'r'  => [],
+					],
+				] ); ?></span>
+				<span class="sa-nav-label"><?php echo esc_html( $siteagent_item['label'] ); ?></span>
 			</a>
 		<?php endforeach; ?>
 	</nav>
 
 	<div class="sa-header-actions">
-		<a href="#" class="sa-btn sa-btn--primary sa-btn--sm" style="background: #000; color: #fff; border: none; padding: 10px 20px; border-radius: 100px; font-weight: 600;">
-			<?php esc_html_e( 'Upgrade to Pro', 'wp-siteagent' ); ?>
+		<a href="https://github.com/taninrahman21/wp-siteagent#readme" target="_blank" class="sa-btn sa-btn--primary sa-btn--sm" style="background: var(--sa-primary); color: #fff; border: none; padding: 10px 20px; border-radius: 100px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+			<?php esc_html_e( 'Documentation', 'wp-siteagent' ); ?>
 		</a>
 	</div>
 </header>

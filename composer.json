@@ -17,12 +17,11 @@
         "phpunit/phpunit": "^10.0"
     },
     "autoload": {
-        "psr-4": {
-            "WP_SiteAgent\\Admin\\": "admin/",
-            "WP_SiteAgent\\Api\\": "api/",
-            "WP_SiteAgent\\Modules\\": "includes/modules/",
-            "WP_SiteAgent\\": "includes/"
-        }
+        "classmap": [
+            "admin/",
+            "api/",
+            "includes/"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

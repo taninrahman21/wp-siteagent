@@ -319,7 +319,7 @@ class Module_Content extends Module_Base {
 		}
 
 		if ( ! empty( $input['date'] ) ) {
-			$post_data['post_date']     = date( 'Y-m-d H:i:s', strtotime( sanitize_text_field( $input['date'] ) ) );
+			$post_data['post_date']     = gmdate( 'Y-m-d H:i:s', strtotime( sanitize_text_field( $input['date'] ) ) );
 			$post_data['post_date_gmt'] = get_gmt_from_date( $post_data['post_date'] );
 		}
 
@@ -446,7 +446,7 @@ class Module_Content extends Module_Base {
 			$post_data['menu_order'] = absint( $input['menu_order'] );
 		}
 		if ( ! empty( $input['date'] ) ) {
-			$post_data['post_date']     = date( 'Y-m-d H:i:s', strtotime( sanitize_text_field( $input['date'] ) ) );
+			$post_data['post_date']     = gmdate( 'Y-m-d H:i:s', strtotime( sanitize_text_field( $input['date'] ) ) );
 			$post_data['post_date_gmt'] = get_gmt_from_date( $post_data['post_date'] );
 		}
 		if ( isset( $input['categories'] ) ) {

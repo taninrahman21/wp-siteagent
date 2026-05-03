@@ -7,11 +7,11 @@
 
 defined('ABSPATH') || exit;
 
-$plugin = \WP_SiteAgent\Plugin::get_instance();
-$registry = $plugin->get_abilities_registry();
-$abilities = $registry->get_all();
+$siteagent_plugin = \WP_SiteAgent\Plugin::get_instance();
+$siteagent_registry = $siteagent_plugin->get_abilities_registry();
+$siteagent_abilities = $siteagent_registry->get_all();
 
-$module_labels = [
+$siteagent_module_labels = [
 	'content'     => __( 'Content', 'wp-siteagent' ),
 	'seo'         => __( 'SEO', 'wp-siteagent' ),
 	'woocommerce' => __( 'WooCommerce', 'wp-siteagent' ),
@@ -32,17 +32,17 @@ $module_labels = [
 						<?php esc_html_e('Abilities', 'wp-siteagent'); ?></h2>
 					<div style="font-size: 13px; color: var(--sa-text-muted); margin-top: 4px;">
 						<?php
-						$disabled_abs = (array) get_option('siteagent_disabled_abilities', []);
-						$public_abs = $registry->get_mcp_public();
-						$public_count = count($public_abs);
-						$disabled_count = count(array_intersect(array_keys($abilities), $disabled_abs));
+						$siteagent_disabled_abs = (array) get_option('siteagent_disabled_abilities', []);
+						$siteagent_public_abs = $siteagent_registry->get_mcp_public();
+						$siteagent_public_count = count($siteagent_public_abs);
+						$siteagent_disabled_count = count(array_intersect(array_keys($siteagent_abilities), $siteagent_disabled_abs));
 
 						printf(
 							/* translators: 1: total count, 2: public count, 3: disabled count */
 							esc_html__('%1$d registered · %2$d MCP-public · %3$d disabled', 'wp-siteagent'),
-							count($abilities),
-							$public_count,
-							$disabled_count
+							(int) count($siteagent_abilities),
+							(int) $siteagent_public_count,
+							(int) $siteagent_disabled_count
 						);
 						?>
 					</div>
@@ -58,24 +58,24 @@ $module_labels = [
 
 			<div class="sa-abilities-grid">
 				<?php
-				$module_objs = $plugin->get_modules();
-				foreach ($module_labels as $slug => $label):
-					$module_obj = $module_objs[$slug] ?? null;
-					$module_ability_names = $module_obj ? $module_obj->get_ability_names() : [];
+				$siteagent_module_objs = $siteagent_plugin->get_modules();
+				foreach ($siteagent_module_labels as $slug => $label):
+					$siteagent_module_obj = $siteagent_module_objs[$slug] ?? null;
+					$siteagent_module_ability_names = $siteagent_module_obj ? $siteagent_module_obj->get_ability_names() : [];
 
 					if ('general' === $slug) {
-						$module_abilities = array_filter($abilities, function ($name) use ($module_objs) {
-							foreach ($module_objs as $m) {
+						$siteagent_module_abilities = array_filter($siteagent_abilities, function ($name) use ($siteagent_module_objs) {
+							foreach ($siteagent_module_objs as $m) {
 								if (in_array($name, $m->get_ability_names(), true))
 									return false;
 							}
 							return true;
 						}, ARRAY_FILTER_USE_KEY);
 					} else {
-						$module_abilities = array_intersect_key($abilities, array_flip($module_ability_names));
+						$siteagent_module_abilities = array_intersect_key($siteagent_abilities, array_flip($siteagent_module_ability_names));
 					}
 
-					if (empty($module_abilities) && 'general' !== $slug)
+					if (empty($siteagent_module_abilities) && 'general' !== $slug)
 						continue;
 					?>
 					<div class="sa-card" style="padding: 0;">
@@ -84,14 +84,19 @@ $module_labels = [
 							<h3 style="font-size: 14px; font-weight: 600; color: var(--sa-secondary); margin: 0;">
 								<?php echo esc_html($label); ?> 	<?php esc_html_e('module', 'wp-siteagent'); ?></h3>
 							<span class="sa-tag sa-tag--public"
-								style="text-transform: lowercase; font-weight: 500;"><?php printf(esc_html__('%d abilities', 'wp-siteagent'), count($module_abilities)); ?></span>
+								style="text-transform: lowercase; font-weight: 500;"><?php
+								printf(
+									/* translators: %d: number of abilities */
+									esc_html__('%d abilities', 'wp-siteagent'),
+									count($siteagent_module_abilities)
+								); ?></span>
 						</div>
 						<div class="sa-abilities-list">
-							<?php foreach ($module_abilities as $name => $ability):
+							<?php foreach ($siteagent_module_abilities as $name => $ability):
 								$is_public = !empty($ability['annotations']['meta']['mcp']['public']);
 								$is_readonly = !empty($ability['annotations']['readonly']);
 								$is_destructive = !empty($ability['annotations']['destructive']);
-								$is_enabled = !in_array($name, $disabled_abs, true);
+								$is_enabled = !in_array($name, $siteagent_disabled_abs, true);
 								?>
 								<div class="sa-ability-row">
 									<div class="sa-ability-info" style="padding: 12px 0;">

@@ -893,9 +893,12 @@ class Module_Woocommerce extends Module_Base {
 
 		// Low stock.
 		$low_stock = $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
-			INNER JOIN {$wpdb->postmeta} pm2 ON pm.post_id = pm2.post_id AND pm2.meta_key = '_manage_stock' AND pm2.meta_value = 'yes'
-			WHERE pm.meta_key = '_stock' AND CAST(pm.meta_value AS SIGNED) <= " . (int) get_option( 'woocommerce_notify_low_stock_amount', 2 )
+			$wpdb->prepare(
+				"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
+				INNER JOIN {$wpdb->postmeta} pm2 ON pm.post_id = pm2.post_id AND pm2.meta_key = '_manage_stock' AND pm2.meta_value = 'yes'
+				WHERE pm.meta_key = '_stock' AND CAST(pm.meta_value AS SIGNED) <= %d",
+				(int) get_option( 'woocommerce_notify_low_stock_amount', 2 )
+			)
 		);
 
 		$summary = [

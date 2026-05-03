@@ -1,108 +1,78 @@
-=== WP SiteAgent ===
-Contributors: siteagent
-Tags: ai, mcp, model-context-protocol, claude, cursor, agent, automation
-Requires at least: 6.9
-Tested up to: 6.9
-Stable tag: 1.0.0
+=== SiteAgent for WordPress ===
+Contributors: builtbytanin
+Tags: ai, mcp, claude, automation, agent
+Requires at least: 6.0
+Tested up to: 6.7
 Requires PHP: 8.1
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Connect AI agents (Claude Desktop, Cursor, and more) to your WordPress site via the Model Context Protocol (MCP).
+Connect Claude Desktop and other AI agents to WordPress in seconds using automated MCP commands.
 
 == Description ==
 
-WP SiteAgent exposes your WordPress site to AI coding agents and assistants through the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) — an open standard for AI-to-tool communication.
+**SiteAgent for WordPress** is the ultimate bridge between your WordPress site and AI agents (like Claude Desktop, Cursor, and VS Code). Built on the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), it allows AI assistants to manage your site through simple natural language.
 
-**Key Features:**
+What makes SiteAgent special is the **Zero-Config Setup**. Instead of manually editing JSON files, SiteAgent generates automated terminal commands that configure your AI clients for you instantly.
 
-* 🤖 **MCP JSON-RPC 2.0 endpoint** — fully compatible with Claude Desktop, Cursor, Windsurf, and any MCP-compliant client
-* ⚡ **50+ Abilities** — content management, SEO analysis, media library, users, diagnostics, WooCommerce
-* 🔑 **Secure API tokens** — SHA-256 hashed, per-token ability restrictions, expiry dates
-* 🛡️ **Rate limiting** — configurable hourly/daily limits per token
-* 📋 **Audit logging** — every API call logged with input, status, duration, and IP
-* ⚙️ **Modular** — enable/disable modules (Content, SEO, WooCommerce, Diagnostics, Media, Users)
-* 🔍 **SEO module** — Yoast SEO and RankMath integration, keyword density, readability scoring, broken link checking
-* 🛒 **WooCommerce module** — products, orders, coupons, customers, store analytics (auto-enabled when WooCommerce is active)
-* 🩺 **Diagnostics** — site health report, error logs, cron jobs, DB table sizes, transients
+### 🚀 Key Features:
 
-**Included Abilities (50+):**
+*   **One-Click Automated Setup** – No manual JSON editing. Copy a single command to connect Claude Desktop automatically.
+*   **45+ Built-in Abilities** – Comprehensive tools for Content, SEO, WooCommerce, Media, and Diagnostics.
+*   **Cross-Platform Support** – Dedicated automated setup steps for **Windows, macOS, and Linux**.
+*   **Native MCP Support** – Full JSON-RPC 2.0 server implementation compatible with all MCP-compliant clients.
+*   **Enterprise-Grade Security** – All tokens are SHA-256 hashed. Granular permissions ensure AI agents only access what you allow.
+*   **Detailed Audit Logging** – Watch every action the AI takes in real-time with our built-in logs.
 
-*Content:* list-posts, get-post, create-post, update-post, delete-post, bulk-update-posts, list-post-types, list-taxonomies, get-post-revisions
+---
 
-*SEO:* analyze-seo, set-meta-description, set-focus-keyword, bulk-seo-audit, get-sitemap-urls, check-broken-links
+### 📦 Included Modules:
 
-*WooCommerce:* woo-list/get/create/update/delete-product, woo-list/get-order, woo-update-order-status, woo-store-summary, woo-list-coupons, woo-create-coupon, woo-list-customers
+**1. Content Management**
+List, read, create, and update posts, pages, and custom post types.
 
-*Diagnostics:* site-health-report, list-plugin-updates, get-error-logs, list-cron-jobs, get-site-options, list-transients, get-db-table-sizes
+**2. SEO Power-Tools (Yoast & RankMath)**
+AI-driven SEO audits, meta-description updates, and focus keyword management.
 
-*Media:* list-media, get-unattached-media, update-media-alt-text, bulk-update-alt-text, get-large-media, get-media-library-stats
+**3. WooCommerce (Auto-enabled)**
+Manage products, orders, and store analytics through natural language.
 
-*Users:* list-users, get-user, create-user, update-user-role, list-roles, get-user-stats
+**4. Site Diagnostics & Media**
+Site health reports, error log monitoring, bulk media alt-text updates, and more.
 
 == Installation ==
 
-1. Upload the plugin files to the `/wp-content/plugins/wp-siteagent` directory, or install the plugin through the WordPress plugins screen.
-2. Activate the plugin through the 'Plugins' screen in WordPress.
-3. Go to **SiteAgent > API Tokens** and generate a new token.
-4. Copy the token and add it to your MCP client configuration.
-
-**Claude Desktop configuration:**
-
-    {
-      "mcpServers": {
-        "wp-siteagent": {
-          "type": "http",
-          "url": "https://your-site.com/wp-json/siteagent/v1/mcp/streamable",
-          "headers": {
-            "Authorization": "Bearer YOUR_TOKEN_HERE"
-          }
-        }
-      }
-    }
+1.  Install and activate the plugin.
+2.  Go to **SiteAgent > API Tokens** to generate your secure access key.
+3.  Go to the **SiteAgent Dashboard** and paste your token.
+4.  **Automated Connection**:
+    *   **Step 1**: Run the provided command to install `mcp-remote`.
+    *   **Step 2**: Copy the generated "Connect" command and run it in your terminal.
+5.  Restart Claude Desktop, and you're ready!
 
 == Frequently Asked Questions ==
 
-= Does this require WooCommerce? =
+= Do I need to edit the Claude config file manually? =
+No! SiteAgent generates a command that uses `mcp-remote` to handle the configuration for you automatically on Windows, Mac, or Linux.
 
-No. The WooCommerce module is optional and automatically activates only if WooCommerce is installed and active.
+= Is Node.js required? =
+Yes, to use the automated connection feature, you need Node.js installed on your computer to run the `mcp-remote` utility.
 
-= Is this compatible with Yoast SEO and RankMath? =
-
-Yes. The SEO module detects both and uses their metadata fields when available.
-
-= How are tokens stored? =
-
-Tokens are stored as SHA-256 hashes — the raw token is shown only once at generation and never stored in plain text.
-
-= Can I restrict what an AI agent can do? =
-
-Yes. When generating a token, you can restrict it to a specific set of abilities.
-
-= What WordPress version do I need? =
-
-WordPress 6.9+ is required for full WordPress Abilities API compatibility.
+= Can I use this with Cursor or VS Code? =
+Absolutely. The Dashboard provides the MCP Server URL which you can paste directly into Cursor or any IDE that supports MCP.
 
 == Screenshots ==
 
-1. Dashboard overview with API call statistics and module status
-2. API Token manager with one-time token reveal
-3. Abilities browser showing all registered MCP tools
-4. Audit log with filtering and CSV export
-5. Settings page with module enable/disable controls
+1. **Dashboard**: Automated setup steps for Windows, Mac, and Linux.
+2. **Abilities Browser**: A full catalog of tools your AI agent can use.
+3. **Token Manager**: Secure token generation with granular ability selection.
+4. **Audit Log**: Detailed history of every AI-powered action.
 
 == Changelog ==
 
 = 1.0.0 =
-* Initial release.
-* Full MCP JSON-RPC 2.0 server implementation.
-* 50+ abilities across 6 modules.
-* Secure token management with SHA-256 hashing.
-* Rate limiting, audit logging, and caching.
-* Full admin UI with dark-theme dashboard.
-* Yoast SEO, RankMath, and WooCommerce integration.
-
-== Upgrade Notice ==
-
-= 1.0.0 =
-Initial release — no upgrade steps required.
+*   Official Initial Release.
+*   Automated setup for Claude Desktop using `mcp-remote`.
+*   45+ abilities across Content, SEO, and WooCommerce modules.
+*   Secure hashed tokens and real-time audit logging.

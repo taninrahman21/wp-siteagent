@@ -403,6 +403,7 @@ class Rest_Controller {
 		}
 
 		$logs   = $this->audit->get_logs( [ 'per_page' => 5000, 'page' => 1 ] );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
 		$output = fopen( 'php://output', 'w' );
 
 		if ( ! $output ) {
@@ -416,9 +417,11 @@ class Rest_Controller {
 		header( 'Expires: 0' );
 
 		// CSV header row.
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fputcsv
 		fputcsv( $output, [ 'ID', 'Token ID', 'User ID', 'Ability', 'Status', 'Duration (ms)', 'IP Address', 'Executed At', 'Summary' ] );
 
 		foreach ( $logs['logs'] as $log ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fputcsv
 			fputcsv( $output, [
 				$log['id'],
 				$log['token_id'],
@@ -432,6 +435,7 @@ class Rest_Controller {
 			] );
 		}
 
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
 		fclose( $output );
 		exit;
 	}

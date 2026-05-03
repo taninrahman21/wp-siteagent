@@ -104,22 +104,32 @@
 			const endpoint = cfg.mcpEndpoint || '';
 
 			if (this.selectedClient === 'claude') {
-				const commandBlock = document.getElementById('sa-dash-command-block');
-				if (!commandBlock) return;
+				const step1Input = document.getElementById('sa-dash-claude-step-1');
+				const step2Input = document.getElementById('sa-dash-claude-step-2');
 
-				if (!token) {
-					commandBlock.textContent = 'Paste your token above to generate the command';
-					return;
+				if (step1Input) {
+					step1Input.value = (this.selectedOs === 'mac' ? 'sudo ' : '') + 'npm install -g mcp-remote';
 				}
 
-				let command = '';
-				if (this.selectedOs === 'windows') {
-					command = `npm install -g mcp-remote; node -e "const fs=require('fs'),os=require('os'),path=require('path'),cp=require('child_process');const home=os.homedir();const p=path.join(home,'AppData','Roaming','Claude','claude_desktop_config.json');const dir=path.dirname(p);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync('npm root -g').toString().trim(),'mcp-remote','dist','proxy.js');d.mcpServers['wp-siteagent']={command:'node',args:[proxy,'${endpoint}','--header','Authorization: Bearer ${token}']};fs.writeFileSync(p,JSON.stringify(d,null,2));console.log('Done');" ; Write-Host "Successfully connected. Restart Claude Desktop." -ForegroundColor Green`;
-				} else {
-					command = `npm install -g mcp-remote && node -e "const fs=require('fs'),os=require('os'),path=require('path'),cp=require('child_process');const home=os.homedir();const configPath=process.platform==='darwin'?path.join(home,'Library','Application Support','Claude','claude_desktop_config.json'):path.join(home,'.config','Claude','claude_desktop_config.json');const dir=path.dirname(configPath);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(configPath,'utf8'))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync('npm root -g').toString().trim(),'mcp-remote','dist','proxy.js');d.mcpServers['wp-siteagent']={command:'node',args:[proxy,'${endpoint}','--header','Authorization: Bearer ${token}']};fs.writeFileSync(configPath,JSON.stringify(d,null,2));console.log('Connected. Restart Claude Desktop.');"`;
-				}
+				if (step2Input) {
+					if (!token) {
+						step2Input.value = '';
+						step2Input.placeholder = 'Paste token first...';
+						return;
+					}
 
-				commandBlock.textContent = command;
+					let command = '';
+					if (this.selectedOs === 'windows') {
+						command = `node -e "const fs=require('fs'),os=require('os'),path=require('path'),cp=require('child_process');const home=os.homedir();const p=path.join(home,'AppData','Roaming','Claude','claude_desktop_config.json');const dir=path.dirname(p);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync('npm root -g').toString().trim(),'mcp-remote','dist','proxy.js');d.mcpServers['wp-siteagent']={command:'node',args:[proxy,'${endpoint}','--header','Authorization: Bearer ${token}']};fs.writeFileSync(p,JSON.stringify(d,null,2));console.log('Done');"`;
+					} else if (this.selectedOs === 'mac') {
+						command = `node -e 'const fs=require("fs"),os=require("os"),path=require("path"),cp=require("child_process");const home=os.homedir();const configPath=path.join(home,"Library","Application Support","Claude","claude_desktop_config.json");const dir=path.dirname(configPath);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(configPath,"utf8"))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync("npm root -g").toString().trim(),"mcp-remote","dist","proxy.js");d.mcpServers["wp-siteagent"]={command:"node",args:[proxy,"${endpoint}","--header","Authorization: Bearer ${token}"]};fs.writeFileSync(configPath,JSON.stringify(d,null,2));console.log("Done. Restart Claude Desktop.");'`;
+					} else {
+						// Linux
+						command = `node -e 'const fs=require("fs"),os=require("os"),path=require("path"),cp=require("child_process");const home=os.homedir();const configPath=path.join(home,".config","Claude","claude_desktop_config.json");const dir=path.dirname(configPath);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(configPath,"utf8"))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync("npm root -g").toString().trim(),"mcp-remote","dist","proxy.js");d.mcpServers["wp-siteagent"]={command:"node",args:[proxy,"${endpoint}","--header","Authorization: Bearer ${token}"]};fs.writeFileSync(configPath,JSON.stringify(d,null,2));console.log("Done. Restart Claude Desktop.");'`;
+					}
+
+					step2Input.value = command;
+				}
 			} else {
 				// Cursor / IDEs
 				const authInput = document.getElementById('sa-dash-cursor-auth');
@@ -128,37 +138,6 @@
 				}
 			}
 		},
-
-		/**
-		 * Copy the currently displayed Claude command to clipboard.
-		 */
-		copyCommand: function () {
-			const commandBlock = document.getElementById('sa-dash-command-block');
-			if (!commandBlock) return;
-
-			const text = commandBlock.textContent;
-			if (!text || text.includes('Paste your token')) {
-				if (window.siteagent && window.siteagent._showToast) {
-					window.siteagent._showToast('Please enter a token first.', 'error');
-				}
-				return;
-			}
-
-			// Use a temporary textarea to copy.
-			const el = document.createElement('textarea');
-			el.value = text;
-			el.setAttribute('readonly', '');
-			el.style.position = 'absolute';
-			el.style.left = '-9999px';
-			document.body.appendChild(el);
-			el.select();
-			document.execCommand('copy');
-			document.body.removeChild(el);
-
-			if (window.siteagent && window.siteagent._showToast) {
-				window.siteagent._showToast(i18n.copied || 'Copied!');
-			}
-		}
 	};
 
 	// Initialize on DOM ready.
