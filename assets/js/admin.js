@@ -345,3 +345,4 @@
 	// Register WordPress AJAX actions via PHP (see class-plugin.php boot).
 
 }());
+

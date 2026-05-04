@@ -88,10 +88,10 @@ class Admin {
 
 		// Main menu page.
 		$this->page_hooks[] = add_menu_page(
-			__( 'WP SiteAgent', 'wp-siteagent' ),
-			__( 'SiteAgent', 'wp-siteagent' ),
+			__( 'WP SiteAgent', 'siteagent' ),
+			__( 'SiteAgent', 'siteagent' ),
 			'manage_options',
-			'wp-siteagent',
+			'siteagent',
 			[ $this, 'render_dashboard' ],
 			$icon,
 			80
@@ -99,61 +99,61 @@ class Admin {
 
 		// Dashboard submenu.
 		add_submenu_page(
-			'wp-siteagent',
-			__( 'Dashboard — WP SiteAgent', 'wp-siteagent' ),
-			__( 'Dashboard', 'wp-siteagent' ),
+			'siteagent',
+			__( 'Dashboard — WP SiteAgent', 'siteagent' ),
+			__( 'Dashboard', 'siteagent' ),
 			'manage_options',
-			'wp-siteagent',
+			'siteagent',
 			[ $this, 'render_dashboard' ]
 		);
 
 		// Abilities submenu.
 		$this->page_hooks[] = add_submenu_page(
-			'wp-siteagent',
-			__( 'Abilities — WP SiteAgent', 'wp-siteagent' ),
-			__( 'Abilities', 'wp-siteagent' ),
+			'siteagent',
+			__( 'Abilities — WP SiteAgent', 'siteagent' ),
+			__( 'Abilities', 'siteagent' ),
 			'manage_options',
-			'wp-siteagent-abilities',
+			'siteagent-abilities',
 			[ $this, 'render_abilities' ]
 		);
 
 		// API Tokens submenu.
 		$this->page_hooks[] = add_submenu_page(
-			'wp-siteagent',
-			__( 'API Tokens — WP SiteAgent', 'wp-siteagent' ),
-			__( 'API Tokens', 'wp-siteagent' ),
+			'siteagent',
+			__( 'API Tokens — WP SiteAgent', 'siteagent' ),
+			__( 'API Tokens', 'siteagent' ),
 			'manage_options',
-			'wp-siteagent-tokens',
+			'siteagent-tokens',
 			[ $this, 'render_tokens' ]
 		);
 
 		// Audit Log submenu.
 		$this->page_hooks[] = add_submenu_page(
-			'wp-siteagent',
-			__( 'Audit Log — WP SiteAgent', 'wp-siteagent' ),
-			__( 'Audit Log', 'wp-siteagent' ),
+			'siteagent',
+			__( 'Audit Log — WP SiteAgent', 'siteagent' ),
+			__( 'Audit Log', 'siteagent' ),
 			'manage_options',
-			'wp-siteagent-audit',
+			'siteagent-audit',
 			[ $this, 'render_audit_log' ]
 		);
 
 		// Settings submenu.
 		$this->page_hooks[] = add_submenu_page(
-			'wp-siteagent',
-			__( 'Settings — WP SiteAgent', 'wp-siteagent' ),
-			__( 'Settings', 'wp-siteagent' ),
+			'siteagent',
+			__( 'Settings — WP SiteAgent', 'siteagent' ),
+			__( 'Settings', 'siteagent' ),
 			'manage_options',
-			'wp-siteagent-settings',
+			'siteagent-settings',
 			[ $this, 'render_settings' ]
 		);
 
 		// Tools submenu.
 		$this->page_hooks[] = add_submenu_page(
-			'wp-siteagent',
-			__( 'Tools — WP SiteAgent', 'wp-siteagent' ),
-			__( 'Tools', 'wp-siteagent' ),
+			'siteagent',
+			__( 'Tools — WP SiteAgent', 'siteagent' ),
+			__( 'Tools', 'siteagent' ),
 			'manage_options',
-			'wp-siteagent-tools',
+			'siteagent-tools',
 			[ $this, 'render_tools' ]
 		);
 	}
@@ -166,7 +166,7 @@ class Admin {
 	 */
 	public function enqueue_assets( string $hook ): void {
 		// Check if we're on a SiteAgent page.
-		$is_siteagent_page = str_contains( $hook, 'wp-siteagent' );
+		$is_siteagent_page = str_contains( $hook, 'siteagent' );
 
 		if ( ! $is_siteagent_page ) {
 			return;
@@ -174,7 +174,7 @@ class Admin {
 
 		// Admin CSS.
 		wp_enqueue_style(
-			'wp-siteagent-admin',
+			'siteagent-admin',
 			SITEAGENT_URL . 'assets/css/admin.css',
 			[],
 			SITEAGENT_VERSION
@@ -182,7 +182,7 @@ class Admin {
 
 		// Admin JS.
 		wp_enqueue_script(
-			'wp-siteagent-admin',
+			'siteagent-admin',
 			SITEAGENT_URL . 'assets/js/admin.js',
 			[],
 			SITEAGENT_VERSION,
@@ -191,19 +191,19 @@ class Admin {
 
 		// Token Manager JS.
 		wp_enqueue_script(
-			'wp-siteagent-token-manager',
+			'siteagent-token-manager',
 			SITEAGENT_URL . 'assets/js/token-manager.js',
-			[ 'wp-siteagent-admin' ],
+			[ 'siteagent-admin' ],
 			SITEAGENT_VERSION,
 			true
 		);
 
 		// Dashboard Connect JS.
-		if ( 'toplevel_page_wp-siteagent' === $hook ) {
+		if ( 'toplevel_page_siteagent' === $hook ) {
 			wp_enqueue_script(
-				'wp-siteagent-dashboard-connect',
+				'siteagent-dashboard-connect',
 				SITEAGENT_URL . 'assets/js/dashboard-connect.js',
-				[ 'wp-siteagent-admin' ],
+				[ 'siteagent-admin' ],
 				SITEAGENT_VERSION,
 				true
 			);
@@ -211,7 +211,7 @@ class Admin {
 
 		// Localized data for JavaScript.
 		wp_localize_script(
-			'wp-siteagent-admin',
+			'siteagent-admin',
 			'siteagentAdmin',
 			[
 				'nonce'       => wp_create_nonce( 'siteagent_admin' ),
@@ -221,12 +221,12 @@ class Admin {
 				'mcpEndpoint' => rest_url( 'siteagent/v1/mcp/streamable' ),
 				'pluginUrl'   => SITEAGENT_URL,
 				'i18n'        => [
-					'copied'        => __( 'Copied!', 'wp-siteagent' ),
-					'confirmRevoke' => __( 'Are you sure you want to revoke this token?', 'wp-siteagent' ),
-					'saving'        => __( 'Saving...', 'wp-siteagent' ),
-					'saved'         => __( 'Saved!', 'wp-siteagent' ),
-					'error'         => __( 'An error occurred. Please try again.', 'wp-siteagent' ),
-					'cacheCleared'  => __( 'Cache cleared!', 'wp-siteagent' ),
+					'copied'        => __( 'Copied!', 'siteagent' ),
+					'confirmRevoke' => __( 'Are you sure you want to revoke this token?', 'siteagent' ),
+					'saving'        => __( 'Saving...', 'siteagent' ),
+					'saved'         => __( 'Saved!', 'siteagent' ),
+					'error'         => __( 'An error occurred. Please try again.', 'siteagent' ),
+					'cacheCleared'  => __( 'Cache cleared!', 'siteagent' ),
 				],
 			]
 		);
@@ -312,7 +312,7 @@ class Admin {
 	 */
 	public function render_dashboard(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'wp-siteagent' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'siteagent' ) );
 		}
 		require SITEAGENT_PATH . 'templates/admin/dashboard.php';
 	}
@@ -324,7 +324,7 @@ class Admin {
 	 */
 	public function render_abilities(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'wp-siteagent' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'siteagent' ) );
 		}
 		require SITEAGENT_PATH . 'templates/admin/abilities.php';
 	}
@@ -336,7 +336,7 @@ class Admin {
 	 */
 	public function render_tokens(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'wp-siteagent' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'siteagent' ) );
 		}
 		require SITEAGENT_PATH . 'templates/admin/tokens.php';
 	}
@@ -348,7 +348,7 @@ class Admin {
 	 */
 	public function render_audit_log(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'wp-siteagent' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'siteagent' ) );
 		}
 		require SITEAGENT_PATH . 'templates/admin/audit-log.php';
 	}
@@ -360,7 +360,7 @@ class Admin {
 	 */
 	public function render_settings(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'wp-siteagent' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'siteagent' ) );
 		}
 		require SITEAGENT_PATH . 'templates/admin/settings.php';
 	}
@@ -372,7 +372,7 @@ class Admin {
 	 */
 	public function render_tools(): void {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to access this page.', 'wp-siteagent' ) );
+			wp_die( esc_html__( 'You do not have permission to access this page.', 'siteagent' ) );
 		}
 		require SITEAGENT_PATH . 'templates/admin/tools.php';
 	}
@@ -404,3 +404,4 @@ class Admin {
 		return $this->audit;
 	}
 }
+

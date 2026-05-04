@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'yourname/wp-siteagent',
+        'name' => 'yourname/siteagent',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '0d2379ff6fb02e39faf9dc7b166481603ee2cfcd',
+        'reference' => 'b4d972b2971e3085e625aecada8c468ec156491c',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => false,
     ),
     'versions' => array(
-        'yourname/wp-siteagent' => array(
+        'yourname/siteagent' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '0d2379ff6fb02e39faf9dc7b166481603ee2cfcd',
+            'reference' => 'b4d972b2971e3085e625aecada8c468ec156491c',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

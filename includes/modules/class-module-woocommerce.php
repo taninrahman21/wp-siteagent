@@ -86,8 +86,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-list-products',
 			[
-				'label'            => __( 'List Products', 'wp-siteagent' ),
-				'description'      => __( 'List WooCommerce products with filtering options.', 'wp-siteagent' ),
+				'label'            => __( 'List Products', 'siteagent' ),
+				'description'      => __( 'List WooCommerce products with filtering options.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -197,8 +197,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-get-product',
 			[
-				'label'            => __( 'Get Product', 'wp-siteagent' ),
-				'description'      => __( 'Get a single WooCommerce product with all details.', 'wp-siteagent' ),
+				'label'            => __( 'Get Product', 'siteagent' ),
+				'description'      => __( 'Get a single WooCommerce product with all details.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'required'   => [ 'product_id' ],
@@ -226,7 +226,7 @@ class Module_Woocommerce extends Module_Base {
 		$product    = wc_get_product( $product_id );
 
 		if ( ! $product ) {
-			return $this->error( __( 'Product not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'Product not found.', 'siteagent' ), 'not_found' );
 		}
 
 		$categories = array_map(
@@ -300,8 +300,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-update-product',
 			[
-				'label'            => __( 'Update Product', 'wp-siteagent' ),
-				'description'      => __( 'Update WooCommerce product fields.', 'wp-siteagent' ),
+				'label'            => __( 'Update Product', 'siteagent' ),
+				'description'      => __( 'Update WooCommerce product fields.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'required'   => [ 'product_id' ],
@@ -343,7 +343,7 @@ class Module_Woocommerce extends Module_Base {
 		$product = wc_get_product( absint( $input['product_id'] ) );
 
 		if ( ! $product ) {
-			return $this->error( __( 'Product not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'Product not found.', 'siteagent' ), 'not_found' );
 		}
 
 		if ( isset( $input['price'] ) ) {
@@ -397,8 +397,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-create-product',
 			[
-				'label'               => __( 'Create Product', 'wp-siteagent' ),
-				'description'         => __( 'Create a new WooCommerce product.', 'wp-siteagent' ),
+				'label'               => __( 'Create Product', 'siteagent' ),
+				'description'         => __( 'Create a new WooCommerce product.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'name' ],
@@ -455,7 +455,7 @@ class Module_Woocommerce extends Module_Base {
 		$product_id = $product->save();
 
 		if ( ! $product_id ) {
-			return $this->error( __( 'Failed to create product.', 'wp-siteagent' ) );
+			return $this->error( __( 'Failed to create product.', 'siteagent' ) );
 		}
 
 		return [
@@ -478,8 +478,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-delete-product',
 			[
-				'label'               => __( 'Delete Product', 'wp-siteagent' ),
-				'description'         => __( 'Delete or trash a WooCommerce product.', 'wp-siteagent' ),
+				'label'               => __( 'Delete Product', 'siteagent' ),
+				'description'         => __( 'Delete or trash a WooCommerce product.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'product_id' ],
@@ -516,7 +516,7 @@ class Module_Woocommerce extends Module_Base {
 		$product    = wc_get_product( $product_id );
 
 		if ( ! $product ) {
-			return $this->error( __( 'Product not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'Product not found.', 'siteagent' ), 'not_found' );
 		}
 
 		$result = wp_delete_post( $product_id, $force );
@@ -541,8 +541,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-list-orders',
 			[
-				'label'            => __( 'List Orders', 'wp-siteagent' ),
-				'description'      => __( 'List WooCommerce orders with filtering.', 'wp-siteagent' ),
+				'label'            => __( 'List Orders', 'siteagent' ),
+				'description'      => __( 'List WooCommerce orders with filtering.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -643,8 +643,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-get-order',
 			[
-				'label'               => __( 'Get Order', 'wp-siteagent' ),
-				'description'         => __( 'Get a WooCommerce order with all details.', 'wp-siteagent' ),
+				'label'               => __( 'Get Order', 'siteagent' ),
+				'description'         => __( 'Get a WooCommerce order with all details.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'order_id' ],
@@ -678,7 +678,7 @@ class Module_Woocommerce extends Module_Base {
 		$order = wc_get_order( absint( $input['order_id'] ) );
 
 		if ( ! $order ) {
-			return $this->error( __( 'Order not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'Order not found.', 'siteagent' ), 'not_found' );
 		}
 
 		$items = [];
@@ -738,8 +738,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-update-order-status',
 			[
-				'label'               => __( 'Update Order Status', 'wp-siteagent' ),
-				'description'         => __( 'Update the status of a WooCommerce order.', 'wp-siteagent' ),
+				'label'               => __( 'Update Order Status', 'siteagent' ),
+				'description'         => __( 'Update the status of a WooCommerce order.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'order_id', 'status' ],
@@ -774,7 +774,7 @@ class Module_Woocommerce extends Module_Base {
 		$order = wc_get_order( absint( $input['order_id'] ) );
 
 		if ( ! $order ) {
-			return $this->error( __( 'Order not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'Order not found.', 'siteagent' ), 'not_found' );
 		}
 
 		$new_status = sanitize_text_field( $input['status'] );
@@ -802,8 +802,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-store-summary',
 			[
-				'label'               => __( 'Store Summary', 'wp-siteagent' ),
-				'description'         => __( 'Get a WooCommerce store summary for a given time period.', 'wp-siteagent' ),
+				'label'               => __( 'Store Summary', 'siteagent' ),
+				'description'         => __( 'Get a WooCommerce store summary for a given time period.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -892,6 +892,7 @@ class Module_Woocommerce extends Module_Base {
 		$pending_count = count( wc_get_orders( [ 'status' => 'wc-pending', 'return' => 'ids', 'limit' => -1 ] ) );
 
 		// Low stock.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$low_stock = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$wpdb->postmeta} pm
@@ -931,8 +932,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-list-coupons',
 			[
-				'label'               => __( 'List Coupons', 'wp-siteagent' ),
-				'description'         => __( 'List WooCommerce coupons.', 'wp-siteagent' ),
+				'label'               => __( 'List Coupons', 'siteagent' ),
+				'description'         => __( 'List WooCommerce coupons.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -1001,8 +1002,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-create-coupon',
 			[
-				'label'               => __( 'Create Coupon', 'wp-siteagent' ),
-				'description'         => __( 'Create a new WooCommerce coupon code.', 'wp-siteagent' ),
+				'label'               => __( 'Create Coupon', 'siteagent' ),
+				'description'         => __( 'Create a new WooCommerce coupon code.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'code', 'type', 'amount' ],
@@ -1056,7 +1057,7 @@ class Module_Woocommerce extends Module_Base {
 		$coupon_id = $coupon->save();
 
 		if ( ! $coupon_id ) {
-			return $this->error( __( 'Failed to create coupon.', 'wp-siteagent' ) );
+			return $this->error( __( 'Failed to create coupon.', 'siteagent' ) );
 		}
 
 		return [
@@ -1078,8 +1079,8 @@ class Module_Woocommerce extends Module_Base {
 		$this->register(
 			'siteagent/woo-list-customers',
 			[
-				'label'               => __( 'List Customers', 'wp-siteagent' ),
-				'description'         => __( 'List WooCommerce customers.', 'wp-siteagent' ),
+				'label'               => __( 'List Customers', 'siteagent' ),
+				'description'         => __( 'List WooCommerce customers.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -1144,3 +1145,4 @@ class Module_Woocommerce extends Module_Base {
 		return [ 'customers' => $customers, 'count' => count( $customers ) ];
 	}
 }
+

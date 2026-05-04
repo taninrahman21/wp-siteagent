@@ -106,7 +106,6 @@ class Plugin {
 	 * @return void
 	 */
 	public function boot(): void {
-		$this->load_textdomain();
 		$this->init_services();
 		$this->init_modules();
 		$this->register_abilities();
@@ -124,22 +123,7 @@ class Plugin {
 	}
 
 	/**
-	 * Load plugin text domain for translations.
-	 *
-	 * @return void
-	 */
-	private function load_textdomain(): void {
-		load_plugin_textdomain(
-			'wp-siteagent',
-			false,
-			dirname( SITEAGENT_BASENAME ) . '/languages'
-		);
-	}
-
-	/**
 	 * Initialize core services.
-	 *
-	 * @return void
 	 */
 	private function init_services(): void {
 		$this->abilities_registry = new Abilities_Registry();
@@ -259,14 +243,14 @@ class Plugin {
 		check_ajax_referer( 'siteagent_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'wp-siteagent' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'siteagent' ) ], 403 );
 		}
 
 		$module_slug = sanitize_key( wp_unslash( $_POST['module_slug'] ?? '' ) );
 		$is_enabled  = rest_sanitize_boolean( wp_unslash( $_POST['is_enabled'] ?? '0' ) );
 
 		if ( empty( $module_slug ) ) {
-			wp_send_json_error( [ 'message' => __( 'Missing module slug.', 'wp-siteagent' ) ], 400 );
+			wp_send_json_error( [ 'message' => __( 'Missing module slug.', 'siteagent' ) ], 400 );
 		}
 
 		$enabled = (array) get_option( 'siteagent_enabled_modules', [] );
@@ -293,14 +277,14 @@ class Plugin {
 		check_ajax_referer( 'siteagent_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'wp-siteagent' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'siteagent' ) ], 403 );
 		}
 
 		$ability_name = sanitize_text_field( wp_unslash( $_POST['ability_name'] ?? '' ) );
 		$is_enabled   = rest_sanitize_boolean( wp_unslash( $_POST['is_enabled'] ?? '0' ) );
 
 		if ( empty( $ability_name ) ) {
-			wp_send_json_error( [ 'message' => __( 'Missing ability name.', 'wp-siteagent' ) ], 400 );
+			wp_send_json_error( [ 'message' => __( 'Missing ability name.', 'siteagent' ) ], 400 );
 		}
 
 		$disabled = (array) get_option( 'siteagent_disabled_abilities', [] );
@@ -329,7 +313,7 @@ class Plugin {
 		check_ajax_referer( 'siteagent_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'wp-siteagent' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'siteagent' ) ], 403 );
 		}
 
 		$action = sanitize_text_field( wp_unslash( $_POST['danger_action'] ?? '' ) );
@@ -340,7 +324,7 @@ class Plugin {
 				wp_send_json_success( [
 					'message' => sprintf(
 						/* translators: %d: number of tokens deleted */
-						__( 'Deleted %d tokens.', 'wp-siteagent' ),
+						__( 'Deleted %d tokens.', 'siteagent' ),
 						$count
 					),
 				] );
@@ -351,7 +335,7 @@ class Plugin {
 				wp_send_json_success( [
 					'message' => sprintf(
 						/* translators: %d: number of log entries deleted */
-						__( 'Deleted %d log entries.', 'wp-siteagent' ),
+						__( 'Deleted %d log entries.', 'siteagent' ),
 						$count
 					),
 				] );
@@ -360,6 +344,7 @@ class Plugin {
 			case 'reset_all':
 				// Delete all plugin options.
 				global $wpdb;
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 				$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'siteagent_%'" );
 
 				// Clear logs and tokens.
@@ -367,12 +352,12 @@ class Plugin {
 				$this->auth_manager->delete_all_tokens();
 
 				wp_send_json_success( [
-					'message' => __( 'All plugin data has been reset to defaults.', 'wp-siteagent' ),
+					'message' => __( 'All plugin data has been reset to defaults.', 'siteagent' ),
 				] );
 				break;
 
 			default:
-				wp_send_json_error( [ 'message' => __( 'Unknown action.', 'wp-siteagent' ) ], 400 );
+				wp_send_json_error( [ 'message' => __( 'Unknown action.', 'siteagent' ) ], 400 );
 		}
 	}
 
@@ -380,7 +365,7 @@ class Plugin {
 		check_ajax_referer( 'siteagent_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'wp-siteagent' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'siteagent' ) ], 403 );
 		}
 
 		$allowed = [
@@ -397,11 +382,11 @@ class Plugin {
 		$option_name = sanitize_key( wp_unslash( $_POST['option_name'] ?? '' ) );
 
 		if ( ! in_array( $option_name, $allowed, true ) ) {
-			wp_send_json_error( [ 'message' => __( 'Option not allowed via AJAX.', 'wp-siteagent' ) ], 400 );
+			wp_send_json_error( [ 'message' => __( 'Option not allowed via AJAX.', 'siteagent' ) ], 400 );
 		}
 
-		$option_value = wp_unslash( $_POST['option_value'] ?? '' ); // This will be sanitized below based on the option type.
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below based on option type.
+		$option_value = wp_unslash( $_POST['option_value'] ?? '' );
 
 		// Sanitize based on option type.
 		if ( in_array( $option_name, [ 'siteagent_enabled', 'siteagent_delete_data_on_uninstall' ], true ) ) {
@@ -412,6 +397,8 @@ class Plugin {
 			$option_value = sanitize_text_field( $option_value );
 		} elseif ( 'siteagent_log_level' === $option_name ) {
 			$option_value = in_array( $option_value, [ 'all', 'errors-only', 'none' ], true ) ? $option_value : 'all';
+		} else {
+			$option_value = sanitize_text_field( $option_value );
 		}
 
 		update_option( $option_name, $option_value );
@@ -502,3 +489,4 @@ class Plugin {
 		return $this->modules;
 	}
 }
+

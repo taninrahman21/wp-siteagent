@@ -1,12 +1,12 @@
 {
-    "name": "yourname/wp-siteagent",
+    "name": "yourname/siteagent",
     "description": "AI Agent Command Layer for WordPress using MCP",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "authors": [
         {
-            "name": "Your Name",
-            "email": "you@example.com"
+            "name": "Tanin Rahman",
+            "email": "builtbytanin@gmail.com"
         }
     ],
     "require": {

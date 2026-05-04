@@ -60,6 +60,7 @@ class Audit_Logger {
 			? substr( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ), 0, 500 )
 			: '';
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$result = $wpdb->insert(
 			$wpdb->prefix . 'siteagent_audit_log',
 			[
@@ -140,18 +141,22 @@ class Audit_Logger {
 		$where_sql = $where ? 'WHERE ' . implode( ' AND ', $where ) : '';
 
 		if ( $where ) {
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-			$total = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log $where_sql", $values ) );
+			$query = "SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log $where_sql";
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			$total = (int) $wpdb->get_var( $wpdb->prepare( $query, ...$values ) );
 		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log" );
 		}
 
 		// Fetch rows.
-		$values[] = $per_page;
-		$values[] = $offset;
+		$query_values   = $values;
+		$query_values[] = $per_page;
+		$query_values[] = $offset;
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$logs = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}siteagent_audit_log $where_sql ORDER BY executed_at DESC LIMIT %d OFFSET %d", $values ), ARRAY_A );
+		$query = "SELECT * FROM {$wpdb->prefix}siteagent_audit_log $where_sql ORDER BY executed_at DESC LIMIT %d OFFSET %d";
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
+		$logs = $wpdb->get_results( $wpdb->prepare( $query, ...$query_values ), ARRAY_A );
 
 		return [
 			'logs'  => $logs ?: [],
@@ -170,6 +175,7 @@ class Audit_Logger {
 
 		$days = (int) get_option( 'siteagent_log_retention_days', 30 );
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return (int) $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->prefix}siteagent_audit_log WHERE executed_at < DATE_SUB(NOW(), INTERVAL %d DAY)",
@@ -192,31 +198,37 @@ class Audit_Logger {
 		}
 
 		// Calls today.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$calls_today = (int) $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE DATE(executed_at) = CURDATE()"
 		);
 
 		// Calls this week.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$calls_week = (int) $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)"
 		);
 
 		// Calls yesterday.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$calls_yesterday = (int) $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE DATE(executed_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)"
 		);
 
 		// Calls this month.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$calls_month = (int) $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
 		);
 
 		// Errors in last 24h.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$errors_24h = (int) $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE result_status = 'error' AND executed_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)"
 		);
 
 		// Top 5 abilities.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$top_abilities = $wpdb->get_results(
 			"SELECT ability_name, COUNT(*) as count FROM {$wpdb->prefix}siteagent_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) GROUP BY ability_name ORDER BY count DESC LIMIT 5",
 			ARRAY_A
@@ -224,12 +236,14 @@ class Audit_Logger {
 
 		// Error rate.
 		$total_month  = max( 1, $calls_month );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$errors_month = (int) $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_audit_log WHERE result_status = 'error' AND executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
 		);
 		$error_rate = round( ( $errors_month / $total_month ) * 100, 2 );
 
 		// Average duration.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$avg_duration = (float) $wpdb->get_var(
 			"SELECT AVG(duration_ms) FROM {$wpdb->prefix}siteagent_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) AND duration_ms IS NOT NULL"
 		);
@@ -257,6 +271,7 @@ class Audit_Logger {
 	 */
 	public function delete_all_logs(): int {
 		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return (int) $wpdb->query( "DELETE FROM {$wpdb->prefix}siteagent_audit_log" );
 	}
 
@@ -291,3 +306,4 @@ class Audit_Logger {
 		return '0.0.0.0';
 	}
 }
+

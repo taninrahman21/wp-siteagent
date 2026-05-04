@@ -112,12 +112,12 @@ class MCP_Server {
 
 		$body = $request->get_body();
 		if ( empty( $body ) ) {
-			return $this->error_response( null, -32700, __( 'Parse error: empty request body.', 'wp-siteagent' ), 400 );
+			return $this->error_response( null, -32700, __( 'Parse error: empty request body.', 'siteagent' ), 400 );
 		}
 
 		$payload = json_decode( $body, true );
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
-			return $this->error_response( null, -32700, __( 'Parse error: invalid JSON.', 'wp-siteagent' ), 400 );
+			return $this->error_response( null, -32700, __( 'Parse error: invalid JSON.', 'siteagent' ), 400 );
 		}
 
 		// Check if batch request.
@@ -170,7 +170,7 @@ class MCP_Server {
 
 		// JSON-RPC version check.
 		if ( ( $payload['jsonrpc'] ?? '' ) !== '2.0' ) {
-			return $this->error_response( $id, -32600, __( 'Invalid Request: jsonrpc must be "2.0".', 'wp-siteagent' ) );
+			return $this->error_response( $id, -32600, __( 'Invalid Request: jsonrpc must be "2.0".', 'siteagent' ) );
 		}
 
 		return match ( $method ) {
@@ -180,7 +180,7 @@ class MCP_Server {
 			'ping'         => $this->handle_ping( $id ),
 			default        => $this->error_response( $id, -32601, sprintf(
 				/* translators: %s: method name */
-				__( 'Method not found: %s', 'wp-siteagent' ),
+				__( 'Method not found: %s', 'siteagent' ),
 				sanitize_text_field( $method )
 			) ),
 		};
@@ -272,7 +272,7 @@ class MCP_Server {
 		$arguments = $params['arguments'] ?? [];
 
 		if ( empty( $tool_name ) ) {
-			return $this->error_response( $id, -32602, __( 'Invalid params: tool name is required.', 'wp-siteagent' ) );
+			return $this->error_response( $id, -32602, __( 'Invalid params: tool name is required.', 'siteagent' ) );
 		}
 
 		$token_id = (int) $token['id'];
@@ -288,7 +288,7 @@ class MCP_Server {
 				'result_summary' => 'Token not authorized for this ability.',
 			] );
 
-			return $this->error_response( $id, -32000, __( 'Token not authorized for this ability.', 'wp-siteagent' ), 403 );
+			return $this->error_response( $id, -32000, __( 'Token not authorized for this ability.', 'siteagent' ), 403 );
 		}
 
 		// Rate limit check.
@@ -475,3 +475,4 @@ class MCP_Server {
 		return $name;
 	}
 }
+

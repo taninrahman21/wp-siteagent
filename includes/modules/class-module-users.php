@@ -63,8 +63,8 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/list-users',
 			[
-				'label'               => __( 'List Users', 'wp-siteagent' ),
-				'description'         => __( 'List WordPress users with filtering and sorting.', 'wp-siteagent' ),
+				'label'               => __( 'List Users', 'siteagent' ),
+				'description'         => __( 'List WordPress users with filtering and sorting.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -152,8 +152,8 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/get-user',
 			[
-				'label'               => __( 'Get User', 'wp-siteagent' ),
-				'description'         => __( 'Get a WordPress user profile (password hash never included).', 'wp-siteagent' ),
+				'label'               => __( 'Get User', 'siteagent' ),
+				'description'         => __( 'Get a WordPress user profile (password hash never included).', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'user_id' ],
@@ -187,7 +187,7 @@ class Module_Users extends Module_Base {
 		$user = get_user_by( 'id', absint( $input['user_id'] ) );
 
 		if ( ! $user ) {
-			return $this->error( __( 'User not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'User not found.', 'siteagent' ), 'not_found' );
 		}
 
 		$post_count = count_user_posts( $user->ID );
@@ -234,8 +234,8 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/create-user',
 			[
-				'label'               => __( 'Create User', 'wp-siteagent' ),
-				'description'         => __( 'Create a new WordPress user with a secure auto-generated password.', 'wp-siteagent' ),
+				'label'               => __( 'Create User', 'siteagent' ),
+				'description'         => __( 'Create a new WordPress user with a secure auto-generated password.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'username', 'email', 'role' ],
@@ -280,7 +280,7 @@ class Module_Users extends Module_Base {
 			return $this->error(
 				sprintf(
 					/* translators: %s: role name */
-					__( 'Role "%s" does not exist.', 'wp-siteagent' ),
+					__( 'Role "%s" does not exist.', 'siteagent' ),
 					$role
 				),
 				'invalid_role'
@@ -289,10 +289,10 @@ class Module_Users extends Module_Base {
 
 		// Check username/email not taken.
 		if ( username_exists( $username ) ) {
-			return $this->error( __( 'Username already exists.', 'wp-siteagent' ), 'username_exists' );
+			return $this->error( __( 'Username already exists.', 'siteagent' ), 'username_exists' );
 		}
 		if ( email_exists( $email ) ) {
-			return $this->error( __( 'Email address already in use.', 'wp-siteagent' ), 'email_exists' );
+			return $this->error( __( 'Email address already in use.', 'siteagent' ), 'email_exists' );
 		}
 
 		// Generate secure password.
@@ -344,8 +344,8 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/update-user-role',
 			[
-				'label'               => __( 'Update User Role', 'wp-siteagent' ),
-				'description'         => __( 'Change a WordPress user\'s role.', 'wp-siteagent' ),
+				'label'               => __( 'Update User Role', 'siteagent' ),
+				'description'         => __( 'Change a WordPress user\'s role.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'user_id', 'role' ],
@@ -381,7 +381,7 @@ class Module_Users extends Module_Base {
 
 		$target_user = get_user_by( 'id', $target_user_id );
 		if ( ! $target_user ) {
-			return $this->error( __( 'User not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'User not found.', 'siteagent' ), 'not_found' );
 		}
 
 		// Validate role exists.
@@ -390,7 +390,7 @@ class Module_Users extends Module_Base {
 			return $this->error(
 				sprintf(
 					/* translators: %s: role name */
-					__( 'Role "%s" does not exist.', 'wp-siteagent' ),
+					__( 'Role "%s" does not exist.', 'siteagent' ),
 					$new_role
 				),
 				'invalid_role'
@@ -402,7 +402,7 @@ class Module_Users extends Module_Base {
 			$current_user = wp_get_current_user();
 			if ( ! in_array( 'administrator', $current_user->roles, true ) ) {
 				return $this->error(
-					__( 'Only administrators can demote other administrators.', 'wp-siteagent' ),
+					__( 'Only administrators can demote other administrators.', 'siteagent' ),
 					'insufficient_permissions'
 				);
 			}
@@ -431,8 +431,8 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/list-roles',
 			[
-				'label'            => __( 'List Roles', 'wp-siteagent' ),
-				'description'      => __( 'List all registered WordPress roles and their capabilities.', 'wp-siteagent' ),
+				'label'            => __( 'List Roles', 'siteagent' ),
+				'description'      => __( 'List all registered WordPress roles and their capabilities.', 'siteagent' ),
 				'execute_callback' => [ $this, 'execute_list_roles' ],
 				'annotations'      => [
 					'readonly' => true,
@@ -477,8 +477,8 @@ class Module_Users extends Module_Base {
 		$this->register(
 			'siteagent/get-user-stats',
 			[
-				'label'               => __( 'User Stats', 'wp-siteagent' ),
-				'description'         => __( 'Get aggregate user statistics including counts by role and registration trends.', 'wp-siteagent' ),
+				'label'               => __( 'User Stats', 'siteagent' ),
+				'description'         => __( 'Get aggregate user statistics including counts by role and registration trends.', 'siteagent' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
 						$user = get_user_by( 'id', $user_id );
@@ -566,3 +566,4 @@ class Module_Users extends Module_Base {
 		];
 	}
 }
+

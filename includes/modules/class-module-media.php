@@ -63,8 +63,8 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/list-media',
 			[
-				'label'            => __( 'List Media', 'wp-siteagent' ),
-				'description'      => __( 'List media library items with filtering options.', 'wp-siteagent' ),
+				'label'            => __( 'List Media', 'siteagent' ),
+				'description'      => __( 'List media library items with filtering options.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -142,8 +142,8 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/get-unattached-media',
 			[
-				'label'            => __( 'List Unattached Media', 'wp-siteagent' ),
-				'description'      => __( 'List media items not attached to any post.', 'wp-siteagent' ),
+				'label'            => __( 'List Unattached Media', 'siteagent' ),
+				'description'      => __( 'List media items not attached to any post.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -185,8 +185,8 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/update-media-alt-text',
 			[
-				'label'               => __( 'Update Alt Text', 'wp-siteagent' ),
-				'description'         => __( 'Set the alt text for a media attachment.', 'wp-siteagent' ),
+				'label'               => __( 'Update Alt Text', 'siteagent' ),
+				'description'         => __( 'Set the alt text for a media attachment.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'attachment_id', 'alt_text' ],
@@ -221,7 +221,7 @@ class Module_Media extends Module_Base {
 		$alt_text      = sanitize_text_field( $input['alt_text'] );
 
 		if ( ! get_post( $attachment_id ) ) {
-			return $this->error( __( 'Attachment not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'Attachment not found.', 'siteagent' ), 'not_found' );
 		}
 
 		update_post_meta( $attachment_id, '_wp_attachment_image_alt', $alt_text );
@@ -246,8 +246,8 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/bulk-update-alt-text',
 			[
-				'label'               => __( 'Bulk Update Alt Text', 'wp-siteagent' ),
-				'description'         => __( 'Set alt text for multiple media attachments at once.', 'wp-siteagent' ),
+				'label'               => __( 'Bulk Update Alt Text', 'siteagent' ),
+				'description'         => __( 'Set alt text for multiple media attachments at once.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'items' ],
@@ -328,8 +328,8 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/get-large-media',
 			[
-				'label'            => __( 'Find Large Media', 'wp-siteagent' ),
-				'description'      => __( 'Find media attachments whose file size exceeds a given threshold.', 'wp-siteagent' ),
+				'label'            => __( 'Find Large Media', 'siteagent' ),
+				'description'      => __( 'Find media attachments whose file size exceeds a given threshold.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -409,8 +409,8 @@ class Module_Media extends Module_Base {
 		$this->register(
 			'siteagent/get-media-library-stats',
 			[
-				'label'            => __( 'Media Library Stats', 'wp-siteagent' ),
-				'description'      => __( 'Get aggregate statistics about the WordPress media library.', 'wp-siteagent' ),
+				'label'            => __( 'Media Library Stats', 'siteagent' ),
+				'description'      => __( 'Get aggregate statistics about the WordPress media library.', 'siteagent' ),
 				'execute_callback' => [ $this, 'execute_get_media_library_stats' ],
 				'annotations'      => [
 					'readonly' => true,
@@ -436,6 +436,7 @@ class Module_Media extends Module_Base {
 		global $wpdb;
 
 		// Total attachments grouped by mime type family.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$mime_counts_raw = $wpdb->get_results(
 			"SELECT LEFT(post_mime_type, LOCATE('/', post_mime_type) - 1) as mime_family, COUNT(*) as cnt
 			FROM {$wpdb->posts}
@@ -470,6 +471,7 @@ class Module_Media extends Module_Base {
 		}
 
 		// Count missing alt text (images only).
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$missing_alt = (int) $wpdb->get_var(
 			"SELECT COUNT(p.ID) FROM {$wpdb->posts} p
 			LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = '_wp_attachment_image_alt'
@@ -480,6 +482,7 @@ class Module_Media extends Module_Base {
 		);
 
 		// Count unattached.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$unattached = (int) $wpdb->get_var(
 			"SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_status = 'inherit' AND post_parent = 0"
 		);
@@ -534,3 +537,4 @@ class Module_Media extends Module_Base {
 		];
 	}
 }
+

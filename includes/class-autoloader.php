@@ -112,3 +112,4 @@ class Autoloader {
 		return strtolower( str_replace( '_', '-', $class_name ) );
 	}
 }
+

@@ -57,7 +57,7 @@ class Abilities_Registry {
 				__METHOD__,
 				sprintf(
 					/* translators: %s: ability name */
-					esc_html__( 'Ability "%s" must have a label, description and a callable execute_callback.', 'wp-siteagent' ),
+					esc_html__( 'Ability "%s" must have a label, description and a callable execute_callback.', 'siteagent' ),
 					esc_html( $name )
 				),
 				'1.0.0'
@@ -71,7 +71,7 @@ class Abilities_Registry {
 				__METHOD__,
 				sprintf(
 					/* translators: %s: ability name */
-					esc_html__( 'Ability "%s" is already registered.', 'wp-siteagent' ),
+					esc_html__( 'Ability "%s" is already registered.', 'siteagent' ),
 					esc_html( $name )
 				),
 				'1.0.0'
@@ -85,7 +85,7 @@ class Abilities_Registry {
 				__METHOD__,
 				sprintf(
 					/* translators: %s: ability name */
-					esc_html__( 'Ability "%s" has a non-callable permission_callback.', 'wp-siteagent' ),
+					esc_html__( 'Ability "%s" has a non-callable permission_callback.', 'siteagent' ),
 					esc_html( $name )
 				),
 				'1.0.0'
@@ -122,7 +122,7 @@ class Abilities_Registry {
 				'ability_not_found',
 				sprintf(
 					/* translators: %s: ability name */
-					__( 'Ability "%s" is not registered.', 'wp-siteagent' ),
+					__( 'Ability "%s" is not registered.', 'siteagent' ),
 					$name
 				),
 				[ 'status' => 404 ]
@@ -137,7 +137,7 @@ class Abilities_Registry {
 			if ( ! $permitted || ( $permitted instanceof \WP_Error ) ) {
 				return new \WP_Error(
 					'forbidden',
-					__( 'You do not have permission to execute this ability.', 'wp-siteagent' ),
+					__( 'You do not have permission to execute this ability.', 'siteagent' ),
 					[ 'status' => 403 ]
 				);
 			}
@@ -281,7 +281,7 @@ class Abilities_Registry {
 			if ( ! array_key_exists( $field, $input ) ) {
 				$errors[] = sprintf(
 					/* translators: %s: field name */
-					__( 'Required field "%s" is missing.', 'wp-siteagent' ),
+					__( 'Required field "%s" is missing.', 'siteagent' ),
 					$field
 				);
 			}
@@ -309,7 +309,7 @@ class Abilities_Registry {
 				if ( isset( $def['enum'] ) && ! in_array( $value, $def['enum'], true ) ) {
 					$errors[] = sprintf(
 						/* translators: 1: field name 2: allowed values */
-						__( 'Field "%1$s" must be one of: %2$s.', 'wp-siteagent' ),
+						__( 'Field "%1$s" must be one of: %2$s.', 'siteagent' ),
 						$field,
 						implode( ', ', array_map( 'strval', $def['enum'] ) )
 					);
@@ -367,3 +367,4 @@ class Abilities_Registry {
 		};
 	}
 }
+

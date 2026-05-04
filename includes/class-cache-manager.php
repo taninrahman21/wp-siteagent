@@ -119,6 +119,7 @@ class Cache_Manager {
 		$this->runtime_cache = [];
 
 		// Delete all transients with our prefix.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$count = (int) $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
@@ -140,3 +141,4 @@ class Cache_Manager {
 		return false !== $this->get( $key );
 	}
 }
+

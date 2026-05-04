@@ -87,3 +87,4 @@ class Error_Handler {
 		return $message;
 	}
 }
+

@@ -43,7 +43,7 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 			<div class="sa-top-status">
 				<div class="sa-status-indicator">
 					<span class="sa-status-dot"></span>
-					<?php esc_html_e('MCP Server Active', 'wp-siteagent'); ?>
+					<?php esc_html_e('MCP Server Active', 'siteagent'); ?>
 				</div>
 				<div class="sa-status-center">
 					<div class="sa-endpoint-code" id="sa-mcp-url-top">
@@ -51,11 +51,11 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 					</div>
 					<button type="button" class="sa-copy-btn sa-copy-btn--inline"
 						onclick="siteagent.copyText('sa-mcp-url-top')">
-						<?php esc_html_e('Copy', 'wp-siteagent'); ?>
+						<?php esc_html_e('Copy', 'siteagent'); ?>
 					</button>
 				</div>
 				<div class="sa-status-protocol">
-					<?php esc_html_e('Protocol: 2024-11-05', 'wp-siteagent'); ?>
+					<?php esc_html_e('Protocol: 2024-11-05', 'siteagent'); ?>
 				</div>
 			</div>
 
@@ -73,13 +73,13 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 					<div class="sa-stat-value" id="stat-calls-today">
 						<?php echo esc_html(number_format($siteagent_stats['calls_today'])); ?>
 					</div>
-					<div class="sa-stat-label"><?php esc_html_e('API calls today', 'wp-siteagent'); ?></div>
+					<div class="sa-stat-label"><?php esc_html_e('API calls today', 'siteagent'); ?></div>
 					<div class="sa-stat-meta sa-meta--<?php echo $siteagent_trend_up ? 'up' : 'down'; ?>">
 						<span class="sa-meta-icon"><?php echo $siteagent_trend_up ? '↑' : '↓'; ?></span>
 						<span><?php
 							printf(
 								/* translators: %d: percentage change in API calls */
-								esc_html__('%d%% vs yesterday', 'wp-siteagent'),
+								esc_html__('%d%% vs yesterday', 'siteagent'),
 								(int) abs($siteagent_pct_change)
 							); ?></span>
 					</div>
@@ -94,12 +94,12 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 						</svg>
 					</div>
 					<div class="sa-stat-value" id="stat-tokens"><?php echo esc_html(count($siteagent_tokens)); ?></div>
-					<div class="sa-stat-label"><?php esc_html_e('Active tokens', 'wp-siteagent'); ?></div>
+					<div class="sa-stat-label"><?php esc_html_e('Active tokens', 'siteagent'); ?></div>
 					<div class="sa-stat-meta" style="color: var(--sa-text-muted);">
 						<span><?php
 							printf(
 								/* translators: %d: number of tokens expiring in 30 days */
-								esc_html__('%d expire in 30d', 'wp-siteagent'),
+								esc_html__('%d expire in 30d', 'siteagent'),
 								(int) $siteagent_expiring_30d
 							); ?></span>
 					</div>
@@ -114,12 +114,12 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 						</svg>
 					</div>
 					<div class="sa-stat-value" id="stat-abilities"><?php echo esc_html(count($siteagent_abilities)); ?></div>
-					<div class="sa-stat-label"><?php esc_html_e('Abilities registered', 'wp-siteagent'); ?></div>
+					<div class="sa-stat-label"><?php esc_html_e('Abilities registered', 'siteagent'); ?></div>
 					<div class="sa-stat-meta" style="color: var(--sa-text-muted);">
 						<span><?php
 							printf(
 								/* translators: %d: number of public abilities */
-								esc_html__('%d MCP-public', 'wp-siteagent'),
+								esc_html__('%d MCP-public', 'siteagent'),
 								(int) $siteagent_public_count
 							); ?></span>
 					</div>
@@ -136,12 +136,12 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 					<div class="sa-stat-value" id="stat-errors">
 						<?php echo esc_html(number_format($siteagent_stats['errors_24h'])); ?>
 					</div>
-					<div class="sa-stat-label"><?php esc_html_e('Errors (24h)', 'wp-siteagent'); ?></div>
+					<div class="sa-stat-label"><?php esc_html_e('Errors (24h)', 'siteagent'); ?></div>
 					<div class="sa-stat-meta sa-meta--<?php echo $siteagent_stats['error_rate'] > 5 ? 'down' : 'up'; ?>">
 						<span><?php
 							printf(
 								/* translators: %s: error rate percentage */
-								esc_html__('Rate: %s%%', 'wp-siteagent'),
+								esc_html__('Rate: %s%%', 'siteagent'),
 								esc_html($siteagent_stats['error_rate'])
 							); ?></span>
 					</div>
@@ -155,16 +155,16 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 					<div class="sa-card" style="margin-bottom: 0; height: 100%;">
 						<div class="sa-card-header" style="border-bottom: none; padding-bottom: 0;">
 							<h2 style="font-size: 14px; font-weight: 600;">
-								<?php esc_html_e('Recent audit log', 'wp-siteagent'); ?>
+								<?php esc_html_e('Recent audit log', 'siteagent'); ?>
 							</h2>
-							<a href="<?php echo esc_url(admin_url('admin.php?page=wp-siteagent-audit')); ?>"
+							<a href="<?php echo esc_url(admin_url('admin.php?page=siteagent-audit')); ?>"
 								class="sa-link"
-								style="font-size: 12px; color: var(--sa-primary); text-decoration: none; font-weight: 500;"><?php esc_html_e('View all →', 'wp-siteagent'); ?></a>
+								style="font-size: 12px; color: var(--sa-primary); text-decoration: none; font-weight: 500;"><?php esc_html_e('View all →', 'siteagent'); ?></a>
 						</div>
 						<div class="sa-card-body sa-card--no-pad">
 							<?php if (empty($siteagent_recent_logs['logs'])): ?>
 								<div class="sa-empty-state">
-									<p><?php esc_html_e('No API calls yet.', 'wp-siteagent'); ?></p>
+									<p><?php esc_html_e('No API calls yet.', 'siteagent'); ?></p>
 								</div>
 							<?php else: ?>
 								<div class="sa-table-wrap">
@@ -173,32 +173,32 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 											<tr style="background: transparent;">
 												<th
 													style="background: transparent; border-bottom: 1px solid var(--sa-border); padding: 16px 24px; color: var(--sa-text-muted); font-size: 11px;">
-													<?php esc_html_e('ABILITY', 'wp-siteagent'); ?>
+													<?php esc_html_e('ABILITY', 'siteagent'); ?>
 												</th>
 												<th
 													style="background: transparent; border-bottom: 1px solid var(--sa-border); padding: 16px 24px; color: var(--sa-text-muted); font-size: 11px;">
-													<?php esc_html_e('TOKEN', 'wp-siteagent'); ?>
+													<?php esc_html_e('TOKEN', 'siteagent'); ?>
 												</th>
 												<th
 													style="background: transparent; border-bottom: 1px solid var(--sa-border); padding: 16px 24px; color: var(--sa-text-muted); font-size: 11px;">
-													<?php esc_html_e('STATUS', 'wp-siteagent'); ?>
+													<?php esc_html_e('STATUS', 'siteagent'); ?>
 												</th>
 												<th
 													style="background: transparent; border-bottom: 1px solid var(--sa-border); padding: 16px 24px; color: var(--sa-text-muted); font-size: 11px;">
-													<?php esc_html_e('TIME', 'wp-siteagent'); ?>
+													<?php esc_html_e('TIME', 'siteagent'); ?>
 												</th>
 											</tr>
 										</thead>
 										<tbody>
 											<?php
-											foreach ($siteagent_recent_logs['logs'] as $log):
-												$siteagent_token_data = $siteagent_auth->get_token($log['token_id']);
+											foreach ($siteagent_recent_logs['logs'] as $siteagent_log):
+												$siteagent_token_data = $siteagent_auth->get_token($siteagent_log['token_id']);
 												$siteagent_token_name = $siteagent_token_data ? ($siteagent_token_data['label'] ?? '—') : '—';
 												?>
 												<tr>
 													<td style="font-size: 13px;">
 														<div style="font-weight: 500;">
-															<?php echo esc_html($siteagent_abilities[$log['ability_name']]['label'] ?? $log['ability_name']); ?>
+															<?php echo esc_html($siteagent_abilities[$siteagent_log['ability_name']]['label'] ?? $siteagent_log['ability_name']); ?>
 														</div>
 													</td>
 													<td style="color: var(--sa-text-secondary); font-size: 13px;">
@@ -206,13 +206,31 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 													</td>
 													<td>
 														<span
-															class="sa-badge sa-badge--<?php echo esc_attr($log['result_status']); ?>">
-															<?php echo esc_html($log['result_status']); ?>
+															class="sa-badge sa-badge--<?php echo esc_attr($siteagent_log['result_status']); ?>">
+															<?php 
+															$siteagent_status = $siteagent_log['result_status'];
+															if ( 'success' === $siteagent_status ) {
+																esc_html_e( 'Success', 'siteagent' );
+															} elseif ( 'error' === $siteagent_status ) {
+																esc_html_e( 'Error', 'siteagent' );
+															} elseif ( 'rate_limited' === $siteagent_status ) {
+																esc_html_e( 'Rate Limited', 'siteagent' );
+															} else {
+																echo esc_html( $siteagent_status );
+															}
+															?>
 														</span>
 													</td>
 													<td style="color: var(--sa-text-muted); font-size: 13px;">
-														<?php echo esc_html(human_time_diff(strtotime($log['executed_at']))); ?>
-														<?php esc_html_e('ago', 'wp-siteagent'); ?>
+														<?php 
+														echo esc_html( 
+															sprintf( 
+																/* translators: %s: relative time */
+																__( '%s ago', 'siteagent' ), 
+																human_time_diff( strtotime( $siteagent_log['executed_at'] ) ) 
+															) 
+														); 
+														?>
 													</td>
 												</tr>
 											<?php endforeach; ?>
@@ -228,30 +246,30 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 						<div class="sa-card-header"
 							style="border-bottom: 1px solid var(--sa-border); padding-bottom: 16px;">
 							<h2 style="font-size: 14px; font-weight: 600;">
-								<?php esc_html_e('Module status', 'wp-siteagent'); ?>
+								<?php esc_html_e('Module status', 'siteagent'); ?>
 							</h2>
 						</div>
 						<div class="sa-card-body" style="padding-top: 16px;">
 							<div class="sa-modules-grid">
 								<?php
 								$siteagent_all_module_defs = [
-									'content' => ['label' => __('Content', 'wp-siteagent')],
-									'seo' => ['label' => __('SEO', 'wp-siteagent')],
-									'woocommerce' => ['label' => __('WooCommerce', 'wp-siteagent')],
-									'diagnostics' => ['label' => __('Diagnostics', 'wp-siteagent')],
-									'media' => ['label' => __('Media', 'wp-siteagent')],
-									'users' => ['label' => __('Users', 'wp-siteagent')],
+									'content' => ['label' => __('Content', 'siteagent')],
+									'seo' => ['label' => __('SEO', 'siteagent')],
+									'woocommerce' => ['label' => __('WooCommerce', 'siteagent')],
+									'diagnostics' => ['label' => __('Diagnostics', 'siteagent')],
+									'media' => ['label' => __('Media', 'siteagent')],
+									'users' => ['label' => __('Users', 'siteagent')],
 								];
-								foreach ($siteagent_all_module_defs as $slug => $def):
-									$siteagent_module_obj = $siteagent_modules[$slug] ?? null;
+								foreach ($siteagent_all_module_defs as $siteagent_slug => $siteagent_def):
+									$siteagent_module_obj = $siteagent_modules[$siteagent_slug] ?? null;
 									$siteagent_ability_count = $siteagent_module_obj ? count($siteagent_module_obj->get_ability_names()) : 0;
-									$siteagent_is_mod_enabled = in_array($slug, $siteagent_enabled_mods, true);
+									$siteagent_is_mod_enabled = in_array($siteagent_slug, $siteagent_enabled_mods, true);
 									$siteagent_status_class = $siteagent_is_mod_enabled ? 'sa-module-status-dot--enabled' : '';
 									?>
 									<div class="sa-module-card">
 										<div class="sa-module-header">
 											<span class="sa-module-title">
-												<?php echo esc_html($def['label']); ?>
+												<?php echo esc_html($siteagent_def['label']); ?>
 											</span>
 											<span
 												class="sa-module-status-dot <?php echo esc_attr($siteagent_status_class); ?>"></span>
@@ -260,7 +278,7 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 											<?php
 											printf(
 												/* translators: %d: number of abilities */
-												esc_html__('%d abilities', 'wp-siteagent'),
+												esc_html__('%d abilities', 'siteagent'),
 												(int) $siteagent_ability_count
 											); ?>
 										</span>
@@ -276,21 +294,21 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 					<div class="sa-card" style="margin-bottom: 24px;">
 						<div class="sa-card-header" style="border-bottom: none; padding-bottom: 8px;">
 							<h2 style="font-size: 14px; font-weight: 600;">
-								<?php esc_html_e('Connect AI Client', 'wp-siteagent'); ?>
+								<?php esc_html_e('Connect AI Client', 'siteagent'); ?>
 							</h2>
 						</div>
 						<div class="sa-card-body" style="padding-top: 8px;">
 							
 							<!-- Token Input -->
 							<div class="sa-form-group" style="margin-bottom: 20px;">
-								<label for="sa-dash-token" style="font-size: 11px; font-weight: 700; margin-bottom: 8px; display: block; color: var(--sa-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;"><?php esc_html_e('Your API Token', 'wp-siteagent'); ?></label>
-								<input type="password" id="sa-dash-token" class="sa-input" placeholder="<?php esc_attr_e('Paste your token here...', 'wp-siteagent'); ?>" />
+								<label for="sa-dash-token" style="font-size: 11px; font-weight: 700; margin-bottom: 8px; display: block; color: var(--sa-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;"><?php esc_html_e('Your API Token', 'siteagent'); ?></label>
+								<input type="password" id="sa-dash-token" class="sa-input" placeholder="<?php esc_attr_e('Paste your token here...', 'siteagent'); ?>" />
 								<p class="sa-hint" style="margin-top: 8px; font-size: 12px;">
 									<?php
 									printf(
 										/* translators: %s: link to generate a token */
-										esc_html__('Don\'t have a token yet? %s', 'wp-siteagent'),
-										'<a href="' . esc_url(admin_url('admin.php?page=wp-siteagent-tokens')) . '" class="sa-link" style="color: var(--sa-primary); text-decoration: none; font-weight: 600;">' . esc_html__('Generate one →', 'wp-siteagent') . '</a>'
+										esc_html__('Don\'t have a token yet? %s', 'siteagent'),
+										'<a href="' . esc_url(admin_url('admin.php?page=siteagent-tokens')) . '" class="sa-link" style="color: var(--sa-primary); text-decoration: none; font-weight: 600;">' . esc_html__('Generate one →', 'siteagent') . '</a>'
 									); ?>
 								</p>
 							</div>
@@ -299,20 +317,20 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 							<div class="sa-tab-nav" style="margin-bottom: 20px;">
 								<button type="button" id="sa-dash-client-tab-claude" class="sa-tab-btn sa-tab-btn--active" onclick="siteagentDash.switchClient('claude')">
 									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
-									Claude Desktop
+									<?php esc_html_e( 'Claude Desktop', 'siteagent' ); ?>
 								</button>
 								<button type="button" id="sa-dash-client-tab-cursor" class="sa-tab-btn" onclick="siteagentDash.switchClient('cursor')">
 									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-									Cursor / IDEs
+									<?php esc_html_e( 'Cursor / IDEs', 'siteagent' ); ?>
 								</button>
 							</div>
 
 							<!-- Claude Desktop Panel -->
 							<div id="sa-dash-claude-panel">
 								<div class="sa-os-tabs" style="margin-bottom: 16px;">
-									<button type="button" id="sa-dash-os-tab-windows" class="sa-os-tab" onclick="siteagentDash.switchOs('windows')">Windows</button>
-									<button type="button" id="sa-dash-os-tab-mac" class="sa-os-tab" onclick="siteagentDash.switchOs('mac')">macOS</button>
-									<button type="button" id="sa-dash-os-tab-linux" class="sa-os-tab" onclick="siteagentDash.switchOs('linux')">Linux</button>
+									<button type="button" id="sa-dash-os-tab-windows" class="sa-os-tab" onclick="siteagentDash.switchOs('windows')"><?php esc_html_e( 'Windows', 'siteagent' ); ?></button>
+									<button type="button" id="sa-dash-os-tab-mac" class="sa-os-tab" onclick="siteagentDash.switchOs('mac')"><?php esc_html_e( 'macOS', 'siteagent' ); ?></button>
+									<button type="button" id="sa-dash-os-tab-linux" class="sa-os-tab" onclick="siteagentDash.switchOs('linux')"><?php esc_html_e( 'Linux', 'siteagent' ); ?></button>
 								</div>
 
 								<div class="sa-tab-content sa-tab-content--active">
@@ -320,12 +338,12 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 										<div class="sa-step">
 											<div style="font-size: 11px; font-weight: 700; color: var(--sa-text-secondary); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.05em;">
 												<span style="background: var(--sa-primary); color: #fff; width: 16px; height: 16px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px;">1</span>
-												<?php esc_html_e( 'Install mcp-remote', 'wp-siteagent' ); ?>
+												<?php esc_html_e( 'Install mcp-remote', 'siteagent' ); ?>
 											</div>
 											<div class="sa-token-value-wrap" style="margin-bottom: 0;">
 												<input type="text" id="sa-dash-claude-step-1" class="sa-token-value" style="width: 100%; padding: 8px; font-size: 11px; border-color: var(--sa-border);" readonly value="npm install -g mcp-remote" />
 												<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-dash-claude-step-1')">
-													<?php esc_html_e( 'Copy', 'wp-siteagent' ); ?>
+													<?php esc_html_e( 'Copy', 'siteagent' ); ?>
 												</button>
 											</div>
 										</div>
@@ -333,19 +351,19 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 										<div class="sa-step">
 											<div style="font-size: 11px; font-weight: 700; color: var(--sa-text-secondary); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.05em;">
 												<span style="background: var(--sa-primary); color: #fff; width: 16px; height: 16px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 9px;">2</span>
-												<?php esc_html_e( 'Connect to Claude Desktop', 'wp-siteagent' ); ?>
+												<?php esc_html_e( 'Connect to Claude Desktop', 'siteagent' ); ?>
 											</div>
 											<div class="sa-token-value-wrap" style="margin-bottom: 0;">
-												<input type="text" id="sa-dash-claude-step-2" class="sa-token-value" style="width: 100%; padding: 8px; font-size: 11px; border-color: var(--sa-border);" readonly placeholder="<?php esc_attr_e( 'Paste token first...', 'wp-siteagent' ); ?>" />
+												<input type="text" id="sa-dash-claude-step-2" class="sa-token-value" style="width: 100%; padding: 8px; font-size: 11px; border-color: var(--sa-border);" readonly placeholder="<?php esc_attr_e( 'Paste token first...', 'siteagent' ); ?>" />
 												<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-dash-claude-step-2')">
-													<?php esc_html_e( 'Copy', 'wp-siteagent' ); ?>
+													<?php esc_html_e( 'Copy', 'siteagent' ); ?>
 												</button>
 											</div>
 										</div>
 									</div>
 
 									<p style="margin: 0 0 16px; font-size: 11px; font-style: italic; color: var(--sa-text-muted); line-height: 1.4;">
-										<?php esc_html_e( 'Run Step 1 first, wait for it to finish, then run Step 2.', 'wp-siteagent' ); ?>
+										<?php esc_html_e( 'Run Step 1 first, wait for it to finish, then run Step 2.', 'siteagent' ); ?>
 									</p>
 								</div>
 
@@ -354,7 +372,7 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 									<span><?php
 										printf(
 											/* translators: %s: link to nodejs.org */
-											esc_html__( 'No Node.js? Download LTS from %s first.', 'wp-siteagent' ),
+											esc_html__( 'No Node.js? Download LTS from %s first.', 'siteagent' ),
 											'<a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a>'
 										); ?></span>
 								</div>
@@ -363,37 +381,37 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 							<!-- Cursor Panel -->
 							<div id="sa-dash-cursor-panel" style="display:none;">
 								<div class="sa-form-group" style="margin-bottom: 12px;">
-									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e('MCP Server URL', 'wp-siteagent'); ?></label>
+									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e('MCP Server URL', 'siteagent'); ?></label>
 									<div class="sa-token-value-wrap" style="margin-bottom: 0;">
 										<input type="text" id="sa-dash-cursor-url" class="sa-token-value" style="width: 100%; padding: 8px; font-size: 12px; border-color: var(--sa-border);" readonly value="<?php echo esc_url($siteagent_mcp_endpoint); ?>" />
 										<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-dash-cursor-url')">
-											<?php esc_html_e('Copy', 'wp-siteagent'); ?>
+											<?php esc_html_e('Copy', 'siteagent'); ?>
 										</button>
 									</div>
 								</div>
 
 								<div class="sa-form-group" style="margin-bottom: 12px;">
-									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e('Type', 'wp-siteagent'); ?></label>
+									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e('Type', 'siteagent'); ?></label>
 									<div class="sa-token-value-wrap" style="margin-bottom: 0;">
 										<input type="text" id="sa-dash-cursor-type" class="sa-token-value" style="width: 100%; padding: 8px; font-size: 12px; border-color: var(--sa-border);" readonly value="http" />
 										<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-dash-cursor-type')">
-											<?php esc_html_e('Copy', 'wp-siteagent'); ?>
+											<?php esc_html_e('Copy', 'siteagent'); ?>
 										</button>
 									</div>
 								</div>
 
 								<div class="sa-form-group" style="margin-bottom: 12px;">
-									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e('Authorization Header', 'wp-siteagent'); ?></label>
+									<label style="font-size: 11px; font-weight: 700; margin-bottom: 4px; display: block; color: var(--sa-text-secondary);"><?php esc_html_e('Authorization Header', 'siteagent'); ?></label>
 									<div class="sa-token-value-wrap" style="margin-bottom: 0;">
 										<input type="text" id="sa-dash-cursor-auth" class="sa-token-value" style="width: 100%; padding: 8px; font-size: 12px; border-color: var(--sa-border);" readonly placeholder="Bearer YOUR_TOKEN" />
 										<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" onclick="window.siteagent.copyText('sa-dash-cursor-auth')">
-											<?php esc_html_e('Copy', 'wp-siteagent'); ?>
+											<?php esc_html_e('Copy', 'siteagent'); ?>
 										</button>
 									</div>
 								</div>
 
 								<p class="sa-hint" style="margin-top: 16px; font-size: 12px; line-height: 1.4; color: var(--sa-text-secondary);">
-									<?php esc_html_e('In Cursor: Settings → Features → MCP Servers → Add new MCP server → set Type to HTTP, paste the URL and Authorization header.', 'wp-siteagent'); ?>
+									<?php esc_html_e('In Cursor: Settings → Features → MCP Servers → Add new MCP server → set Type to HTTP, paste the URL and Authorization header.', 'siteagent'); ?>
 								</p>
 							</div>
 
@@ -413,3 +431,4 @@ $siteagent_public_count = count($siteagent_registry->get_mcp_public());
 </div>
 
 </div>
+

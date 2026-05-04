@@ -65,8 +65,8 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/site-health-report',
 			[
-				'label'               => __( 'Site Health Report', 'wp-siteagent' ),
-				'description'         => __( 'Get a comprehensive site health and environment report.', 'wp-siteagent' ),
+				'label'               => __( 'Site Health Report', 'siteagent' ),
+				'description'         => __( 'Get a comprehensive site health and environment report.', 'siteagent' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
 						$user = get_user_by( 'id', $user_id );
@@ -118,6 +118,7 @@ class Module_Diagnostics extends Module_Base {
 
 		// Database.
 		$db_version  = $wpdb->db_version();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$tables      = $wpdb->get_results( 'SHOW TABLE STATUS', ARRAY_A );
 		$db_size_mb  = 0.0;
 		$table_count = 0;
@@ -180,6 +181,7 @@ class Module_Diagnostics extends Module_Base {
 				if ( ! empty( $cert['validTo_time_t'] ) ) {
 					$ssl_expires = gmdate( 'Y-m-d', $cert['validTo_time_t'] );
 				}
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 				fclose( $ssl_conn );
 			}
 		}
@@ -250,8 +252,8 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/list-plugin-updates',
 			[
-				'label'               => __( 'Plugin Update List', 'wp-siteagent' ),
-				'description'         => __( 'List all plugins that have available updates.', 'wp-siteagent' ),
+				'label'               => __( 'Plugin Update List', 'siteagent' ),
+				'description'         => __( 'List all plugins that have available updates.', 'siteagent' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
 						$user = get_user_by( 'id', $user_id );
@@ -311,8 +313,8 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/get-error-logs',
 			[
-				'label'               => __( 'Error Logs', 'wp-siteagent' ),
-				'description'         => __( 'Read the last N lines from the WordPress debug error log.', 'wp-siteagent' ),
+				'label'               => __( 'Error Logs', 'siteagent' ),
+				'description'         => __( 'Read the last N lines from the WordPress debug error log.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -359,7 +361,7 @@ class Module_Diagnostics extends Module_Base {
 			return [
 				'lines'    => [],
 				'log_path' => 'debug.log',
-				'message'  => __( 'No error log file found or WP_DEBUG_LOG is not enabled.', 'wp-siteagent' ),
+				'message'  => __( 'No error log file found or WP_DEBUG_LOG is not enabled.', 'siteagent' ),
 			];
 		}
 
@@ -387,8 +389,8 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/list-cron-jobs',
 			[
-				'label'               => __( 'Cron Job List', 'wp-siteagent' ),
-				'description'         => __( 'List all scheduled WP-Cron events.', 'wp-siteagent' ),
+				'label'               => __( 'Cron Job List', 'siteagent' ),
+				'description'         => __( 'List all scheduled WP-Cron events.', 'siteagent' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
 						$user = get_user_by( 'id', $user_id );
@@ -480,8 +482,8 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/get-site-options',
 			[
-				'label'               => __( 'Site Settings', 'wp-siteagent' ),
-				'description'         => __( 'Get WordPress site options (allowlisted safe options only — no passwords or secrets).', 'wp-siteagent' ),
+				'label'               => __( 'Site Settings', 'siteagent' ),
+				'description'         => __( 'Get WordPress site options (allowlisted safe options only — no passwords or secrets).', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -543,8 +545,8 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/list-transients',
 			[
-				'label'               => __( 'Transient List', 'wp-siteagent' ),
-				'description'         => __( 'List active WordPress transients.', 'wp-siteagent' ),
+				'label'               => __( 'Transient List', 'siteagent' ),
+				'description'         => __( 'List active WordPress transients.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -582,6 +584,7 @@ class Module_Diagnostics extends Module_Base {
 
 		$prefix_like = $wpdb->esc_like( '_transient_timeout_' ) . $search;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT option_name, option_value FROM {$wpdb->options}
@@ -628,8 +631,8 @@ class Module_Diagnostics extends Module_Base {
 		$this->register(
 			'siteagent/get-db-table-sizes',
 			[
-				'label'               => __( 'Database Sizes', 'wp-siteagent' ),
-				'description'         => __( 'Get row count and size for every WordPress database table.', 'wp-siteagent' ),
+				'label'               => __( 'Database Sizes', 'siteagent' ),
+				'description'         => __( 'Get row count and size for every WordPress database table.', 'siteagent' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
 						$user = get_user_by( 'id', $user_id );
@@ -661,6 +664,7 @@ class Module_Diagnostics extends Module_Base {
 
 		global $wpdb;
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$tables = $wpdb->get_results( 'SHOW TABLE STATUS', ARRAY_A );
 		$result = [];
 
@@ -722,19 +726,8 @@ class Module_Diagnostics extends Module_Base {
 
 		// WP_Filesystem doesn't support offsets in get_contents easily across all adapters.
 		// For local files (most common), we can use the direct path if needed, or just read the whole thing if it's small.
-		if ( $file_size < 1024 * 1024 ) { // < 1MB
-			$content = $wp_filesystem->get_contents( $file_path );
-		} else {
-			// If it's too big, we use PHP's native calls but ignore them for WPCS since there's no good WP alternative for tailing large files.
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
-			$handle = fopen( $file_path, 'rb' );
-			if ( ! $handle ) {
-				return [];
-			}
-			fseek( $handle, -$read_size, SEEK_END );
-			$content = fread( $handle, $read_size );
-			fclose( $handle );
-		}
+		// Use WP_Filesystem to read the contents.
+		$content = $wp_filesystem->get_contents( $file_path );
 
 		if ( ! $content ) {
 			return [];
@@ -771,3 +764,4 @@ class Module_Diagnostics extends Module_Base {
 		return $size / 1024 / 1024;
 	}
 }
+

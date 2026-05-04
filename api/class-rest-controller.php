@@ -312,14 +312,14 @@ class Rest_Controller {
 		// Verify nonce for admin requests.
 		$nonce = $request->get_header( 'X-WP-Nonce' );
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'wp-siteagent' ) ], 403 );
+			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'siteagent' ) ], 403 );
 		}
 
 		$user_id = get_current_user_id();
 		$label   = sanitize_text_field( $request->get_param( 'label' ) );
 
 		if ( empty( $label ) ) {
-			return new \WP_REST_Response( [ 'message' => __( 'Label is required.', 'wp-siteagent' ) ], 400 );
+			return new \WP_REST_Response( [ 'message' => __( 'Label is required.', 'siteagent' ) ], 400 );
 		}
 
 		$options = [
@@ -333,7 +333,7 @@ class Rest_Controller {
 			[
 				'token'    => $result['token'],
 				'token_id' => $result['token_id'],
-				'message'  => __( 'Save this token — it will not be shown again.', 'wp-siteagent' ),
+				'message'  => __( 'Save this token — it will not be shown again.', 'siteagent' ),
 			],
 			201
 		);
@@ -349,7 +349,7 @@ class Rest_Controller {
 		// Verify nonce.
 		$nonce = $request->get_header( 'X-WP-Nonce' );
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'wp-siteagent' ) ], 403 );
+			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'siteagent' ) ], 403 );
 		}
 
 		$token_id        = absint( $request->get_param( 'id' ) );
@@ -358,7 +358,7 @@ class Rest_Controller {
 		$revoked = $this->auth->revoke_token( $token_id, $requesting_user );
 
 		if ( ! $revoked ) {
-			return new \WP_REST_Response( [ 'message' => __( 'Failed to revoke token.', 'wp-siteagent' ) ], 400 );
+			return new \WP_REST_Response( [ 'message' => __( 'Failed to revoke token.', 'siteagent' ) ], 400 );
 		}
 
 		return new \WP_REST_Response( [ 'revoked' => true, 'token_id' => $token_id ], 200 );
@@ -399,7 +399,7 @@ class Rest_Controller {
 	public function export_audit_log( \WP_REST_Request $request ): void {
 		$nonce = $request->get_param( 'nonce' );
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'siteagent_admin' ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'wp-siteagent' ) );
+			wp_die( esc_html__( 'Security check failed.', 'siteagent' ) );
 		}
 
 		$logs   = $this->audit->get_logs( [ 'per_page' => 5000, 'page' => 1 ] );
@@ -407,7 +407,7 @@ class Rest_Controller {
 		$output = fopen( 'php://output', 'w' );
 
 		if ( ! $output ) {
-			wp_die( esc_html__( 'Could not open output stream.', 'wp-siteagent' ) );
+			wp_die( esc_html__( 'Could not open output stream.', 'siteagent' ) );
 		}
 
 		// Headers for CSV download.
@@ -417,11 +417,11 @@ class Rest_Controller {
 		header( 'Expires: 0' );
 
 		// CSV header row.
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fputcsv
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputcsv
 		fputcsv( $output, [ 'ID', 'Token ID', 'User ID', 'Ability', 'Status', 'Duration (ms)', 'IP Address', 'Executed At', 'Summary' ] );
 
 		foreach ( $logs['logs'] as $log ) {
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fputcsv
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fputcsv
 			fputcsv( $output, [
 				$log['id'],
 				$log['token_id'],
@@ -435,7 +435,7 @@ class Rest_Controller {
 			] );
 		}
 
-		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		fclose( $output );
 		exit;
 	}
@@ -450,7 +450,7 @@ class Rest_Controller {
 		// Verify nonce.
 		$nonce = $request->get_header( 'X-WP-Nonce' );
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'wp-siteagent' ) ], 403 );
+			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'siteagent' ) ], 403 );
 		}
 
 		$count = $this->cache->clear_all();
@@ -461,7 +461,7 @@ class Rest_Controller {
 				'count'   => $count,
 				'message' => sprintf(
 					/* translators: %d: number of transients cleared */
-					__( 'Cleared %d cached items.', 'wp-siteagent' ),
+					__( 'Cleared %d cached items.', 'siteagent' ),
 					$count
 				),
 			],
@@ -482,3 +482,4 @@ class Rest_Controller {
 		return current_user_can( 'manage_options' );
 	}
 }
+

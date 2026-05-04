@@ -11,21 +11,24 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // Only delete data if the user opted in.
-$delete = get_option( 'siteagent_delete_data_on_uninstall', false );
+$siteagent_delete = get_option( 'siteagent_delete_data_on_uninstall', false );
 
-if ( ! $delete ) {
+if ( ! $siteagent_delete ) {
 	return;
 }
 
 global $wpdb;
 
 // Drop custom tables.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 $wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}siteagent_tokens`" );
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 $wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}siteagent_audit_log`" );
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
 $wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}siteagent_rate_limits`" );
 
 // Delete all plugin options.
-$options = [
+$siteagent_options = [
 	'siteagent_version',
 	'siteagent_enabled',
 	'siteagent_display_name',
@@ -38,11 +41,12 @@ $options = [
 	'siteagent_delete_data_on_uninstall',
 ];
 
-foreach ( $options as $option ) {
-	delete_option( $option );
+foreach ( $siteagent_options as $siteagent_option ) {
+	delete_option( $siteagent_option );
 }
 
 // Delete all SiteAgent transients.
+// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
 	"DELETE FROM `{$wpdb->options}`
 	WHERE `option_name` LIKE '_transient_siteagent_%'
@@ -52,3 +56,4 @@ $wpdb->query(
 // Remove cron schedule.
 wp_clear_scheduled_hook( 'siteagent_cleanup_logs' );
 wp_clear_scheduled_hook( 'siteagent_cleanup_rate_limits' );
+

@@ -165,3 +165,4 @@ abstract class Module_Base {
 		return $user ? $user->has_cap( $cap ) : false;
 	}
 }
+

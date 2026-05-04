@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: SiteAgent for WordPress 1.0.0\n"
-"Report-Msgid-Bugs-To: https://github.com/taninrahman21/wp-siteagent/issues\n"
+"Report-Msgid-Bugs-To: https://github.com/taninrahman21/siteagent/issues\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -490,7 +490,7 @@ msgstr ""
 
 #: includes\modules\class-module-seo.php:218
 msgid "%d image is missing alt text."
-msgid_plural "%d images are missing alt text.', $images_missing_alt, 'wp-siteagent"
+msgid_plural "%d images are missing alt text."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -1502,15 +1502,16 @@ msgstr ""
 msgid "Generate one here"
 msgstr ""
 
-#: wp-siteagent.php:42
+#: siteagent.php:42
 msgid "WP SiteAgent requires PHP %1$s or higher. You are running PHP %2$s. Please upgrade PHP."
 msgstr ""
 
-#: wp-siteagent.php:88
+#: siteagent.php:88
 msgid "WP SiteAgent requires WordPress %1$s or higher. You are running WordPress %2$s. Please upgrade WordPress."
 msgstr ""
 
-#: wp-siteagent.php:107
+#: siteagent.php:107
 msgid "WP SiteAgent requires WordPress %s or higher."
 msgstr ""
+
 

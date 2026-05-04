@@ -69,8 +69,8 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/list-posts',
 			[
-				'label'            => __( 'List Posts', 'wp-siteagent' ),
-				'description'      => __( 'List WordPress posts with filtering, sorting, and pagination.', 'wp-siteagent' ),
+				'label'            => __( 'List Posts', 'siteagent' ),
+				'description'      => __( 'List WordPress posts with filtering, sorting, and pagination.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -165,8 +165,8 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/get-post',
 			[
-				'label'            => __( 'Get Post', 'wp-siteagent' ),
-				'description'      => __( 'Get a single WordPress post with full content, meta, and SEO data.', 'wp-siteagent' ),
+				'label'            => __( 'Get Post', 'siteagent' ),
+				'description'      => __( 'Get a single WordPress post with full content, meta, and SEO data.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'required'   => [ 'post_id' ],
@@ -194,7 +194,7 @@ class Module_Content extends Module_Base {
 		$post    = get_post( $post_id );
 
 		if ( ! $post ) {
-			return $this->error( __( 'Post not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
 		}
 
 		$author    = get_user_by( 'id', $post->post_author );
@@ -262,8 +262,8 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/create-post',
 			[
-				'label'               => __( 'Create Post', 'wp-siteagent' ),
-				'description'         => __( 'Create a new WordPress post, page, or custom post type entry.', 'wp-siteagent' ),
+				'label'               => __( 'Create Post', 'siteagent' ),
+				'description'         => __( 'Create a new WordPress post, page, or custom post type entry.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'title', 'content' ],
@@ -373,8 +373,8 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/update-post',
 			[
-				'label'               => __( 'Update Post', 'wp-siteagent' ),
-				'description'         => __( 'Update an existing WordPress post. Only provided fields are changed.', 'wp-siteagent' ),
+				'label'               => __( 'Update Post', 'siteagent' ),
+				'description'         => __( 'Update an existing WordPress post. Only provided fields are changed.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'post_id' ],
@@ -422,7 +422,7 @@ class Module_Content extends Module_Base {
 		$post    = get_post( $post_id );
 
 		if ( ! $post ) {
-			return $this->error( __( 'Post not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
 		}
 
 		$post_data = [ 'ID' => $post_id ];
@@ -499,8 +499,8 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/delete-post',
 			[
-				'label'               => __( 'Delete Post', 'wp-siteagent' ),
-				'description'         => __( 'Delete or trash a WordPress post.', 'wp-siteagent' ),
+				'label'               => __( 'Delete Post', 'siteagent' ),
+				'description'         => __( 'Delete or trash a WordPress post.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'post_id' ],
@@ -537,13 +537,13 @@ class Module_Content extends Module_Base {
 		$force   = (bool) ( $input['force'] ?? false );
 
 		if ( ! get_post( $post_id ) ) {
-			return $this->error( __( 'Post not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
 		}
 
 		$result = wp_delete_post( $post_id, $force );
 
 		if ( ! $result ) {
-			return $this->error( __( 'Failed to delete post.', 'wp-siteagent' ) );
+			return $this->error( __( 'Failed to delete post.', 'siteagent' ) );
 		}
 
 		return [
@@ -566,8 +566,8 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/bulk-update-posts',
 			[
-				'label'               => __( 'Bulk Update Posts', 'wp-siteagent' ),
-				'description'         => __( 'Apply the same updates to multiple posts at once.', 'wp-siteagent' ),
+				'label'               => __( 'Bulk Update Posts', 'siteagent' ),
+				'description'         => __( 'Apply the same updates to multiple posts at once.', 'siteagent' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'post_ids', 'updates' ],
@@ -647,8 +647,8 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/list-post-types',
 			[
-				'label'            => __( 'List Post Types', 'wp-siteagent' ),
-				'description'      => __( 'List all registered public post types with their labels and capabilities.', 'wp-siteagent' ),
+				'label'            => __( 'List Post Types', 'siteagent' ),
+				'description'      => __( 'List all registered public post types with their labels and capabilities.', 'siteagent' ),
 				'execute_callback' => [ $this, 'execute_list_post_types' ],
 				'annotations'      => [
 					'readonly' => true,
@@ -696,8 +696,8 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/list-taxonomies',
 			[
-				'label'            => __( 'List Taxonomies', 'wp-siteagent' ),
-				'description'      => __( 'List all registered taxonomies with term counts.', 'wp-siteagent' ),
+				'label'            => __( 'List Taxonomies', 'siteagent' ),
+				'description'      => __( 'List all registered taxonomies with term counts.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -756,8 +756,8 @@ class Module_Content extends Module_Base {
 		$this->register(
 			'siteagent/get-post-revisions',
 			[
-				'label'            => __( 'Get Post Revisions', 'wp-siteagent' ),
-				'description'      => __( 'Get revision history for a post.', 'wp-siteagent' ),
+				'label'            => __( 'Get Post Revisions', 'siteagent' ),
+				'description'      => __( 'Get revision history for a post.', 'siteagent' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'required'   => [ 'post_id' ],
@@ -786,7 +786,7 @@ class Module_Content extends Module_Base {
 		$limit   = min( absint( $input['limit'] ?? 10 ), 50 );
 
 		if ( ! get_post( $post_id ) ) {
-			return $this->error( __( 'Post not found.', 'wp-siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
 		}
 
 		$revisions = wp_get_post_revisions(
@@ -870,3 +870,4 @@ class Module_Content extends Module_Base {
 		return $attachment_id;
 	}
 }
+

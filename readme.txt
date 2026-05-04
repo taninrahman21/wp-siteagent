@@ -2,7 +2,7 @@
 Contributors: builtbytanin
 Tags: ai, mcp, claude, automation, agent
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.9
 Requires PHP: 8.1
 Stable tag: 1.0.0
 License: GPLv2 or later
@@ -76,3 +76,4 @@ Absolutely. The Dashboard provides the MCP Server URL which you can paste direct
 *   Automated setup for Claude Desktop using `mcp-remote`.
 *   45+ abilities across Content, SEO, and WooCommerce modules.
 *   Secure hashed tokens and real-time audit logging.
+
