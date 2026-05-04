@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: SiteAgent for WordPress
- * Plugin URI:  https://github.com/taninrahman21/siteagent
+ * Plugin URI:  https://github.com/taninrahman21/wp-siteagent
  * Description: Turn your WordPress site into an AI agent-operable command layer using the Abilities API and Model Context Protocol (MCP). Let Claude Desktop, Cursor, VS Code, and other MCP-compatible AI clients discover, read, and safely operate your WordPress site through natural language.
  * Version:     1.0.0
  * Author:      BuiltByTanin
