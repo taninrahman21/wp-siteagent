@@ -95,6 +95,7 @@ $siteagent_abilities = array_filter($siteagent_all_abilities, function ($siteage
 											<td class="sa-td--time">
 												<?php echo $siteagent_token['expires_at'] ? esc_html(wp_date(get_option('date_format'), strtotime($siteagent_token['expires_at']))) : '<em>' . esc_html__('Never', 'siteagent') . '</em>'; ?>
 											</td>
+											<td class="sa-td--time">
 												<?php 
 												echo $siteagent_token['last_used'] 
 													? esc_html( 
@@ -106,6 +107,7 @@ $siteagent_abilities = array_filter($siteagent_all_abilities, function ($siteage
 													) 
 													: '<em>' . esc_html__( 'Never', 'siteagent' ) . '</em>'; 
 												?>
+											</td>
 											<td class="sa-td--abilities"
 												title="<?php echo isset($siteagent_token['abilities']) ? esc_attr(implode(', ', $siteagent_token['abilities'])) : ''; ?>"
 												style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: var(--sa-text-secondary);">

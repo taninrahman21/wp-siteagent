@@ -81,13 +81,15 @@ $siteagent_module_labels = [
 					<div class="sa-card" style="padding: 0;">
 						<div class="sa-card-header"
 							style="padding: 16px 24px; background: #fff; border-bottom: 1px solid var(--sa-border);">
-								<?php 
-								printf( 
-									/* translators: %s: module name */
-									esc_html__( '%s module', 'siteagent' ), 
-									esc_html( $siteagent_label ) 
-								); 
-								?></h3>
+								<h3 style="margin: 0; font-size: 16px; font-weight: 700; color: var(--sa-secondary);">
+									<?php 
+									printf( 
+										/* translators: %s: module name */
+										esc_html__( '%s module', 'siteagent' ), 
+										esc_html( $siteagent_label ) 
+									); 
+									?>
+								</h3>
 							<span class="sa-tag sa-tag--public"
 								style="text-transform: lowercase; font-weight: 500;"><?php
 								printf(
