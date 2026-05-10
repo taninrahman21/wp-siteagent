@@ -1,17 +1,17 @@
 /**
- * WP SiteAgent — Token Manager JavaScript
+ * WP my-site-hand — Token Manager JavaScript
  *
  * Handles the generate-token modal: opening, form submission,
  * token reveal, copy, confirmation checkbox, and token revocation.
  */
 
-/* global siteagentAdmin, siteagent */
+/* global mshAdmin, msh */
 
 'use strict';
 
 (function () {
 
-	const cfg = window.siteagentAdmin || {};
+	const cfg = window.mshAdmin || {};
 	const restUrl = cfg.restUrl || '';
 	const restNonce = cfg.restNonce || '';
 	const i18n = cfg.i18n || {};
@@ -26,7 +26,7 @@
 		return 'windows';
 	}
 
-	window.siteagentTokens = {
+	window.mshTokens = {
 
 		selectedOs: detectOs(),
 
@@ -106,8 +106,8 @@
 			const label = document.getElementById('sa-token-label')?.value?.trim();
 
 			if (!label) {
-				if (window.siteagent && window.siteagent._showToast) {
-					window.siteagent._showToast('Label is required.', 'error');
+				if (window.msh && window.msh._showToast) {
+					window.msh._showToast('Label is required.', 'error');
 				}
 				document.getElementById('sa-token-label')?.focus();
 				return;
@@ -146,8 +146,8 @@
 					this._revealToken(data.token);
 				})
 				.catch(err => {
-					if (window.siteagent && window.siteagent._showToast) {
-						window.siteagent._showToast(err.message || i18n.error || 'Error occurred.', 'error');
+					if (window.msh && window.msh._showToast) {
+						window.msh._showToast(err.message || i18n.error || 'Error occurred.', 'error');
 					}
 					if (btn) { btn.disabled = false; btn.textContent = 'Generate Token'; }
 				});
@@ -159,7 +159,7 @@
 		 * @param {string} os - 'windows', 'mac', 'linux'
 		 */
 		switchOsTab: function (os) {
-			window.siteagentTokens.selectedOs = os;
+			window.mshTokens.selectedOs = os;
 
 			// Update tab styles.
 			const tabs = ['windows', 'mac', 'linux'];
@@ -185,12 +185,12 @@
 				let command = '';
 
 				if (os === 'windows') {
-					command = `node -e "const fs=require('fs'),os=require('os'),path=require('path'),cp=require('child_process');const home=os.homedir();const p=path.join(home,'AppData','Roaming','Claude','claude_desktop_config.json');const dir=path.dirname(p);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync('npm root -g').toString().trim(),'mcp-remote','dist','proxy.js');d.mcpServers['siteagent']={command:'node',args:[proxy,'${endpoint}','--header','Authorization: Bearer ${token}']};fs.writeFileSync(p,JSON.stringify(d,null,2));console.log('Done');"`;
+					command = `node -e "const fs=require('fs'),os=require('os'),path=require('path'),cp=require('child_process');const home=os.homedir();const p=path.join(home,'AppData','Roaming','Claude','claude_desktop_config.json');const dir=path.dirname(p);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync('npm root -g').toString().trim(),'mcp-remote','dist','proxy.js');d.mcpServers['my-site-hand']={command:'node',args:[proxy,'${endpoint}','--header','Authorization: Bearer ${token}']};fs.writeFileSync(p,JSON.stringify(d,null,2));console.log('Done');"`;
 				} else if (os === 'mac') {
-					command = `node -e 'const fs=require("fs"),os=require("os"),path=require("path"),cp=require("child_process");const home=os.homedir();const configPath=path.join(home,"Library","Application Support","Claude","claude_desktop_config.json");const dir=path.dirname(configPath);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(configPath,"utf8"))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync("npm root -g").toString().trim(),"mcp-remote","dist","proxy.js");d.mcpServers["siteagent"]={command:"node",args:[proxy,"${endpoint}","--header","Authorization: Bearer ${token}"]};fs.writeFileSync(configPath,JSON.stringify(d,null,2));console.log("Done. Restart Claude Desktop.");'`;
+					command = `node -e 'const fs=require("fs"),os=require("os"),path=require("path"),cp=require("child_process");const home=os.homedir();const configPath=path.join(home,"Library","Application Support","Claude","claude_desktop_config.json");const dir=path.dirname(configPath);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(configPath,"utf8"))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync("npm root -g").toString().trim(),"mcp-remote","dist","proxy.js");d.mcpServers["my-site-hand"]={command:"node",args:[proxy,"${endpoint}","--header","Authorization: Bearer ${token}"]};fs.writeFileSync(configPath,JSON.stringify(d,null,2));console.log("Done. Restart Claude Desktop.");'`;
 				} else {
 					// Linux
-					command = `node -e 'const fs=require("fs"),os=require("os"),path=require("path"),cp=require("child_process");const home=os.homedir();const configPath=path.join(home,".config","Claude","claude_desktop_config.json");const dir=path.dirname(configPath);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(configPath,"utf8"))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync("npm root -g").toString().trim(),"mcp-remote","dist","proxy.js");d.mcpServers["siteagent"]={command:"node",args:[proxy,"${endpoint}","--header","Authorization: Bearer ${token}"]};fs.writeFileSync(configPath,JSON.stringify(d,null,2));console.log("Done. Restart Claude Desktop.");'`;
+					command = `node -e 'const fs=require("fs"),os=require("os"),path=require("path"),cp=require("child_process");const home=os.homedir();const configPath=path.join(home,".config","Claude","claude_desktop_config.json");const dir=path.dirname(configPath);if(!fs.existsSync(dir))fs.mkdirSync(dir,{recursive:true});let d={};try{d=JSON.parse(fs.readFileSync(configPath,"utf8"))}catch(e){};if(!d.mcpServers)d.mcpServers={};const proxy=path.join(cp.execSync("npm root -g").toString().trim(),"mcp-remote","dist","proxy.js");d.mcpServers["my-site-hand"]={command:"node",args:[proxy,"${endpoint}","--header","Authorization: Bearer ${token}"]};fs.writeFileSync(configPath,JSON.stringify(d,null,2));console.log("Done. Restart Claude Desktop.");'`;
 				}
 
 				step2Input.value = command;
@@ -216,19 +216,19 @@
 				.then(r => r.json())
 				.then(data => {
 					if (data.revoked) {
-						if (window.siteagent && window.siteagent._showToast) {
-							window.siteagent._showToast('Token revoked.');
+						if (window.msh && window.msh._showToast) {
+							window.msh._showToast('Token revoked.');
 						}
 						setTimeout(() => window.location.reload(), 1000);
 					} else {
-						if (window.siteagent && window.siteagent._showToast) {
-							window.siteagent._showToast(data.message || i18n.error, 'error');
+						if (window.msh && window.msh._showToast) {
+							window.msh._showToast(data.message || i18n.error, 'error');
 						}
 					}
 				})
 				.catch(() => {
-					if (window.siteagent && window.siteagent._showToast) {
-						window.siteagent._showToast(i18n.error || 'Error.', 'error');
+					if (window.msh && window.msh._showToast) {
+						window.msh._showToast(i18n.error || 'Error.', 'error');
 					}
 				});
 		},
@@ -267,12 +267,12 @@
 			const tokenBtn = document.getElementById('sa-copy-token-btn');
 			if (tokenBtn) {
 				tokenBtn.onclick = () => {
-					window.siteagent.copyText('sa-new-token-value');
+					window.msh.copyText('sa-new-token-value');
 				};
 			}
 
 			// Initialize the dynamic copy source for Claude command.
-			this.switchOsTab(window.siteagentTokens.selectedOs || detectOs());
+			this.switchOsTab(window.mshTokens.selectedOs || detectOs());
 
 			// Show done button; enable when checkbox is checked.
 			const doneBtn = document.getElementById('sa-close-after-copy');
@@ -286,7 +286,7 @@
 			}
 
 			// Initialize the dynamic copy source for Claude command.
-			this.switchOsTab(window.siteagentTokens.selectedOs || detectOs());
+			this.switchOsTab(window.mshTokens.selectedOs || detectOs());
 
 			// Also populate Cursor fields for immediate use if user switches.
 			const urlInput = document.getElementById('sa-cursor-url');
@@ -341,4 +341,7 @@
 	};
 
 }());
+
+
+
 

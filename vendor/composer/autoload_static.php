@@ -8,26 +8,26 @@ class ComposerStaticInit62af73b65723548643c573aa2be8003e
 {
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'WP_SiteAgent\\Abilities_Registry' => __DIR__ . '/../..' . '/includes/class-abilities-registry.php',
-        'WP_SiteAgent\\Admin\\Admin' => __DIR__ . '/../..' . '/admin/class-admin.php',
-        'WP_SiteAgent\\Api\\Rest_Controller' => __DIR__ . '/../..' . '/api/class-rest-controller.php',
-        'WP_SiteAgent\\Audit_Logger' => __DIR__ . '/../..' . '/includes/class-audit-logger.php',
-        'WP_SiteAgent\\Auth_Manager' => __DIR__ . '/../..' . '/includes/class-auth-manager.php',
-        'WP_SiteAgent\\Autoloader' => __DIR__ . '/../..' . '/includes/class-autoloader.php',
-        'WP_SiteAgent\\Cache_Manager' => __DIR__ . '/../..' . '/includes/class-cache-manager.php',
-        'WP_SiteAgent\\Deactivator' => __DIR__ . '/../..' . '/includes/class-deactivator.php',
-        'WP_SiteAgent\\Error_Handler' => __DIR__ . '/../..' . '/includes/class-error-handler.php',
-        'WP_SiteAgent\\Installer' => __DIR__ . '/../..' . '/includes/class-installer.php',
-        'WP_SiteAgent\\MCP_Server' => __DIR__ . '/../..' . '/includes/class-mcp-server.php',
-        'WP_SiteAgent\\Modules\\Module_Base' => __DIR__ . '/../..' . '/includes/modules/class-module-base.php',
-        'WP_SiteAgent\\Modules\\Module_Content' => __DIR__ . '/../..' . '/includes/modules/class-module-content.php',
-        'WP_SiteAgent\\Modules\\Module_Diagnostics' => __DIR__ . '/../..' . '/includes/modules/class-module-diagnostics.php',
-        'WP_SiteAgent\\Modules\\Module_Media' => __DIR__ . '/../..' . '/includes/modules/class-module-media.php',
-        'WP_SiteAgent\\Modules\\Module_Seo' => __DIR__ . '/../..' . '/includes/modules/class-module-seo.php',
-        'WP_SiteAgent\\Modules\\Module_Users' => __DIR__ . '/../..' . '/includes/modules/class-module-users.php',
-        'WP_SiteAgent\\Modules\\Module_Woocommerce' => __DIR__ . '/../..' . '/includes/modules/class-module-woocommerce.php',
-        'WP_SiteAgent\\Plugin' => __DIR__ . '/../..' . '/includes/class-plugin.php',
-        'WP_SiteAgent\\Rate_Limiter' => __DIR__ . '/../..' . '/includes/class-rate-limiter.php',
+        'MySiteHand\\Abilities_Registry' => __DIR__ . '/../..' . '/includes/class-abilities-registry.php',
+        'MySiteHand\\Admin\\Admin' => __DIR__ . '/../..' . '/admin/class-admin.php',
+        'MySiteHand\\Api\\Rest_Controller' => __DIR__ . '/../..' . '/api/class-rest-controller.php',
+        'MySiteHand\\Audit_Logger' => __DIR__ . '/../..' . '/includes/class-audit-logger.php',
+        'MySiteHand\\Auth_Manager' => __DIR__ . '/../..' . '/includes/class-auth-manager.php',
+        'MySiteHand\\Autoloader' => __DIR__ . '/../..' . '/includes/class-autoloader.php',
+        'MySiteHand\\Cache_Manager' => __DIR__ . '/../..' . '/includes/class-cache-manager.php',
+        'MySiteHand\\Deactivator' => __DIR__ . '/../..' . '/includes/class-deactivator.php',
+        'MySiteHand\\Error_Handler' => __DIR__ . '/../..' . '/includes/class-error-handler.php',
+        'MySiteHand\\Installer' => __DIR__ . '/../..' . '/includes/class-installer.php',
+        'MySiteHand\\MCP_Server' => __DIR__ . '/../..' . '/includes/class-mcp-server.php',
+        'MySiteHand\\Modules\\Module_Base' => __DIR__ . '/../..' . '/includes/modules/class-module-base.php',
+        'MySiteHand\\Modules\\Module_Content' => __DIR__ . '/../..' . '/includes/modules/class-module-content.php',
+        'MySiteHand\\Modules\\Module_Diagnostics' => __DIR__ . '/../..' . '/includes/modules/class-module-diagnostics.php',
+        'MySiteHand\\Modules\\Module_Media' => __DIR__ . '/../..' . '/includes/modules/class-module-media.php',
+        'MySiteHand\\Modules\\Module_Seo' => __DIR__ . '/../..' . '/includes/modules/class-module-seo.php',
+        'MySiteHand\\Modules\\Module_Users' => __DIR__ . '/../..' . '/includes/modules/class-module-users.php',
+        'MySiteHand\\Modules\\Module_Woocommerce' => __DIR__ . '/../..' . '/includes/modules/class-module-woocommerce.php',
+        'MySiteHand\\Plugin' => __DIR__ . '/../..' . '/includes/class-plugin.php',
+        'MySiteHand\\Rate_Limiter' => __DIR__ . '/../..' . '/includes/class-rate-limiter.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
@@ -38,3 +38,6 @@ class ComposerStaticInit62af73b65723548643c573aa2be8003e
         }, null, ClassLoader::class);
     }
 }
+
+
+

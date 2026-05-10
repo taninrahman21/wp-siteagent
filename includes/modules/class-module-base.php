@@ -2,14 +2,14 @@
 /**
  * Abstract base class for all ability modules.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent\Modules;
+namespace MySiteHand\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
-use WP_SiteAgent\Abilities_Registry;
+use MySiteHand\Abilities_Registry;
 
 /**
  * Module Base abstract class.
@@ -69,7 +69,7 @@ abstract class Module_Base {
 	 */
 	protected function is_enabled(): bool {
 		$default = [ 'content', 'seo', 'diagnostics', 'media', 'users', 'woocommerce' ];
-		$enabled = get_option( 'siteagent_enabled_modules', $default );
+		$enabled = get_option( 'msh_enabled_modules', $default );
 
 		// If it's set but empty, we still want to default to enabled for core functionality
 		if ( empty( $enabled ) ) {
@@ -86,7 +86,7 @@ abstract class Module_Base {
 	 */
 	public function get_ability_count(): int {
 		$all     = $this->registry->get_all();
-		$prefix  = 'siteagent/';
+		$prefix  = 'my-site-hand/';
 		$count   = 0;
 
 		foreach ( array_keys( $all ) as $name ) {
@@ -165,4 +165,7 @@ abstract class Module_Base {
 		return $user ? $user->has_cap( $cap ) : false;
 	}
 }
+
+
+
 

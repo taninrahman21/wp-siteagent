@@ -2,20 +2,20 @@
 /**
  * Core plugin singleton.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent;
+namespace MySiteHand;
 
 defined( 'ABSPATH' ) || exit;
 
-use WP_SiteAgent\Admin\Admin;
-use WP_SiteAgent\Modules\Module_Content;
-use WP_SiteAgent\Modules\Module_Seo;
-use WP_SiteAgent\Modules\Module_Woocommerce;
-use WP_SiteAgent\Modules\Module_Diagnostics;
-use WP_SiteAgent\Modules\Module_Media;
-use WP_SiteAgent\Modules\Module_Users;
+use MySiteHand\Admin\Admin;
+use MySiteHand\Modules\Module_Content;
+use MySiteHand\Modules\Module_Seo;
+use MySiteHand\Modules\Module_Woocommerce;
+use MySiteHand\Modules\Module_Diagnostics;
+use MySiteHand\Modules\Module_Media;
+use MySiteHand\Modules\Module_Users;
 
 /**
  * Plugin class.
@@ -35,7 +35,7 @@ class Plugin {
 	/**
 	 * Registered module instances.
 	 *
-	 * @var array<string, \WP_SiteAgent\Modules\Module_Base>
+	 * @var array<string, \MySiteHand\Modules\Module_Base>
 	 */
 	private array $modules = [];
 
@@ -119,7 +119,7 @@ class Plugin {
 		$this->boot_ajax_handlers();
 
 		// Allow third-party plugins to hook in after everything is loaded.
-		do_action( 'siteagent_loaded' );
+		do_action( 'msh_loaded' );
 	}
 
 	/**
@@ -156,7 +156,7 @@ class Plugin {
 		}
 
 		// Allow third-party filtering of the module list.
-		$all_modules = apply_filters( 'siteagent_modules', $all_modules );
+		$all_modules = apply_filters( 'msh_modules', $all_modules );
 
 		foreach ( $all_modules as $name => $class ) {
 			if ( class_exists( $class ) ) {
@@ -176,7 +176,7 @@ class Plugin {
 			$module->boot();
 		}
 
-		do_action( 'siteagent_abilities_registered' );
+		do_action( 'msh_abilities_registered' );
 	}
 
 	/**
@@ -196,7 +196,7 @@ class Plugin {
 		add_action( 'rest_api_init', [ $this->mcp_server, 'register_routes' ] );
 
 		// Register our custom REST controller.
-		$rest_controller = new \WP_SiteAgent\Api\Rest_Controller(
+		$rest_controller = new \MySiteHand\Api\Rest_Controller(
 			$this->abilities_registry,
 			$this->auth_manager,
 			$this->rate_limiter,
@@ -228,10 +228,10 @@ class Plugin {
 	 * @return void
 	 */
 	private function boot_ajax_handlers(): void {
-		add_action( 'wp_ajax_siteagent_danger_action', [ $this, 'ajax_danger_action' ] );
-		add_action( 'wp_ajax_siteagent_save_option', [ $this, 'ajax_save_option' ] );
-		add_action( 'wp_ajax_siteagent_toggle_ability', [ $this, 'ajax_toggle_ability' ] );
-		add_action( 'wp_ajax_siteagent_toggle_module', [ $this, 'ajax_toggle_module' ] );
+		add_action( 'wp_ajax_msh_danger_action', [ $this, 'ajax_danger_action' ] );
+		add_action( 'wp_ajax_msh_save_option', [ $this, 'ajax_save_option' ] );
+		add_action( 'wp_ajax_msh_toggle_ability', [ $this, 'ajax_toggle_ability' ] );
+		add_action( 'wp_ajax_msh_toggle_module', [ $this, 'ajax_toggle_module' ] );
 	}
 
 	/**
@@ -240,20 +240,20 @@ class Plugin {
 	 * @return void
 	 */
 	public function ajax_toggle_module(): void {
-		check_ajax_referer( 'siteagent_admin', 'nonce' );
+		check_ajax_referer( 'msh_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'siteagent' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'my-site-hand' ) ], 403 );
 		}
 
 		$module_slug = sanitize_key( wp_unslash( $_POST['module_slug'] ?? '' ) );
 		$is_enabled  = rest_sanitize_boolean( wp_unslash( $_POST['is_enabled'] ?? '0' ) );
 
 		if ( empty( $module_slug ) ) {
-			wp_send_json_error( [ 'message' => __( 'Missing module slug.', 'siteagent' ) ], 400 );
+			wp_send_json_error( [ 'message' => __( 'Missing module slug.', 'my-site-hand' ) ], 400 );
 		}
 
-		$enabled = (array) get_option( 'siteagent_enabled_modules', [] );
+		$enabled = (array) get_option( 'msh_enabled_modules', [] );
 
 		if ( $is_enabled ) {
 			if ( ! in_array( $module_slug, $enabled, true ) ) {
@@ -263,7 +263,7 @@ class Plugin {
 			$enabled = array_diff( $enabled, [ $module_slug ] );
 		}
 
-		update_option( 'siteagent_enabled_modules', array_values( array_unique( $enabled ) ) );
+		update_option( 'msh_enabled_modules', array_values( array_unique( $enabled ) ) );
 
 		wp_send_json_success( [ 'saved' => true, 'is_enabled' => $is_enabled ] );
 	}
@@ -274,20 +274,20 @@ class Plugin {
 	 * @return void
 	 */
 	public function ajax_toggle_ability(): void {
-		check_ajax_referer( 'siteagent_admin', 'nonce' );
+		check_ajax_referer( 'msh_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'siteagent' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'my-site-hand' ) ], 403 );
 		}
 
 		$ability_name = sanitize_text_field( wp_unslash( $_POST['ability_name'] ?? '' ) );
 		$is_enabled   = rest_sanitize_boolean( wp_unslash( $_POST['is_enabled'] ?? '0' ) );
 
 		if ( empty( $ability_name ) ) {
-			wp_send_json_error( [ 'message' => __( 'Missing ability name.', 'siteagent' ) ], 400 );
+			wp_send_json_error( [ 'message' => __( 'Missing ability name.', 'my-site-hand' ) ], 400 );
 		}
 
-		$disabled = (array) get_option( 'siteagent_disabled_abilities', [] );
+		$disabled = (array) get_option( 'msh_disabled_abilities', [] );
 
 		if ( $is_enabled ) {
 			// Remove from disabled list.
@@ -299,7 +299,7 @@ class Plugin {
 			}
 		}
 
-		update_option( 'siteagent_disabled_abilities', array_values( array_unique( $disabled ) ) );
+		update_option( 'msh_disabled_abilities', array_values( array_unique( $disabled ) ) );
 
 		wp_send_json_success( [ 'saved' => true, 'is_enabled' => $is_enabled ] );
 	}
@@ -310,10 +310,10 @@ class Plugin {
 	 * @return void
 	 */
 	public function ajax_danger_action(): void {
-		check_ajax_referer( 'siteagent_admin', 'nonce' );
+		check_ajax_referer( 'msh_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'siteagent' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'my-site-hand' ) ], 403 );
 		}
 
 		$action = sanitize_text_field( wp_unslash( $_POST['danger_action'] ?? '' ) );
@@ -324,7 +324,7 @@ class Plugin {
 				wp_send_json_success( [
 					'message' => sprintf(
 						/* translators: %d: number of tokens deleted */
-						__( 'Deleted %d tokens.', 'siteagent' ),
+						__( 'Deleted %d tokens.', 'my-site-hand' ),
 						$count
 					),
 				] );
@@ -335,7 +335,7 @@ class Plugin {
 				wp_send_json_success( [
 					'message' => sprintf(
 						/* translators: %d: number of log entries deleted */
-						__( 'Deleted %d log entries.', 'siteagent' ),
+						__( 'Deleted %d log entries.', 'my-site-hand' ),
 						$count
 					),
 				] );
@@ -345,57 +345,57 @@ class Plugin {
 				// Delete all plugin options.
 				global $wpdb;
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-				$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'siteagent_%'" );
+				$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'msh_%'" );
 
 				// Clear logs and tokens.
 				$this->audit_logger->delete_all_logs();
 				$this->auth_manager->delete_all_tokens();
 
 				wp_send_json_success( [
-					'message' => __( 'All plugin data has been reset to defaults.', 'siteagent' ),
+					'message' => __( 'All plugin data has been reset to defaults.', 'my-site-hand' ),
 				] );
 				break;
 
 			default:
-				wp_send_json_error( [ 'message' => __( 'Unknown action.', 'siteagent' ) ], 400 );
+				wp_send_json_error( [ 'message' => __( 'Unknown action.', 'my-site-hand' ) ], 400 );
 		}
 	}
 
 	public function ajax_save_option(): void {
-		check_ajax_referer( 'siteagent_admin', 'nonce' );
+		check_ajax_referer( 'msh_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'siteagent' ) ], 403 );
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'my-site-hand' ) ], 403 );
 		}
 
 		$allowed = [
-			'siteagent_enabled',
-			'siteagent_delete_data_on_uninstall',
-			'siteagent_display_name',
-			'siteagent_hourly_limit',
-			'siteagent_daily_limit',
-			'siteagent_cache_ttl',
-			'siteagent_log_retention_days',
-			'siteagent_log_level',
+			'msh_enabled',
+			'msh_delete_data_on_uninstall',
+			'msh_display_name',
+			'msh_hourly_limit',
+			'msh_daily_limit',
+			'msh_cache_ttl',
+			'msh_log_retention_days',
+			'msh_log_level',
 		];
 
 		$option_name = sanitize_key( wp_unslash( $_POST['option_name'] ?? '' ) );
 
 		if ( ! in_array( $option_name, $allowed, true ) ) {
-			wp_send_json_error( [ 'message' => __( 'Option not allowed via AJAX.', 'siteagent' ) ], 400 );
+			wp_send_json_error( [ 'message' => __( 'Option not allowed via AJAX.', 'my-site-hand' ) ], 400 );
 		}
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Sanitized below based on option type.
 		$option_value = wp_unslash( $_POST['option_value'] ?? '' );
 
 		// Sanitize based on option type.
-		if ( in_array( $option_name, [ 'siteagent_enabled', 'siteagent_delete_data_on_uninstall' ], true ) ) {
+		if ( in_array( $option_name, [ 'msh_enabled', 'msh_delete_data_on_uninstall' ], true ) ) {
 			$option_value = rest_sanitize_boolean( $option_value );
-		} elseif ( in_array( $option_name, [ 'siteagent_hourly_limit', 'siteagent_daily_limit', 'siteagent_cache_ttl', 'siteagent_log_retention_days' ], true ) ) {
+		} elseif ( in_array( $option_name, [ 'msh_hourly_limit', 'msh_daily_limit', 'msh_cache_ttl', 'msh_log_retention_days' ], true ) ) {
 			$option_value = absint( $option_value );
-		} elseif ( 'siteagent_display_name' === $option_name ) {
+		} elseif ( 'msh_display_name' === $option_name ) {
 			$option_value = sanitize_text_field( $option_value );
-		} elseif ( 'siteagent_log_level' === $option_name ) {
+		} elseif ( 'msh_log_level' === $option_name ) {
 			$option_value = in_array( $option_value, [ 'all', 'errors-only', 'none' ], true ) ? $option_value : 'all';
 		} else {
 			$option_value = sanitize_text_field( $option_value );
@@ -412,17 +412,17 @@ class Plugin {
 	 * @return void
 	 */
 	private function register_cron_callbacks(): void {
-		add_action( 'siteagent_cleanup_logs', [ $this->audit_logger, 'cleanup_old_logs' ] );
-		add_action( 'siteagent_cleanup_expired_tokens', [ $this->auth_manager, 'delete_expired_tokens' ] );
+		add_action( 'msh_cleanup_logs', [ $this->audit_logger, 'cleanup_old_logs' ] );
+		add_action( 'msh_cleanup_expired_tokens', [ $this->auth_manager, 'delete_expired_tokens' ] );
 	}
 
 	/**
 	 * Get a registered module instance by name.
 	 *
 	 * @param string $name Module name (e.g. 'content', 'seo').
-	 * @return \WP_SiteAgent\Modules\Module_Base|null
+	 * @return \MySiteHand\Modules\Module_Base|null
 	 */
-	public function get_module( string $name ): ?\WP_SiteAgent\Modules\Module_Base {
+	public function get_module( string $name ): ?\MySiteHand\Modules\Module_Base {
 		return $this->modules[ $name ] ?? null;
 	}
 
@@ -432,7 +432,7 @@ class Plugin {
 	 * @return array<string>
 	 */
 	public function get_enabled_modules(): array {
-		return (array) get_option( 'siteagent_enabled_modules', [ 'content', 'seo', 'diagnostics', 'media', 'users' ] );
+		return (array) get_option( 'msh_enabled_modules', [ 'content', 'seo', 'diagnostics', 'media', 'users' ] );
 	}
 
 	/**
@@ -483,10 +483,13 @@ class Plugin {
 	/**
 	 * Get all registered module instances.
 	 *
-	 * @return array<string, \WP_SiteAgent\Modules\Module_Base>
+	 * @return array<string, \MySiteHand\Modules\Module_Base>
 	 */
 	public function get_modules(): array {
 		return $this->modules;
 	}
 }
+
+
+
 

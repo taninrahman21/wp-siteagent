@@ -2,10 +2,10 @@
 /**
  * Media module — media library management abilities.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent\Modules;
+namespace MySiteHand\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,12 +29,12 @@ class Module_Media extends Module_Base {
 	 */
 	public function get_ability_names(): array {
 		return [
-			'siteagent/list-media',
-			'siteagent/get-unattached-media',
-			'siteagent/update-media-alt-text',
-			'siteagent/bulk-update-alt-text',
-			'siteagent/get-large-media',
-			'siteagent/get-media-library-stats',
+			'my-site-hand/list-media',
+			'my-site-hand/get-unattached-media',
+			'my-site-hand/update-media-alt-text',
+			'my-site-hand/bulk-update-alt-text',
+			'my-site-hand/get-large-media',
+			'my-site-hand/get-media-library-stats',
 		];
 	}
 
@@ -51,20 +51,20 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_list-media
+	// Ability: msh_list-media
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_list-media ability.
+	 * Register the msh_list-media ability.
 	 *
 	 * @return void
 	 */
 	private function register_list_media(): void {
 		$this->register(
-			'siteagent/list-media',
+			'my-site-hand/list-media',
 			[
-				'label'            => __( 'List Media', 'siteagent' ),
-				'description'      => __( 'List media library items with filtering options.', 'siteagent' ),
+				'label'            => __( 'List Media', 'my-site-hand' ),
+				'description'      => __( 'List media library items with filtering options.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -86,7 +86,7 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_list-media.
+	 * Execute msh_list-media.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -130,20 +130,20 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-unattached-media
+	// Ability: msh_get-unattached-media
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_get-unattached-media ability.
+	 * Register the msh_get-unattached-media ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_unattached_media(): void {
 		$this->register(
-			'siteagent/get-unattached-media',
+			'my-site-hand/get-unattached-media',
 			[
-				'label'            => __( 'List Unattached Media', 'siteagent' ),
-				'description'      => __( 'List media items not attached to any post.', 'siteagent' ),
+				'label'            => __( 'List Unattached Media', 'my-site-hand' ),
+				'description'      => __( 'List media items not attached to any post.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -160,7 +160,7 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-unattached-media.
+	 * Execute msh_get-unattached-media.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -173,20 +173,20 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_update-media-alt-text
+	// Ability: msh_update-media-alt-text
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_update-media-alt-text ability.
+	 * Register the msh_update-media-alt-text ability.
 	 *
 	 * @return void
 	 */
 	private function register_update_media_alt_text(): void {
 		$this->register(
-			'siteagent/update-media-alt-text',
+			'my-site-hand/update-media-alt-text',
 			[
-				'label'               => __( 'Update Alt Text', 'siteagent' ),
-				'description'         => __( 'Set the alt text for a media attachment.', 'siteagent' ),
+				'label'               => __( 'Update Alt Text', 'my-site-hand' ),
+				'description'         => __( 'Set the alt text for a media attachment.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'attachment_id', 'alt_text' ],
@@ -211,7 +211,7 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_update-media-alt-text.
+	 * Execute msh_update-media-alt-text.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -221,7 +221,7 @@ class Module_Media extends Module_Base {
 		$alt_text      = sanitize_text_field( $input['alt_text'] );
 
 		if ( ! get_post( $attachment_id ) ) {
-			return $this->error( __( 'Attachment not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Attachment not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		update_post_meta( $attachment_id, '_wp_attachment_image_alt', $alt_text );
@@ -234,20 +234,20 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_bulk-update-alt-text
+	// Ability: msh_bulk-update-alt-text
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_bulk-update-alt-text ability.
+	 * Register the msh_bulk-update-alt-text ability.
 	 *
 	 * @return void
 	 */
 	private function register_bulk_update_alt_text(): void {
 		$this->register(
-			'siteagent/bulk-update-alt-text',
+			'my-site-hand/bulk-update-alt-text',
 			[
-				'label'               => __( 'Bulk Update Alt Text', 'siteagent' ),
-				'description'         => __( 'Set alt text for multiple media attachments at once.', 'siteagent' ),
+				'label'               => __( 'Bulk Update Alt Text', 'my-site-hand' ),
+				'description'         => __( 'Set alt text for multiple media attachments at once.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'items' ],
@@ -282,7 +282,7 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_bulk-update-alt-text.
+	 * Execute msh_bulk-update-alt-text.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -316,20 +316,20 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-large-media
+	// Ability: msh_get-large-media
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_get-large-media ability.
+	 * Register the msh_get-large-media ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_large_media(): void {
 		$this->register(
-			'siteagent/get-large-media',
+			'my-site-hand/get-large-media',
 			[
-				'label'            => __( 'Find Large Media', 'siteagent' ),
-				'description'      => __( 'Find media attachments whose file size exceeds a given threshold.', 'siteagent' ),
+				'label'            => __( 'Find Large Media', 'my-site-hand' ),
+				'description'      => __( 'Find media attachments whose file size exceeds a given threshold.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -346,7 +346,7 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-large-media.
+	 * Execute msh_get-large-media.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -397,20 +397,20 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-media-library-stats
+	// Ability: msh_get-media-library-stats
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_get-media-library-stats ability.
+	 * Register the msh_get-media-library-stats ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_media_library_stats(): void {
 		$this->register(
-			'siteagent/get-media-library-stats',
+			'my-site-hand/get-media-library-stats',
 			[
-				'label'            => __( 'Media Library Stats', 'siteagent' ),
-				'description'      => __( 'Get aggregate statistics about the WordPress media library.', 'siteagent' ),
+				'label'            => __( 'Media Library Stats', 'my-site-hand' ),
+				'description'      => __( 'Get aggregate statistics about the WordPress media library.', 'my-site-hand' ),
 				'execute_callback' => [ $this, 'execute_get_media_library_stats' ],
 				'annotations'      => [
 					'readonly' => true,
@@ -421,14 +421,14 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-media-library-stats.
+	 * Execute msh_get-media-library-stats.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
 	 */
 	public function execute_get_media_library_stats( array $input ): array {
 		$cache_key = 'media_library_stats';
-		$cached    = get_transient( 'siteagent_' . $cache_key );
+		$cached    = get_transient( 'MSH_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -495,7 +495,7 @@ class Module_Media extends Module_Base {
 			'unattached'        => $unattached,
 		];
 
-		set_transient( 'siteagent_' . $cache_key, $stats, 30 * MINUTE_IN_SECONDS );
+		set_transient( 'MSH_' . $cache_key, $stats, 30 * MINUTE_IN_SECONDS );
 
 		return $stats;
 	}
@@ -537,4 +537,7 @@ class Module_Media extends Module_Base {
 		];
 	}
 }
+
+
+
 

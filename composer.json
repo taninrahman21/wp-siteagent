@@ -1,6 +1,6 @@
 {
-    "name": "yourname/siteagent",
-    "description": "AI Agent Command Layer for WordPress using MCP",
+    "name": "mysitehand/my-site-hand",
+    "description": "My Site Hand (AI) - AI Agent Command Layer for WordPress using MCP",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
     "authors": [
@@ -25,7 +25,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "WP_SiteAgent\\Tests": "tests/"
+            "MySiteHand\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -43,3 +43,5 @@
     "minimum-stability": "stable",
     "prefer-stable": true
 }
+
+

@@ -2,10 +2,10 @@
 /**
  * Plugin installer — creates DB tables, default options, and schedules cron.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent;
+namespace MySiteHand;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -27,7 +27,7 @@ class Installer {
 		self::set_default_options();
 		self::schedule_cron();
 		flush_rewrite_rules();
-		update_option( 'siteagent_db_version', SITEAGENT_DB_VERSION );
+		update_option( 'msh_db_version', MSH_DB_VERSION );
 	}
 
 	/**
@@ -42,8 +42,8 @@ class Installer {
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		// Table: siteagent_tokens.
-		$table_tokens = $wpdb->prefix . 'siteagent_tokens';
+		// Table: msh_tokens.
+		$table_tokens = $wpdb->prefix . 'msh_tokens';
 		$sql_tokens   = "CREATE TABLE {$table_tokens} (
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			token_hash VARCHAR(64) NOT NULL,
@@ -61,8 +61,8 @@ class Installer {
 
 		dbDelta( $sql_tokens );
 
-		// Table: siteagent_audit_log.
-		$table_audit = $wpdb->prefix . 'siteagent_audit_log';
+		// Table: msh_audit_log.
+		$table_audit = $wpdb->prefix . 'msh_audit_log';
 		$sql_audit   = "CREATE TABLE {$table_audit} (
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			token_id BIGINT(20) UNSIGNED DEFAULT NULL,
@@ -83,8 +83,8 @@ class Installer {
 
 		dbDelta( $sql_audit );
 
-		// Table: siteagent_rate_limits.
-		$table_rate = $wpdb->prefix . 'siteagent_rate_limits';
+		// Table: msh_rate_limits.
+		$table_rate = $wpdb->prefix . 'msh_rate_limits';
 		$sql_rate   = "CREATE TABLE {$table_rate} (
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			token_id BIGINT(20) UNSIGNED NOT NULL,
@@ -105,15 +105,15 @@ class Installer {
 	 */
 	private static function set_default_options(): void {
 		$defaults = [
-			'siteagent_hourly_limit'           => 200,
-			'siteagent_daily_limit'            => 2000,
-			'siteagent_log_retention_days'     => 30,
-			'siteagent_enabled_modules'        => [ 'content', 'seo', 'diagnostics', 'media', 'users' ],
-			'siteagent_cache_ttl'              => 3600,
-			'siteagent_enabled'                => true,
-			'siteagent_display_name'           => get_bloginfo( 'name' ) . ' Agent',
-			'siteagent_log_level'              => 'all',
-			'siteagent_delete_data_on_uninstall' => false,
+			'msh_hourly_limit'           => 200,
+			'msh_daily_limit'            => 2000,
+			'msh_log_retention_days'     => 30,
+			'msh_enabled_modules'        => [ 'content', 'seo', 'diagnostics', 'media', 'users' ],
+			'msh_cache_ttl'              => 3600,
+			'msh_enabled'                => true,
+			'msh_display_name'           => get_bloginfo( 'name' ) . ' Agent',
+			'msh_log_level'              => 'all',
+			'msh_delete_data_on_uninstall' => false,
 		];
 
 		foreach ( $defaults as $option => $value ) {
@@ -129,13 +129,16 @@ class Installer {
 	 * @return void
 	 */
 	private static function schedule_cron(): void {
-		if ( ! wp_next_scheduled( 'siteagent_cleanup_logs' ) ) {
-			wp_schedule_event( time(), 'daily', 'siteagent_cleanup_logs' );
+		if ( ! wp_next_scheduled( 'msh_cleanup_logs' ) ) {
+			wp_schedule_event( time(), 'daily', 'msh_cleanup_logs' );
 		}
 
-		if ( ! wp_next_scheduled( 'siteagent_cleanup_expired_tokens' ) ) {
-			wp_schedule_event( time(), 'daily', 'siteagent_cleanup_expired_tokens' );
+		if ( ! wp_next_scheduled( 'msh_cleanup_expired_tokens' ) ) {
+			wp_schedule_event( time(), 'daily', 'msh_cleanup_expired_tokens' );
 		}
 	}
 }
+
+
+
 

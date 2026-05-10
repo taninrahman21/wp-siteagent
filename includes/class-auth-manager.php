@@ -1,11 +1,11 @@
 <?php
 /**
- * Authentication manager for WP SiteAgent.
+ * Authentication manager for WP my-site-hand.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent;
+namespace MySiteHand;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -37,7 +37,7 @@ class Auth_Manager {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->insert(
-			$wpdb->prefix . 'siteagent_tokens',
+			$wpdb->prefix . 'msh_tokens',
 			[
 				'token_hash' => $token_hash,
 				'label'      => sanitize_text_field( $label ),
@@ -68,7 +68,7 @@ class Auth_Manager {
 		global $wpdb;
 
 		if ( empty( $raw_token ) ) {
-			return new \WP_Error( 'invalid_token', __( 'No token provided.', 'siteagent' ), [ 'status' => 401 ] );
+			return new \WP_Error( 'invalid_token', __( 'No token provided.', 'my-site-hand' ), [ 'status' => 401 ] );
 		}
 
 		$token_hash = hash( 'sha256', $raw_token );
@@ -76,28 +76,28 @@ class Auth_Manager {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$token = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->prefix}siteagent_tokens WHERE token_hash = %s AND is_active = 1",
+				"SELECT * FROM {$wpdb->prefix}msh_tokens WHERE token_hash = %s AND is_active = 1",
 				$token_hash
 			),
 			ARRAY_A
 		);
 
 		if ( ! $token ) {
-			return new \WP_Error( 'invalid_token', __( 'Invalid or revoked token.', 'siteagent' ), [ 'status' => 401 ] );
+			return new \WP_Error( 'invalid_token', __( 'Invalid or revoked token.', 'my-site-hand' ), [ 'status' => 401 ] );
 		}
 
 		// Check expiry.
 		if ( ! empty( $token['expires_at'] ) ) {
 			$expires = strtotime( $token['expires_at'] );
 			if ( $expires && $expires < time() ) {
-				return new \WP_Error( 'token_expired', __( 'Token has expired.', 'siteagent' ), [ 'status' => 401 ] );
+				return new \WP_Error( 'token_expired', __( 'Token has expired.', 'my-site-hand' ), [ 'status' => 401 ] );
 			}
 		}
 
 		// Update last_used timestamp.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->update(
-			$wpdb->prefix . 'siteagent_tokens',
+			$wpdb->prefix . 'msh_tokens',
 			[ 'last_used' => current_time( 'mysql' ) ],
 			[ 'id' => $token['id'] ],
 			[ '%s' ],
@@ -123,7 +123,7 @@ class Auth_Manager {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$token = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->prefix}siteagent_tokens WHERE id = %d",
+				"SELECT * FROM {$wpdb->prefix}msh_tokens WHERE id = %d",
 				$token_id
 			),
 			ARRAY_A
@@ -140,7 +140,7 @@ class Auth_Manager {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$result = $wpdb->update(
-			$wpdb->prefix . 'siteagent_tokens',
+			$wpdb->prefix . 'msh_tokens',
 			[ 'is_active' => 0 ],
 			[ 'id' => $token_id ],
 			[ '%d' ],
@@ -163,7 +163,7 @@ class Auth_Manager {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$token = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->prefix}siteagent_tokens WHERE id = %d",
+				"SELECT * FROM {$wpdb->prefix}msh_tokens WHERE id = %d",
 				$token_id
 			),
 			ARRAY_A
@@ -179,7 +179,7 @@ class Auth_Manager {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return false !== $wpdb->delete(
-			$wpdb->prefix . 'siteagent_tokens',
+			$wpdb->prefix . 'msh_tokens',
 			[ 'id' => $token_id ],
 			[ '%d' ]
 		);
@@ -197,14 +197,14 @@ class Auth_Manager {
 		if ( 0 === $user_id ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$tokens = $wpdb->get_results(
-				"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}siteagent_tokens ORDER BY created_at DESC",
+				"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}msh_tokens ORDER BY created_at DESC",
 				ARRAY_A
 			);
 		} else {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$tokens = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}siteagent_tokens WHERE user_id = %d ORDER BY created_at DESC",
+					"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}msh_tokens WHERE user_id = %d ORDER BY created_at DESC",
 					$user_id
 				),
 				ARRAY_A
@@ -236,7 +236,7 @@ class Auth_Manager {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->prefix}siteagent_tokens WHERE is_active = 1 AND expires_at IS NOT NULL AND expires_at BETWEEN %s AND %s",
+				"SELECT COUNT(*) FROM {$wpdb->prefix}msh_tokens WHERE is_active = 1 AND expires_at IS NOT NULL AND expires_at BETWEEN %s AND %s",
 				current_time( 'mysql', 1 ),
 				gmdate( 'Y-m-d H:i:s', strtotime( '+' . $days . ' days', current_time( 'timestamp', 1 ) ) )
 			)
@@ -253,7 +253,7 @@ class Auth_Manager {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$result = $wpdb->query(
-			"DELETE FROM {$wpdb->prefix}siteagent_tokens WHERE expires_at IS NOT NULL AND expires_at < NOW()"
+			"DELETE FROM {$wpdb->prefix}msh_tokens WHERE expires_at IS NOT NULL AND expires_at < NOW()"
 		);
 
 		return (int) $result;
@@ -303,7 +303,7 @@ class Auth_Manager {
 		$raw_token = $this->extract_token_from_request();
 
 		if ( null === $raw_token ) {
-			return new \WP_Error( 'missing_token', __( 'Authorization token is required.', 'siteagent' ), [ 'status' => 401 ] );
+			return new \WP_Error( 'missing_token', __( 'Authorization token is required.', 'my-site-hand' ), [ 'status' => 401 ] );
 		}
 
 		return $this->validate_token( $raw_token );
@@ -321,7 +321,7 @@ class Auth_Manager {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$token = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}siteagent_tokens WHERE id = %d",
+				"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}msh_tokens WHERE id = %d",
 				$token_id
 			),
 			ARRAY_A
@@ -344,7 +344,10 @@ class Auth_Manager {
 	public function delete_all_tokens(): int {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		return (int) $wpdb->query( "DELETE FROM {$wpdb->prefix}siteagent_tokens" );
+		return (int) $wpdb->query( "DELETE FROM {$wpdb->prefix}msh_tokens" );
 	}
 }
+
+
+
 

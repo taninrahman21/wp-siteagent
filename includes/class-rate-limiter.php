@@ -2,10 +2,10 @@
 /**
  * Rate limiter for API tokens.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent;
+namespace MySiteHand;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -27,14 +27,14 @@ class Rate_Limiter {
 		global $wpdb;
 
 		$hourly_limit = (int) apply_filters(
-			'siteagent_hourly_limit',
-			(int) get_option( 'siteagent_hourly_limit', 200 ),
+			'msh_hourly_limit',
+			(int) get_option( 'msh_hourly_limit', 200 ),
 			$token_id
 		);
 
 		$daily_limit = (int) apply_filters(
-			'siteagent_daily_limit',
-			(int) get_option( 'siteagent_daily_limit', 2000 ),
+			'msh_daily_limit',
+			(int) get_option( 'msh_daily_limit', 2000 ),
 			$token_id
 		);
 
@@ -51,7 +51,7 @@ class Rate_Limiter {
 				'rate_limited',
 				sprintf(
 					/* translators: %d: hourly limit */
-					__( 'Hourly rate limit of %d requests exceeded.', 'siteagent' ),
+					__( 'Hourly rate limit of %d requests exceeded.', 'my-site-hand' ),
 					$hourly_limit
 				),
 				[
@@ -68,7 +68,7 @@ class Rate_Limiter {
 				'rate_limited',
 				sprintf(
 					/* translators: %d: daily limit */
-					__( 'Daily rate limit of %d requests exceeded.', 'siteagent' ),
+					__( 'Daily rate limit of %d requests exceeded.', 'my-site-hand' ),
 					$daily_limit
 				),
 				[
@@ -100,7 +100,7 @@ class Rate_Limiter {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO {$wpdb->prefix}siteagent_rate_limits (token_id, window_key, request_count, window_start)
+				"INSERT INTO {$wpdb->prefix}msh_rate_limits (token_id, window_key, request_count, window_start)
 				VALUES (%d, %s, 1, %s)
 				ON DUPLICATE KEY UPDATE request_count = request_count + 1",
 				$token_id,
@@ -113,7 +113,7 @@ class Rate_Limiter {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO {$wpdb->prefix}siteagent_rate_limits (token_id, window_key, request_count, window_start)
+				"INSERT INTO {$wpdb->prefix}msh_rate_limits (token_id, window_key, request_count, window_start)
 				VALUES (%d, %s, 1, %s)
 				ON DUPLICATE KEY UPDATE request_count = request_count + 1",
 				$token_id,
@@ -133,14 +133,14 @@ class Rate_Limiter {
 		global $wpdb;
 
 		$hourly_limit = (int) apply_filters(
-			'siteagent_hourly_limit',
-			(int) get_option( 'siteagent_hourly_limit', 200 ),
+			'msh_hourly_limit',
+			(int) get_option( 'msh_hourly_limit', 200 ),
 			$token_id
 		);
 
 		$daily_limit = (int) apply_filters(
-			'siteagent_daily_limit',
-			(int) get_option( 'siteagent_daily_limit', 2000 ),
+			'msh_daily_limit',
+			(int) get_option( 'msh_daily_limit', 2000 ),
 			$token_id
 		);
 
@@ -150,7 +150,7 @@ class Rate_Limiter {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$hourly_used = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT request_count FROM {$wpdb->prefix}siteagent_rate_limits WHERE token_id = %d AND window_key = %s",
+				"SELECT request_count FROM {$wpdb->prefix}msh_rate_limits WHERE token_id = %d AND window_key = %s",
 				$token_id,
 				$hourly_key
 			)
@@ -159,7 +159,7 @@ class Rate_Limiter {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$daily_used = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT request_count FROM {$wpdb->prefix}siteagent_rate_limits WHERE token_id = %d AND window_key = %s",
+				"SELECT request_count FROM {$wpdb->prefix}msh_rate_limits WHERE token_id = %d AND window_key = %s",
 				$token_id,
 				$daily_key
 			)
@@ -188,7 +188,7 @@ class Rate_Limiter {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->delete(
-			$wpdb->prefix . 'siteagent_rate_limits',
+			$wpdb->prefix . 'msh_rate_limits',
 			[ 'token_id' => $token_id ],
 			[ '%d' ]
 		);
@@ -206,8 +206,11 @@ class Rate_Limiter {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return (int) $wpdb->query(
-			"DELETE FROM {$wpdb->prefix}siteagent_rate_limits WHERE window_start < DATE_SUB(NOW(), INTERVAL 2 DAY)"
+			"DELETE FROM {$wpdb->prefix}msh_rate_limits WHERE window_start < DATE_SUB(NOW(), INTERVAL 2 DAY)"
 		);
 	}
 }
+
+
+
 

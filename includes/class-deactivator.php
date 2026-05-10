@@ -2,10 +2,10 @@
 /**
  * Plugin deactivator.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent;
+namespace MySiteHand;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -34,8 +34,8 @@ class Deactivator {
 	 */
 	private static function unschedule_cron(): void {
 		$hooks = [
-			'siteagent_cleanup_logs',
-			'siteagent_cleanup_expired_tokens',
+			'msh_cleanup_logs',
+			'msh_cleanup_expired_tokens',
 		];
 
 		foreach ( $hooks as $hook ) {
@@ -46,4 +46,7 @@ class Deactivator {
 		}
 	}
 }
+
+
+
 

@@ -2,17 +2,17 @@
 /**
  * PSR-4 class autoloader.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent;
+namespace MySiteHand;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Autoloader class.
  *
- * Maps the WP_SiteAgent namespace to the plugin directory structure.
+ * Maps the MySiteHand namespace to the plugin directory structure.
  */
 class Autoloader {
 
@@ -21,7 +21,7 @@ class Autoloader {
 	 *
 	 * @var string
 	 */
-	private static string $prefix = 'WP_SiteAgent\\';
+	private static string $prefix = 'MySiteHand\\';
 
 	/**
 	 * Base directory for the namespace prefix.
@@ -36,7 +36,7 @@ class Autoloader {
 	 * @return void
 	 */
 	public static function register(): void {
-		self::$base_dir = SITEAGENT_PATH;
+		self::$base_dir = MSH_PATH;
 		spl_autoload_register( [ self::class, 'load_class' ] );
 	}
 
@@ -67,9 +67,9 @@ class Autoloader {
 	/**
 	 * Resolve a class name to a file path.
 	 *
-	 * Maps WP_SiteAgent\Admin\Admin_Dashboard → admin/class-admin-dashboard.php
-	 * Maps WP_SiteAgent\Modules\Module_Content → includes/modules/class-module-content.php
-	 * Maps WP_SiteAgent\Plugin → includes/class-plugin.php
+	 * Maps MySiteHand\Admin\Admin_Dashboard → admin/class-admin-dashboard.php
+	 * Maps MySiteHand\Modules\Module_Content → includes/modules/class-module-content.php
+	 * Maps MySiteHand\Plugin → includes/class-plugin.php
 	 *
 	 * @param string $relative_class Class name without namespace prefix.
 	 * @return string|null File path or null if not resolvable.
@@ -80,7 +80,7 @@ class Autoloader {
 
 		// Determine subdirectory and filename.
 		if ( count( $parts ) === 1 ) {
-			// Top-level class: WP_SiteAgent\Plugin → includes/class-plugin.php
+			// Top-level class: MySiteHand\Plugin → includes/class-plugin.php
 			$filename = 'class-' . self::to_kebab( $parts[0] ) . '.php';
 			return self::$base_dir . 'includes/' . $filename;
 		}
@@ -112,4 +112,7 @@ class Autoloader {
 		return strtolower( str_replace( '_', '-', $class_name ) );
 	}
 }
+
+
+
 

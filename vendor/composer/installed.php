@@ -1,6 +1,6 @@
 <?php return array(
     'root' => array(
-        'name' => 'yourname/siteagent',
+        'name' => 'yourname/my-site-hand',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
         'reference' => 'b4d972b2971e3085e625aecada8c468ec156491c',
@@ -10,7 +10,7 @@
         'dev' => false,
     ),
     'versions' => array(
-        'yourname/siteagent' => array(
+        'yourname/my-site-hand' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
             'reference' => 'b4d972b2971e3085e625aecada8c468ec156491c',
@@ -21,3 +21,6 @@
         ),
     ),
 );
+
+
+

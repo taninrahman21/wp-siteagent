@@ -2,10 +2,10 @@
 /**
  * MCP Server — implements the Model Context Protocol over HTTP.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent;
+namespace MySiteHand;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -80,7 +80,7 @@ class MCP_Server {
 	 */
 	public function register_routes(): void {
 		register_rest_route(
-			'siteagent/v1',
+			'my-site-hand/v1',
 			'/mcp/streamable',
 			[
 				[
@@ -112,12 +112,12 @@ class MCP_Server {
 
 		$body = $request->get_body();
 		if ( empty( $body ) ) {
-			return $this->error_response( null, -32700, __( 'Parse error: empty request body.', 'siteagent' ), 400 );
+			return $this->error_response( null, -32700, __( 'Parse error: empty request body.', 'my-site-hand' ), 400 );
 		}
 
 		$payload = json_decode( $body, true );
 		if ( json_last_error() !== JSON_ERROR_NONE ) {
-			return $this->error_response( null, -32700, __( 'Parse error: invalid JSON.', 'siteagent' ), 400 );
+			return $this->error_response( null, -32700, __( 'Parse error: invalid JSON.', 'my-site-hand' ), 400 );
 		}
 
 		// Check if batch request.
@@ -150,7 +150,7 @@ class MCP_Server {
 			[
 				'status'     => 'ready',
 				'serverInfo' => $server_info,
-				'endpoint'   => rest_url( 'siteagent/v1/mcp/streamable' ),
+				'endpoint'   => rest_url( 'my-site-hand/v1/mcp/streamable' ),
 			],
 			200
 		);
@@ -170,7 +170,7 @@ class MCP_Server {
 
 		// JSON-RPC version check.
 		if ( ( $payload['jsonrpc'] ?? '' ) !== '2.0' ) {
-			return $this->error_response( $id, -32600, __( 'Invalid Request: jsonrpc must be "2.0".', 'siteagent' ) );
+			return $this->error_response( $id, -32600, __( 'Invalid Request: jsonrpc must be "2.0".', 'my-site-hand' ) );
 		}
 
 		return match ( $method ) {
@@ -180,7 +180,7 @@ class MCP_Server {
 			'ping'         => $this->handle_ping( $id ),
 			default        => $this->error_response( $id, -32601, sprintf(
 				/* translators: %s: method name */
-				__( 'Method not found: %s', 'siteagent' ),
+				__( 'Method not found: %s', 'my-site-hand' ),
 				sanitize_text_field( $method )
 			) ),
 		};
@@ -272,7 +272,7 @@ class MCP_Server {
 		$arguments = $params['arguments'] ?? [];
 
 		if ( empty( $tool_name ) ) {
-			return $this->error_response( $id, -32602, __( 'Invalid params: tool name is required.', 'siteagent' ) );
+			return $this->error_response( $id, -32602, __( 'Invalid params: tool name is required.', 'my-site-hand' ) );
 		}
 
 		$token_id = (int) $token['id'];
@@ -288,7 +288,7 @@ class MCP_Server {
 				'result_summary' => 'Token not authorized for this ability.',
 			] );
 
-			return $this->error_response( $id, -32000, __( 'Token not authorized for this ability.', 'siteagent' ), 403 );
+			return $this->error_response( $id, -32000, __( 'Token not authorized for this ability.', 'my-site-hand' ), 403 );
 		}
 
 		// Rate limit check.
@@ -375,11 +375,11 @@ class MCP_Server {
 	 */
 	private function get_server_info(): array {
 		$info = [
-			'name'    => get_option( 'siteagent_display_name', 'WP SiteAgent' ),
-			'version' => SITEAGENT_VERSION,
+			'name'    => get_option( 'msh_display_name', 'WP my-site-hand' ),
+			'version' => MSH_VERSION,
 		];
 
-		return apply_filters( 'siteagent_server_info', $info );
+		return apply_filters( 'msh_server_info', $info );
 	}
 
 	/**
@@ -449,7 +449,7 @@ class MCP_Server {
 	 * Convert an internal ability name to an MCP-safe tool name.
 	 *
 	 * MCP spec requires tool names to match ^[a-zA-Z0-9_-]{1,64}$.
-	 * Internal names like "siteagent/list-posts" become "siteagent_list-posts".
+	 * Internal names like "my-site-hand/list-posts" become "msh_list-posts".
 	 *
 	 * @param string $name Internal ability name.
 	 * @return string MCP-compliant tool name.
@@ -462,7 +462,7 @@ class MCP_Server {
 	 * Convert an MCP tool name back to the internal ability name.
 	 *
 	 * Reverses to_mcp_tool_name() by replacing the first underscore with a slash.
-	 * e.g. "siteagent_list-posts" becomes "siteagent/list-posts".
+	 * e.g. "msh_list-posts" becomes "my-site-hand/list-posts".
 	 *
 	 * @param string $name MCP tool name from client request.
 	 * @return string Internal ability name.
@@ -475,4 +475,7 @@ class MCP_Server {
 		return $name;
 	}
 }
+
+
+
 

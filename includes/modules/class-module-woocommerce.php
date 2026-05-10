@@ -2,10 +2,10 @@
 /**
  * WooCommerce module — product and order management abilities.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent\Modules;
+namespace MySiteHand\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,18 +29,18 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	public function get_ability_names(): array {
 		return [
-			'siteagent/woo-list-products',
-			'siteagent/woo-get-product',
-			'siteagent/woo-update-product',
-			'siteagent/woo-create-product',
-			'siteagent/woo-delete-product',
-			'siteagent/woo-list-orders',
-			'siteagent/woo-get-order',
-			'siteagent/woo-update-order-status',
-			'siteagent/woo-store-summary',
-			'siteagent/woo-list-coupons',
-			'siteagent/woo-create-coupon',
-			'siteagent/woo-list-customers',
+			'my-site-hand/woo-list-products',
+			'my-site-hand/woo-get-product',
+			'my-site-hand/woo-update-product',
+			'my-site-hand/woo-create-product',
+			'my-site-hand/woo-delete-product',
+			'my-site-hand/woo-list-orders',
+			'my-site-hand/woo-get-order',
+			'my-site-hand/woo-update-order-status',
+			'my-site-hand/woo-store-summary',
+			'my-site-hand/woo-list-coupons',
+			'my-site-hand/woo-create-coupon',
+			'my-site-hand/woo-list-customers',
 		];
 	}
 
@@ -74,7 +74,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-list-products
+	// Ability: msh_woo-list-products
 	// -------------------------------------------------------------------------
 
 	/**
@@ -84,10 +84,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_list_products(): void {
 		$this->register(
-			'siteagent/woo-list-products',
+			'my-site-hand/woo-list-products',
 			[
-				'label'            => __( 'List Products', 'siteagent' ),
-				'description'      => __( 'List WooCommerce products with filtering options.', 'siteagent' ),
+				'label'            => __( 'List Products', 'my-site-hand' ),
+				'description'      => __( 'List WooCommerce products with filtering options.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -185,7 +185,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-get-product
+	// Ability: msh_woo-get-product
 	// -------------------------------------------------------------------------
 
 	/**
@@ -195,10 +195,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_get_product(): void {
 		$this->register(
-			'siteagent/woo-get-product',
+			'my-site-hand/woo-get-product',
 			[
-				'label'            => __( 'Get Product', 'siteagent' ),
-				'description'      => __( 'Get a single WooCommerce product with all details.', 'siteagent' ),
+				'label'            => __( 'Get Product', 'my-site-hand' ),
+				'description'      => __( 'Get a single WooCommerce product with all details.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'required'   => [ 'product_id' ],
@@ -226,7 +226,7 @@ class Module_Woocommerce extends Module_Base {
 		$product    = wc_get_product( $product_id );
 
 		if ( ! $product ) {
-			return $this->error( __( 'Product not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Product not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$categories = array_map(
@@ -288,7 +288,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-update-product
+	// Ability: msh_woo-update-product
 	// -------------------------------------------------------------------------
 
 	/**
@@ -298,10 +298,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_update_product(): void {
 		$this->register(
-			'siteagent/woo-update-product',
+			'my-site-hand/woo-update-product',
 			[
-				'label'            => __( 'Update Product', 'siteagent' ),
-				'description'      => __( 'Update WooCommerce product fields.', 'siteagent' ),
+				'label'            => __( 'Update Product', 'my-site-hand' ),
+				'description'      => __( 'Update WooCommerce product fields.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'required'   => [ 'product_id' ],
@@ -343,7 +343,7 @@ class Module_Woocommerce extends Module_Base {
 		$product = wc_get_product( absint( $input['product_id'] ) );
 
 		if ( ! $product ) {
-			return $this->error( __( 'Product not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Product not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		if ( isset( $input['price'] ) ) {
@@ -385,7 +385,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-create-product
+	// Ability: msh_woo-create-product
 	// -------------------------------------------------------------------------
 
 	/**
@@ -395,10 +395,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_create_product(): void {
 		$this->register(
-			'siteagent/woo-create-product',
+			'my-site-hand/woo-create-product',
 			[
-				'label'               => __( 'Create Product', 'siteagent' ),
-				'description'         => __( 'Create a new WooCommerce product.', 'siteagent' ),
+				'label'               => __( 'Create Product', 'my-site-hand' ),
+				'description'         => __( 'Create a new WooCommerce product.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'name' ],
@@ -455,7 +455,7 @@ class Module_Woocommerce extends Module_Base {
 		$product_id = $product->save();
 
 		if ( ! $product_id ) {
-			return $this->error( __( 'Failed to create product.', 'siteagent' ) );
+			return $this->error( __( 'Failed to create product.', 'my-site-hand' ) );
 		}
 
 		return [
@@ -466,7 +466,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-delete-product
+	// Ability: msh_woo-delete-product
 	// -------------------------------------------------------------------------
 
 	/**
@@ -476,10 +476,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_delete_product(): void {
 		$this->register(
-			'siteagent/woo-delete-product',
+			'my-site-hand/woo-delete-product',
 			[
-				'label'               => __( 'Delete Product', 'siteagent' ),
-				'description'         => __( 'Delete or trash a WooCommerce product.', 'siteagent' ),
+				'label'               => __( 'Delete Product', 'my-site-hand' ),
+				'description'         => __( 'Delete or trash a WooCommerce product.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'product_id' ],
@@ -516,7 +516,7 @@ class Module_Woocommerce extends Module_Base {
 		$product    = wc_get_product( $product_id );
 
 		if ( ! $product ) {
-			return $this->error( __( 'Product not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Product not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$result = wp_delete_post( $product_id, $force );
@@ -529,7 +529,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-list-orders
+	// Ability: msh_woo-list-orders
 	// -------------------------------------------------------------------------
 
 	/**
@@ -539,10 +539,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_list_orders(): void {
 		$this->register(
-			'siteagent/woo-list-orders',
+			'my-site-hand/woo-list-orders',
 			[
-				'label'            => __( 'List Orders', 'siteagent' ),
-				'description'      => __( 'List WooCommerce orders with filtering.', 'siteagent' ),
+				'label'            => __( 'List Orders', 'my-site-hand' ),
+				'description'      => __( 'List WooCommerce orders with filtering.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -631,7 +631,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-get-order
+	// Ability: msh_woo-get-order
 	// -------------------------------------------------------------------------
 
 	/**
@@ -641,10 +641,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_get_order(): void {
 		$this->register(
-			'siteagent/woo-get-order',
+			'my-site-hand/woo-get-order',
 			[
-				'label'               => __( 'Get Order', 'siteagent' ),
-				'description'         => __( 'Get a WooCommerce order with all details.', 'siteagent' ),
+				'label'               => __( 'Get Order', 'my-site-hand' ),
+				'description'         => __( 'Get a WooCommerce order with all details.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'order_id' ],
@@ -678,7 +678,7 @@ class Module_Woocommerce extends Module_Base {
 		$order = wc_get_order( absint( $input['order_id'] ) );
 
 		if ( ! $order ) {
-			return $this->error( __( 'Order not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Order not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$items = [];
@@ -726,7 +726,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-update-order-status
+	// Ability: msh_woo-update-order-status
 	// -------------------------------------------------------------------------
 
 	/**
@@ -736,10 +736,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_update_order_status(): void {
 		$this->register(
-			'siteagent/woo-update-order-status',
+			'my-site-hand/woo-update-order-status',
 			[
-				'label'               => __( 'Update Order Status', 'siteagent' ),
-				'description'         => __( 'Update the status of a WooCommerce order.', 'siteagent' ),
+				'label'               => __( 'Update Order Status', 'my-site-hand' ),
+				'description'         => __( 'Update the status of a WooCommerce order.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'order_id', 'status' ],
@@ -774,7 +774,7 @@ class Module_Woocommerce extends Module_Base {
 		$order = wc_get_order( absint( $input['order_id'] ) );
 
 		if ( ! $order ) {
-			return $this->error( __( 'Order not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Order not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$new_status = sanitize_text_field( $input['status'] );
@@ -790,7 +790,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-store-summary
+	// Ability: msh_woo-store-summary
 	// -------------------------------------------------------------------------
 
 	/**
@@ -800,10 +800,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_store_summary(): void {
 		$this->register(
-			'siteagent/woo-store-summary',
+			'my-site-hand/woo-store-summary',
 			[
-				'label'               => __( 'Store Summary', 'siteagent' ),
-				'description'         => __( 'Get a WooCommerce store summary for a given time period.', 'siteagent' ),
+				'label'               => __( 'Store Summary', 'my-site-hand' ),
+				'description'         => __( 'Get a WooCommerce store summary for a given time period.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -845,7 +845,7 @@ class Module_Woocommerce extends Module_Base {
 		};
 
 		$cache_key = 'woo_store_summary_' . $period;
-		$cached    = get_transient( 'siteagent_' . $cache_key );
+		$cached    = get_transient( 'MSH_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -914,13 +914,13 @@ class Module_Woocommerce extends Module_Base {
 			'from'                => $date_from,
 		];
 
-		set_transient( 'siteagent_' . $cache_key, $summary, 15 * MINUTE_IN_SECONDS );
+		set_transient( 'MSH_' . $cache_key, $summary, 15 * MINUTE_IN_SECONDS );
 
 		return $summary;
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-list-coupons
+	// Ability: msh_woo-list-coupons
 	// -------------------------------------------------------------------------
 
 	/**
@@ -930,10 +930,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_list_coupons(): void {
 		$this->register(
-			'siteagent/woo-list-coupons',
+			'my-site-hand/woo-list-coupons',
 			[
-				'label'               => __( 'List Coupons', 'siteagent' ),
-				'description'         => __( 'List WooCommerce coupons.', 'siteagent' ),
+				'label'               => __( 'List Coupons', 'my-site-hand' ),
+				'description'         => __( 'List WooCommerce coupons.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -990,7 +990,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-create-coupon
+	// Ability: msh_woo-create-coupon
 	// -------------------------------------------------------------------------
 
 	/**
@@ -1000,10 +1000,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_create_coupon(): void {
 		$this->register(
-			'siteagent/woo-create-coupon',
+			'my-site-hand/woo-create-coupon',
 			[
-				'label'               => __( 'Create Coupon', 'siteagent' ),
-				'description'         => __( 'Create a new WooCommerce coupon code.', 'siteagent' ),
+				'label'               => __( 'Create Coupon', 'my-site-hand' ),
+				'description'         => __( 'Create a new WooCommerce coupon code.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'code', 'type', 'amount' ],
@@ -1057,7 +1057,7 @@ class Module_Woocommerce extends Module_Base {
 		$coupon_id = $coupon->save();
 
 		if ( ! $coupon_id ) {
-			return $this->error( __( 'Failed to create coupon.', 'siteagent' ) );
+			return $this->error( __( 'Failed to create coupon.', 'my-site-hand' ) );
 		}
 
 		return [
@@ -1067,7 +1067,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_woo-list-customers
+	// Ability: msh_woo-list-customers
 	// -------------------------------------------------------------------------
 
 	/**
@@ -1077,10 +1077,10 @@ class Module_Woocommerce extends Module_Base {
 	 */
 	private function register_woo_list_customers(): void {
 		$this->register(
-			'siteagent/woo-list-customers',
+			'my-site-hand/woo-list-customers',
 			[
-				'label'               => __( 'List Customers', 'siteagent' ),
-				'description'         => __( 'List WooCommerce customers.', 'siteagent' ),
+				'label'               => __( 'List Customers', 'my-site-hand' ),
+				'description'         => __( 'List WooCommerce customers.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -1145,4 +1145,7 @@ class Module_Woocommerce extends Module_Base {
 		return [ 'customers' => $customers, 'count' => count( $customers ) ];
 	}
 }
+
+
+
 

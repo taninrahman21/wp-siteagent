@@ -1,17 +1,17 @@
 /**
- * WP SiteAgent — Admin JavaScript
+ * WP my-site-hand — Admin JavaScript
  *
  * Core utilities: clipboard, cache clearing, danger actions, option saving,
  * log row expansion, and audit filter helpers.
  */
 
-/* global siteagentAdmin */
+/* global mshAdmin */
 
 'use strict';
 
 (function () {
 
-	const cfg = window.siteagentAdmin || {};
+	const cfg = window.mshAdmin || {};
 	const restUrl = cfg.restUrl || '';
 	const restNonce = cfg.restNonce || '';
 	const i18n = cfg.i18n || {};
@@ -19,7 +19,7 @@
 	/** -----------------------------------------------------------------------
 	 * Core utilities
 	 * ---------------------------------------------------------------------- */
-	window.siteagent = {
+	window.msh = {
 		/**
 		 * Toggle an individual ability via AJAX.
 		 * 
@@ -31,7 +31,7 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: new URLSearchParams({
-					action: 'siteagent_toggle_ability',
+					action: 'msh_toggle_ability',
 					ability_name: name,
 					is_enabled: isEnabled ? 1 : 0,
 					nonce: cfg.nonce
@@ -135,7 +135,7 @@
 		},
 
 		/**
-		 * Clear all SiteAgent caches via REST API.
+		 * Clear all my-site-hand caches via REST API.
 		 */
 		clearCache: function () {
 			const btn = document.getElementById('sa-clear-cache-btn');
@@ -181,7 +181,7 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: new URLSearchParams({
-					action: 'siteagent_danger_action',
+					action: 'msh_danger_action',
 					danger_action: action,
 					nonce: nonce || cfg.nonce
 				})
@@ -209,7 +209,7 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: new URLSearchParams({
-					action: 'siteagent_save_option',
+					action: 'msh_save_option',
 					option_name: optionName,
 					option_value: value,
 					nonce: cfg.nonce
@@ -234,7 +234,7 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: new URLSearchParams({
-					action: 'siteagent_toggle_module',
+					action: 'msh_toggle_module',
 					module_slug: slug,
 					is_enabled: isEnabled ? 1 : 0,
 					nonce: cfg.nonce
@@ -305,6 +305,64 @@
 		}
 	};
 
+	/**
+	 * Run a diagnostic test.
+	 *
+	 * @param {string} test - Test name.
+	 */
+	window.msh.runDiagnostic = function (test) {
+		this._showToast(i18n.saving || 'Running…');
+		fetch(cfg.ajaxUrl, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: new URLSearchParams({
+				action: 'msh_run_diagnostic',
+				test: test,
+				nonce: cfg.nonce
+			})
+		})
+		.then(r => r.json())
+		.then(data => {
+			if (data.success) {
+				this._showToast(data.data?.message || 'Test completed.');
+			} else {
+				this._showToast(data.data?.message || i18n.error || 'Error.', 'error');
+			}
+		})
+		.catch(() => this._showToast(i18n.error || 'Error occurred.', 'error'));
+	};
+
+	/**
+	 * Run a fix action.
+	 *
+	 * @param {string} action - Action name.
+	 */
+	window.msh.fixAction = function (action) {
+		if (action === 'regen_cache') {
+			this.clearCache();
+			return;
+		}
+		this._showToast(i18n.saving || 'Executing…');
+		fetch(cfg.ajaxUrl, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: new URLSearchParams({
+				action: 'msh_fix_action',
+				fix_action: action,
+				nonce: cfg.nonce
+			})
+		})
+		.then(r => r.json())
+		.then(data => {
+			if (data.success) {
+				this._showToast(data.data?.message || 'Action completed.');
+			} else {
+				this._showToast(data.data?.message || i18n.error || 'Error.', 'error');
+			}
+		})
+		.catch(() => this._showToast(i18n.error || 'Error occurred.', 'error'));
+	};
+
 	/** -----------------------------------------------------------------------
 	 * DOM Ready
 	 * ---------------------------------------------------------------------- */
@@ -345,4 +403,7 @@
 	// Register WordPress AJAX actions via PHP (see class-plugin.php boot).
 
 }());
+
+
+
 

@@ -1,4 +1,4 @@
-/* WP SiteAgent Admin Styles — WordPress Integrated Dashboard Edition */
+/* WP my-site-hand Admin Styles — WordPress Integrated Dashboard Edition */
 /* Focus: Sidebar Layout, WordPress Palette, Modern SaaS Feel */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -1255,3 +1255,6 @@ input:checked+.sa-slider:before {
 .sa-node-note a:hover {
 	text-decoration: underline;
 }
+
+
+

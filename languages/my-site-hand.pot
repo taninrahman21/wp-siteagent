@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the SiteAgent for WordPress plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: SiteAgent for WordPress 1.0.0\n"
+"Project-Id-Version: My Site Hand (AI) for WordPress 1.0.0\n"
 "Report-Msgid-Bugs-To: https://github.com/taninrahman21/siteagent/issues\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1513,5 +1513,6 @@ msgstr ""
 #: siteagent.php:107
 msgid "WP SiteAgent requires WordPress %s or higher."
 msgstr ""
+
 
 

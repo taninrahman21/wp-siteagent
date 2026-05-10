@@ -1,25 +1,25 @@
 <?php
 /**
- * REST API controller — registers all siteagent/v1 endpoints.
+ * REST API controller — registers all my-site-hand/v1 endpoints.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent\Api;
+namespace MySiteHand\Api;
 
 defined( 'ABSPATH' ) || exit;
 
-use WP_SiteAgent\Abilities_Registry;
-use WP_SiteAgent\Auth_Manager;
-use WP_SiteAgent\Rate_Limiter;
-use WP_SiteAgent\Audit_Logger;
-use WP_SiteAgent\Cache_Manager;
+use MySiteHand\Abilities_Registry;
+use MySiteHand\Auth_Manager;
+use MySiteHand\Rate_Limiter;
+use MySiteHand\Audit_Logger;
+use MySiteHand\Cache_Manager;
 
 /**
  * REST Controller class.
  *
- * Registers WP REST API endpoints for the SiteAgent admin API.
- * All endpoints are under the siteagent/v1 namespace.
+ * Registers WP REST API endpoints for the my-site-hand admin API.
+ * All endpoints are under the my-site-hand/v1 namespace.
  */
 class Rest_Controller {
 
@@ -28,7 +28,7 @@ class Rest_Controller {
 	 *
 	 * @var string
 	 */
-	private const NAMESPACE = 'siteagent/v1';
+	private const NAMESPACE = 'my-site-hand/v1';
 
 	/**
 	 * Abilities registry.
@@ -222,13 +222,13 @@ class Rest_Controller {
 	 * @return \WP_REST_Response
 	 */
 	public function get_status( \WP_REST_Request $request ): \WP_REST_Response {
-		$enabled = (bool) get_option( 'siteagent_enabled', true );
+		$enabled = (bool) get_option( 'msh_enabled', true );
 
 		return new \WP_REST_Response(
 			[
 				'status'       => $enabled ? 'active' : 'disabled',
-				'version'      => SITEAGENT_VERSION,
-				'mcp_endpoint' => rest_url( 'siteagent/v1/mcp/streamable' ),
+				'version'      => MSH_VERSION,
+				'mcp_endpoint' => rest_url( 'my-site-hand/v1/mcp/streamable' ),
 				'timestamp'    => current_time( 'c' ),
 			],
 			200
@@ -312,14 +312,14 @@ class Rest_Controller {
 		// Verify nonce for admin requests.
 		$nonce = $request->get_header( 'X-WP-Nonce' );
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'siteagent' ) ], 403 );
+			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'my-site-hand' ) ], 403 );
 		}
 
 		$user_id = get_current_user_id();
 		$label   = sanitize_text_field( $request->get_param( 'label' ) );
 
 		if ( empty( $label ) ) {
-			return new \WP_REST_Response( [ 'message' => __( 'Label is required.', 'siteagent' ) ], 400 );
+			return new \WP_REST_Response( [ 'message' => __( 'Label is required.', 'my-site-hand' ) ], 400 );
 		}
 
 		$options = [
@@ -333,7 +333,7 @@ class Rest_Controller {
 			[
 				'token'    => $result['token'],
 				'token_id' => $result['token_id'],
-				'message'  => __( 'Save this token — it will not be shown again.', 'siteagent' ),
+				'message'  => __( 'Save this token — it will not be shown again.', 'my-site-hand' ),
 			],
 			201
 		);
@@ -349,7 +349,7 @@ class Rest_Controller {
 		// Verify nonce.
 		$nonce = $request->get_header( 'X-WP-Nonce' );
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'siteagent' ) ], 403 );
+			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'my-site-hand' ) ], 403 );
 		}
 
 		$token_id        = absint( $request->get_param( 'id' ) );
@@ -358,7 +358,7 @@ class Rest_Controller {
 		$revoked = $this->auth->revoke_token( $token_id, $requesting_user );
 
 		if ( ! $revoked ) {
-			return new \WP_REST_Response( [ 'message' => __( 'Failed to revoke token.', 'siteagent' ) ], 400 );
+			return new \WP_REST_Response( [ 'message' => __( 'Failed to revoke token.', 'my-site-hand' ) ], 400 );
 		}
 
 		return new \WP_REST_Response( [ 'revoked' => true, 'token_id' => $token_id ], 200 );
@@ -398,8 +398,8 @@ class Rest_Controller {
 	 */
 	public function export_audit_log( \WP_REST_Request $request ): void {
 		$nonce = $request->get_param( 'nonce' );
-		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'siteagent_admin' ) ) {
-			wp_die( esc_html__( 'Security check failed.', 'siteagent' ) );
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'msh_admin' ) ) {
+			wp_die( esc_html__( 'Security check failed.', 'my-site-hand' ) );
 		}
 
 		$logs   = $this->audit->get_logs( [ 'per_page' => 5000, 'page' => 1 ] );
@@ -407,12 +407,12 @@ class Rest_Controller {
 		$output = fopen( 'php://output', 'w' );
 
 		if ( ! $output ) {
-			wp_die( esc_html__( 'Could not open output stream.', 'siteagent' ) );
+			wp_die( esc_html__( 'Could not open output stream.', 'my-site-hand' ) );
 		}
 
 		// Headers for CSV download.
 		header( 'Content-Type: text/csv; charset=utf-8' );
-		header( 'Content-Disposition: attachment; filename="siteagent-audit-log-' . gmdate( 'Y-m-d' ) . '.csv"' );
+		header( 'Content-Disposition: attachment; filename="my-site-hand-audit-log-' . gmdate( 'Y-m-d' ) . '.csv"' );
 		header( 'Pragma: no-cache' );
 		header( 'Expires: 0' );
 
@@ -441,7 +441,7 @@ class Rest_Controller {
 	}
 
 	/**
-	 * POST /cache/clear — clear all SiteAgent caches.
+	 * POST /cache/clear — clear all my-site-hand caches.
 	 *
 	 * @param \WP_REST_Request $request REST request.
 	 * @return \WP_REST_Response
@@ -450,7 +450,7 @@ class Rest_Controller {
 		// Verify nonce.
 		$nonce = $request->get_header( 'X-WP-Nonce' );
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
-			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'siteagent' ) ], 403 );
+			return new \WP_REST_Response( [ 'message' => __( 'Nonce verification failed.', 'my-site-hand' ) ], 403 );
 		}
 
 		$count = $this->cache->clear_all();
@@ -461,7 +461,7 @@ class Rest_Controller {
 				'count'   => $count,
 				'message' => sprintf(
 					/* translators: %d: number of transients cleared */
-					__( 'Cleared %d cached items.', 'siteagent' ),
+					__( 'Cleared %d cached items.', 'my-site-hand' ),
 					$count
 				),
 			],
@@ -482,4 +482,7 @@ class Rest_Controller {
 		return current_user_can( 'manage_options' );
 	}
 }
+
+
+
 

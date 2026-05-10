@@ -1,18 +1,18 @@
 <?php
 /**
- * Abilities Registry — central registry for all SiteAgent abilities.
+ * Abilities Registry — central registry for all my-site-hand abilities.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent;
+namespace MySiteHand;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Abilities Registry class.
  *
- * Manages registration, validation, and execution of all SiteAgent abilities.
+ * Manages registration, validation, and execution of all my-site-hand abilities.
  * An "ability" is a named, typed, permission-gated RPC-style operation that
  * can be executed locally or via MCP.
  */
@@ -40,7 +40,7 @@ class Abilities_Registry {
 	/**
 	 * Register an ability.
 	 *
-	 * @param string                $name The unique ability name (e.g. 'siteagent/list-posts').
+	 * @param string                $name The unique ability name (e.g. 'my-site-hand/list-posts').
 	 * @param array<string, mixed>  $args Ability definition:
 	 *   - label           (string, required) Human-friendly name.
 	 *   - description     (string, required)
@@ -57,7 +57,7 @@ class Abilities_Registry {
 				__METHOD__,
 				sprintf(
 					/* translators: %s: ability name */
-					esc_html__( 'Ability "%s" must have a label, description and a callable execute_callback.', 'siteagent' ),
+					esc_html__( 'Ability "%s" must have a label, description and a callable execute_callback.', 'my-site-hand' ),
 					esc_html( $name )
 				),
 				'1.0.0'
@@ -71,7 +71,7 @@ class Abilities_Registry {
 				__METHOD__,
 				sprintf(
 					/* translators: %s: ability name */
-					esc_html__( 'Ability "%s" is already registered.', 'siteagent' ),
+					esc_html__( 'Ability "%s" is already registered.', 'my-site-hand' ),
 					esc_html( $name )
 				),
 				'1.0.0'
@@ -85,7 +85,7 @@ class Abilities_Registry {
 				__METHOD__,
 				sprintf(
 					/* translators: %s: ability name */
-					esc_html__( 'Ability "%s" has a non-callable permission_callback.', 'siteagent' ),
+					esc_html__( 'Ability "%s" has a non-callable permission_callback.', 'my-site-hand' ),
 					esc_html( $name )
 				),
 				'1.0.0'
@@ -122,7 +122,7 @@ class Abilities_Registry {
 				'ability_not_found',
 				sprintf(
 					/* translators: %s: ability name */
-					__( 'Ability "%s" is not registered.', 'siteagent' ),
+					__( 'Ability "%s" is not registered.', 'my-site-hand' ),
 					$name
 				),
 				[ 'status' => 404 ]
@@ -137,7 +137,7 @@ class Abilities_Registry {
 			if ( ! $permitted || ( $permitted instanceof \WP_Error ) ) {
 				return new \WP_Error(
 					'forbidden',
-					__( 'You do not have permission to execute this ability.', 'siteagent' ),
+					__( 'You do not have permission to execute this ability.', 'my-site-hand' ),
 					[ 'status' => 403 ]
 				);
 			}
@@ -150,9 +150,9 @@ class Abilities_Registry {
 		}
 
 		// Apply input filter.
-		$validated_input = apply_filters( 'siteagent_input', $validated_input, $name );
+		$validated_input = apply_filters( 'msh_input', $validated_input, $name );
 
-		do_action( 'siteagent_before_execute', $name, $validated_input, $user_id );
+		do_action( 'msh_before_execute', $name, $validated_input, $user_id );
 
 		// Execute the ability.
 		try {
@@ -166,9 +166,9 @@ class Abilities_Registry {
 		}
 
 		// Apply result filter.
-		$result = apply_filters( 'siteagent_result', $result, $name );
+		$result = apply_filters( 'msh_result', $result, $name );
 
-		do_action( 'siteagent_after_execute', $name, $result, $user_id );
+		do_action( 'msh_after_execute', $name, $result, $user_id );
 
 		return $result;
 	}
@@ -188,7 +188,7 @@ class Abilities_Registry {
 	 * @return array<string, array<string, mixed>>
 	 */
 	public function get_mcp_public(): array {
-		$disabled = (array) get_option( 'siteagent_disabled_abilities', [] );
+		$disabled = (array) get_option( 'msh_disabled_abilities', [] );
 		
 		$public = array_filter(
 			$this->abilities,
@@ -199,7 +199,7 @@ class Abilities_Registry {
 			}
 		);
 
-		return apply_filters( 'siteagent_mcp_public_abilities', $public );
+		return apply_filters( 'msh_mcp_public_abilities', $public );
 	}
 
 	/**
@@ -281,7 +281,7 @@ class Abilities_Registry {
 			if ( ! array_key_exists( $field, $input ) ) {
 				$errors[] = sprintf(
 					/* translators: %s: field name */
-					__( 'Required field "%s" is missing.', 'siteagent' ),
+					__( 'Required field "%s" is missing.', 'my-site-hand' ),
 					$field
 				);
 			}
@@ -309,7 +309,7 @@ class Abilities_Registry {
 				if ( isset( $def['enum'] ) && ! in_array( $value, $def['enum'], true ) ) {
 					$errors[] = sprintf(
 						/* translators: 1: field name 2: allowed values */
-						__( 'Field "%1$s" must be one of: %2$s.', 'siteagent' ),
+						__( 'Field "%1$s" must be one of: %2$s.', 'my-site-hand' ),
 						$field,
 						implode( ', ', array_map( 'strval', $def['enum'] ) )
 					);
@@ -367,4 +367,7 @@ class Abilities_Registry {
 		};
 	}
 }
+
+
+
 

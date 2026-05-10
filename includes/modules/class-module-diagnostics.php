@@ -2,10 +2,10 @@
 /**
  * Diagnostics module — site health and environment abilities.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent\Modules;
+namespace MySiteHand\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,13 +29,13 @@ class Module_Diagnostics extends Module_Base {
 	 */
 	public function get_ability_names(): array {
 		return [
-			'siteagent/site-health-report',
-			'siteagent/list-plugin-updates',
-			'siteagent/get-error-logs',
-			'siteagent/list-cron-jobs',
-			'siteagent/get-site-options',
-			'siteagent/list-transients',
-			'siteagent/get-db-table-sizes',
+			'my-site-hand/site-health-report',
+			'my-site-hand/list-plugin-updates',
+			'my-site-hand/get-error-logs',
+			'my-site-hand/list-cron-jobs',
+			'my-site-hand/get-site-options',
+			'my-site-hand/list-transients',
+			'my-site-hand/get-db-table-sizes',
 		];
 	}
 
@@ -53,20 +53,20 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_site-health-report
+	// Ability: msh_site-health-report
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_site-health-report ability.
+	 * Register the msh_site-health-report ability.
 	 *
 	 * @return void
 	 */
 	private function register_site_health_report(): void {
 		$this->register(
-			'siteagent/site-health-report',
+			'my-site-hand/site-health-report',
 			[
-				'label'               => __( 'Site Health Report', 'siteagent' ),
-				'description'         => __( 'Get a comprehensive site health and environment report.', 'siteagent' ),
+				'label'               => __( 'Site Health Report', 'my-site-hand' ),
+				'description'         => __( 'Get a comprehensive site health and environment report.', 'my-site-hand' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
 						$user = get_user_by( 'id', $user_id );
@@ -84,14 +84,14 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_site-health-report.
+	 * Execute msh_site-health-report.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
 	 */
 	public function execute_site_health_report( array $input ): array {
 		$cache_key = 'site_health_report';
-		$cached    = get_transient( 'siteagent_' . $cache_key );
+		$cached    = get_transient( 'MSH_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -234,26 +234,26 @@ class Module_Diagnostics extends Module_Base {
 			],
 		];
 
-		set_transient( 'siteagent_' . $cache_key, $report, 15 * MINUTE_IN_SECONDS );
+		set_transient( 'MSH_' . $cache_key, $report, 15 * MINUTE_IN_SECONDS );
 
 		return $report;
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_list-plugin-updates
+	// Ability: msh_list-plugin-updates
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_list-plugin-updates ability.
+	 * Register the msh_list-plugin-updates ability.
 	 *
 	 * @return void
 	 */
 	private function register_list_plugin_updates(): void {
 		$this->register(
-			'siteagent/list-plugin-updates',
+			'my-site-hand/list-plugin-updates',
 			[
-				'label'               => __( 'Plugin Update List', 'siteagent' ),
-				'description'         => __( 'List all plugins that have available updates.', 'siteagent' ),
+				'label'               => __( 'Plugin Update List', 'my-site-hand' ),
+				'description'         => __( 'List all plugins that have available updates.', 'my-site-hand' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
 						$user = get_user_by( 'id', $user_id );
@@ -271,7 +271,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_list-plugin-updates.
+	 * Execute msh_list-plugin-updates.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -301,20 +301,20 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-error-logs
+	// Ability: msh_get-error-logs
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_get-error-logs ability.
+	 * Register the msh_get-error-logs ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_error_logs(): void {
 		$this->register(
-			'siteagent/get-error-logs',
+			'my-site-hand/get-error-logs',
 			[
-				'label'               => __( 'Error Logs', 'siteagent' ),
-				'description'         => __( 'Read the last N lines from the WordPress debug error log.', 'siteagent' ),
+				'label'               => __( 'Error Logs', 'my-site-hand' ),
+				'description'         => __( 'Read the last N lines from the WordPress debug error log.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -338,7 +338,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-error-logs.
+	 * Execute msh_get-error-logs.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -361,7 +361,7 @@ class Module_Diagnostics extends Module_Base {
 			return [
 				'lines'    => [],
 				'log_path' => 'debug.log',
-				'message'  => __( 'No error log file found or WP_DEBUG_LOG is not enabled.', 'siteagent' ),
+				'message'  => __( 'No error log file found or WP_DEBUG_LOG is not enabled.', 'my-site-hand' ),
 			];
 		}
 
@@ -377,20 +377,20 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_list-cron-jobs
+	// Ability: msh_list-cron-jobs
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_list-cron-jobs ability.
+	 * Register the msh_list-cron-jobs ability.
 	 *
 	 * @return void
 	 */
 	private function register_list_cron_jobs(): void {
 		$this->register(
-			'siteagent/list-cron-jobs',
+			'my-site-hand/list-cron-jobs',
 			[
-				'label'               => __( 'Cron Job List', 'siteagent' ),
-				'description'         => __( 'List all scheduled WP-Cron events.', 'siteagent' ),
+				'label'               => __( 'Cron Job List', 'my-site-hand' ),
+				'description'         => __( 'List all scheduled WP-Cron events.', 'my-site-hand' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
 						$user = get_user_by( 'id', $user_id );
@@ -408,7 +408,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_list-cron-jobs.
+	 * Execute msh_list-cron-jobs.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -446,7 +446,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-site-options
+	// Ability: msh_get-site-options
 	// -------------------------------------------------------------------------
 
 	/**
@@ -474,16 +474,16 @@ class Module_Diagnostics extends Module_Base {
 	];
 
 	/**
-	 * Register the siteagent_get-site-options ability.
+	 * Register the msh_get-site-options ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_site_options(): void {
 		$this->register(
-			'siteagent/get-site-options',
+			'my-site-hand/get-site-options',
 			[
-				'label'               => __( 'Site Settings', 'siteagent' ),
-				'description'         => __( 'Get WordPress site options (allowlisted safe options only — no passwords or secrets).', 'siteagent' ),
+				'label'               => __( 'Site Settings', 'my-site-hand' ),
+				'description'         => __( 'Get WordPress site options (allowlisted safe options only — no passwords or secrets).', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -511,7 +511,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-site-options.
+	 * Execute msh_get-site-options.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -533,20 +533,20 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_list-transients
+	// Ability: msh_list-transients
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_list-transients ability.
+	 * Register the msh_list-transients ability.
 	 *
 	 * @return void
 	 */
 	private function register_list_transients(): void {
 		$this->register(
-			'siteagent/list-transients',
+			'my-site-hand/list-transients',
 			[
-				'label'               => __( 'Transient List', 'siteagent' ),
-				'description'         => __( 'List active WordPress transients.', 'siteagent' ),
+				'label'               => __( 'Transient List', 'my-site-hand' ),
+				'description'         => __( 'List active WordPress transients.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -571,7 +571,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_list-transients.
+	 * Execute msh_list-transients.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -619,20 +619,20 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-db-table-sizes
+	// Ability: msh_get-db-table-sizes
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_get-db-table-sizes ability.
+	 * Register the msh_get-db-table-sizes ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_db_table_sizes(): void {
 		$this->register(
-			'siteagent/get-db-table-sizes',
+			'my-site-hand/get-db-table-sizes',
 			[
-				'label'               => __( 'Database Sizes', 'siteagent' ),
-				'description'         => __( 'Get row count and size for every WordPress database table.', 'siteagent' ),
+				'label'               => __( 'Database Sizes', 'my-site-hand' ),
+				'description'         => __( 'Get row count and size for every WordPress database table.', 'my-site-hand' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
 						$user = get_user_by( 'id', $user_id );
@@ -650,14 +650,14 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-db-table-sizes.
+	 * Execute msh_get-db-table-sizes.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
 	 */
 	public function execute_get_db_table_sizes( array $input ): array {
 		$cache_key = 'db_table_sizes';
-		$cached    = get_transient( 'siteagent_' . $cache_key );
+		$cached    = get_transient( 'MSH_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -691,7 +691,7 @@ class Module_Diagnostics extends Module_Base {
 			'total_mb'   => round( array_sum( array_column( $result, 'size_mb' ) ), 2 ),
 		];
 
-		set_transient( 'siteagent_' . $cache_key, $response, HOUR_IN_SECONDS );
+		set_transient( 'MSH_' . $cache_key, $response, HOUR_IN_SECONDS );
 
 		return $response;
 	}
@@ -764,4 +764,7 @@ class Module_Diagnostics extends Module_Base {
 		return $size / 1024 / 1024;
 	}
 }
+
+
+
 

@@ -1,11 +1,11 @@
 <?php
 /**
- * Centralized error handler for WP SiteAgent.
+ * Centralized error handler for WP my-site-hand.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent;
+namespace MySiteHand;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -39,7 +39,7 @@ class Error_Handler {
 			return;
 		}
 
-		$log_entry = '[WP SiteAgent] ' . $message;
+		$log_entry = '[WP my-site-hand] ' . $message;
 
 		if ( null !== $context ) {
 			$log_entry .= ' | Context: ' . wp_json_encode( $context );
@@ -87,4 +87,7 @@ class Error_Handler {
 		return $message;
 	}
 }
+
+
+
 

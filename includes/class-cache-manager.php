@@ -2,10 +2,10 @@
 /**
  * Transient-based caching layer.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent;
+namespace MySiteHand;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,7 +22,7 @@ class Cache_Manager {
 	 *
 	 * @var string
 	 */
-	private const KEY_PREFIX = 'siteagent_';
+	private const KEY_PREFIX = 'MSH_';
 
 	/**
 	 * In-request cache to avoid repeated get_transient() calls.
@@ -66,7 +66,7 @@ class Cache_Manager {
 		$full_key = self::KEY_PREFIX . $key;
 
 		if ( 0 === $ttl ) {
-			$ttl = (int) get_option( 'siteagent_cache_ttl', 3600 );
+			$ttl = (int) get_option( 'msh_cache_ttl', 3600 );
 		}
 
 		$this->runtime_cache[ $full_key ] = $value;
@@ -108,7 +108,7 @@ class Cache_Manager {
 	}
 
 	/**
-	 * Clear all SiteAgent transients.
+	 * Clear all my-site-hand transients.
 	 *
 	 * @return int Number of transients deleted.
 	 */
@@ -141,4 +141,7 @@ class Cache_Manager {
 		return false !== $this->get( $key );
 	}
 }
+
+
+
 

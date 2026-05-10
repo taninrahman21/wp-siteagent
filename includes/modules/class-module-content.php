@@ -2,10 +2,10 @@
 /**
  * Content module — post, page, and CPT abilities.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent\Modules;
+namespace MySiteHand\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,15 +29,15 @@ class Module_Content extends Module_Base {
 	 */
 	public function get_ability_names(): array {
 		return [
-			'siteagent/list-posts',
-			'siteagent/get-post',
-			'siteagent/create-post',
-			'siteagent/update-post',
-			'siteagent/delete-post',
-			'siteagent/bulk-update-posts',
-			'siteagent/list-post-types',
-			'siteagent/list-taxonomies',
-			'siteagent/get-post-revisions',
+			'my-site-hand/list-posts',
+			'my-site-hand/get-post',
+			'my-site-hand/create-post',
+			'my-site-hand/update-post',
+			'my-site-hand/delete-post',
+			'my-site-hand/bulk-update-posts',
+			'my-site-hand/list-post-types',
+			'my-site-hand/list-taxonomies',
+			'my-site-hand/get-post-revisions',
 		];
 	}
 
@@ -57,20 +57,20 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_list-posts
+	// Ability: msh_list-posts
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_list-posts ability.
+	 * Register the msh_list-posts ability.
 	 *
 	 * @return void
 	 */
 	private function register_list_posts(): void {
 		$this->register(
-			'siteagent/list-posts',
+			'my-site-hand/list-posts',
 			[
-				'label'            => __( 'List Posts', 'siteagent' ),
-				'description'      => __( 'List WordPress posts with filtering, sorting, and pagination.', 'siteagent' ),
+				'label'            => __( 'List Posts', 'my-site-hand' ),
+				'description'      => __( 'List WordPress posts with filtering, sorting, and pagination.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -98,7 +98,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_list-posts.
+	 * Execute msh_list-posts.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -153,20 +153,20 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-post
+	// Ability: msh_get-post
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_get-post ability.
+	 * Register the msh_get-post ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_post(): void {
 		$this->register(
-			'siteagent/get-post',
+			'my-site-hand/get-post',
 			[
-				'label'            => __( 'Get Post', 'siteagent' ),
-				'description'      => __( 'Get a single WordPress post with full content, meta, and SEO data.', 'siteagent' ),
+				'label'            => __( 'Get Post', 'my-site-hand' ),
+				'description'      => __( 'Get a single WordPress post with full content, meta, and SEO data.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'required'   => [ 'post_id' ],
@@ -184,7 +184,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-post.
+	 * Execute msh_get-post.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -194,7 +194,7 @@ class Module_Content extends Module_Base {
 		$post    = get_post( $post_id );
 
 		if ( ! $post ) {
-			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$author    = get_user_by( 'id', $post->post_author );
@@ -250,20 +250,20 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_create-post
+	// Ability: msh_create-post
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_create-post ability.
+	 * Register the msh_create-post ability.
 	 *
 	 * @return void
 	 */
 	private function register_create_post(): void {
 		$this->register(
-			'siteagent/create-post',
+			'my-site-hand/create-post',
 			[
-				'label'               => __( 'Create Post', 'siteagent' ),
-				'description'         => __( 'Create a new WordPress post, page, or custom post type entry.', 'siteagent' ),
+				'label'               => __( 'Create Post', 'my-site-hand' ),
+				'description'         => __( 'Create a new WordPress post, page, or custom post type entry.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'title', 'content' ],
@@ -296,7 +296,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_create-post.
+	 * Execute msh_create-post.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -361,20 +361,20 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_update-post
+	// Ability: msh_update-post
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_update-post ability.
+	 * Register the msh_update-post ability.
 	 *
 	 * @return void
 	 */
 	private function register_update_post(): void {
 		$this->register(
-			'siteagent/update-post',
+			'my-site-hand/update-post',
 			[
-				'label'               => __( 'Update Post', 'siteagent' ),
-				'description'         => __( 'Update an existing WordPress post. Only provided fields are changed.', 'siteagent' ),
+				'label'               => __( 'Update Post', 'my-site-hand' ),
+				'description'         => __( 'Update an existing WordPress post. Only provided fields are changed.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'post_id' ],
@@ -412,7 +412,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_update-post.
+	 * Execute msh_update-post.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -422,7 +422,7 @@ class Module_Content extends Module_Base {
 		$post    = get_post( $post_id );
 
 		if ( ! $post ) {
-			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$post_data = [ 'ID' => $post_id ];
@@ -487,20 +487,20 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_delete-post
+	// Ability: msh_delete-post
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_delete-post ability.
+	 * Register the msh_delete-post ability.
 	 *
 	 * @return void
 	 */
 	private function register_delete_post(): void {
 		$this->register(
-			'siteagent/delete-post',
+			'my-site-hand/delete-post',
 			[
-				'label'               => __( 'Delete Post', 'siteagent' ),
-				'description'         => __( 'Delete or trash a WordPress post.', 'siteagent' ),
+				'label'               => __( 'Delete Post', 'my-site-hand' ),
+				'description'         => __( 'Delete or trash a WordPress post.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'post_id' ],
@@ -527,7 +527,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_delete-post.
+	 * Execute msh_delete-post.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -537,13 +537,13 @@ class Module_Content extends Module_Base {
 		$force   = (bool) ( $input['force'] ?? false );
 
 		if ( ! get_post( $post_id ) ) {
-			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$result = wp_delete_post( $post_id, $force );
 
 		if ( ! $result ) {
-			return $this->error( __( 'Failed to delete post.', 'siteagent' ) );
+			return $this->error( __( 'Failed to delete post.', 'my-site-hand' ) );
 		}
 
 		return [
@@ -554,20 +554,20 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_bulk-update-posts
+	// Ability: msh_bulk-update-posts
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_bulk-update-posts ability.
+	 * Register the msh_bulk-update-posts ability.
 	 *
 	 * @return void
 	 */
 	private function register_bulk_update_posts(): void {
 		$this->register(
-			'siteagent/bulk-update-posts',
+			'my-site-hand/bulk-update-posts',
 			[
-				'label'               => __( 'Bulk Update Posts', 'siteagent' ),
-				'description'         => __( 'Apply the same updates to multiple posts at once.', 'siteagent' ),
+				'label'               => __( 'Bulk Update Posts', 'my-site-hand' ),
+				'description'         => __( 'Apply the same updates to multiple posts at once.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'post_ids', 'updates' ],
@@ -601,7 +601,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_bulk-update-posts.
+	 * Execute msh_bulk-update-posts.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -635,20 +635,20 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_list-post-types
+	// Ability: msh_list-post-types
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_list-post-types ability.
+	 * Register the msh_list-post-types ability.
 	 *
 	 * @return void
 	 */
 	private function register_list_post_types(): void {
 		$this->register(
-			'siteagent/list-post-types',
+			'my-site-hand/list-post-types',
 			[
-				'label'            => __( 'List Post Types', 'siteagent' ),
-				'description'      => __( 'List all registered public post types with their labels and capabilities.', 'siteagent' ),
+				'label'            => __( 'List Post Types', 'my-site-hand' ),
+				'description'      => __( 'List all registered public post types with their labels and capabilities.', 'my-site-hand' ),
 				'execute_callback' => [ $this, 'execute_list_post_types' ],
 				'annotations'      => [
 					'readonly' => true,
@@ -659,7 +659,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_list-post-types.
+	 * Execute msh_list-post-types.
 	 *
 	 * @param array<string, mixed> $input Validated input (unused).
 	 * @return array<int, array<string, mixed>>
@@ -684,20 +684,20 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_list-taxonomies
+	// Ability: msh_list-taxonomies
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_list-taxonomies ability.
+	 * Register the msh_list-taxonomies ability.
 	 *
 	 * @return void
 	 */
 	private function register_list_taxonomies(): void {
 		$this->register(
-			'siteagent/list-taxonomies',
+			'my-site-hand/list-taxonomies',
 			[
-				'label'            => __( 'List Taxonomies', 'siteagent' ),
-				'description'      => __( 'List all registered taxonomies with term counts.', 'siteagent' ),
+				'label'            => __( 'List Taxonomies', 'my-site-hand' ),
+				'description'      => __( 'List all registered taxonomies with term counts.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -714,7 +714,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_list-taxonomies.
+	 * Execute msh_list-taxonomies.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<int, array<string, mixed>>
@@ -744,20 +744,20 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-post-revisions
+	// Ability: msh_get-post-revisions
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_get-post-revisions ability.
+	 * Register the msh_get-post-revisions ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_post_revisions(): void {
 		$this->register(
-			'siteagent/get-post-revisions',
+			'my-site-hand/get-post-revisions',
 			[
-				'label'            => __( 'Get Post Revisions', 'siteagent' ),
-				'description'      => __( 'Get revision history for a post.', 'siteagent' ),
+				'label'            => __( 'Get Post Revisions', 'my-site-hand' ),
+				'description'      => __( 'Get revision history for a post.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'required'   => [ 'post_id' ],
@@ -776,7 +776,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-post-revisions.
+	 * Execute msh_get-post-revisions.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -786,7 +786,7 @@ class Module_Content extends Module_Base {
 		$limit   = min( absint( $input['limit'] ?? 10 ), 50 );
 
 		if ( ! get_post( $post_id ) ) {
-			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$revisions = wp_get_post_revisions(
@@ -870,4 +870,7 @@ class Module_Content extends Module_Base {
 		return $attachment_id;
 	}
 }
+
+
+
 

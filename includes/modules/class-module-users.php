@@ -2,10 +2,10 @@
 /**
  * Users module — user management abilities.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent\Modules;
+namespace MySiteHand\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,12 +29,12 @@ class Module_Users extends Module_Base {
 	 */
 	public function get_ability_names(): array {
 		return [
-			'siteagent/list-users',
-			'siteagent/get-user',
-			'siteagent/create-user',
-			'siteagent/update-user-role',
-			'siteagent/list-roles',
-			'siteagent/get-user-stats',
+			'my-site-hand/list-users',
+			'my-site-hand/get-user',
+			'my-site-hand/create-user',
+			'my-site-hand/update-user-role',
+			'my-site-hand/list-roles',
+			'my-site-hand/get-user-stats',
 		];
 	}
 
@@ -51,20 +51,20 @@ class Module_Users extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_list-users
+	// Ability: msh_list-users
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_list-users ability.
+	 * Register the msh_list-users ability.
 	 *
 	 * @return void
 	 */
 	private function register_list_users(): void {
 		$this->register(
-			'siteagent/list-users',
+			'my-site-hand/list-users',
 			[
-				'label'               => __( 'List Users', 'siteagent' ),
-				'description'         => __( 'List WordPress users with filtering and sorting.', 'siteagent' ),
+				'label'               => __( 'List Users', 'my-site-hand' ),
+				'description'         => __( 'List WordPress users with filtering and sorting.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'properties' => [
@@ -93,7 +93,7 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_list-users.
+	 * Execute msh_list-users.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -121,7 +121,7 @@ class Module_Users extends Module_Base {
 		foreach ( $users as $user ) {
 			// Filter by inactive days if requested.
 			if ( ! empty( $input['inactive_days'] ) ) {
-				$last_login = get_user_meta( $user->ID, 'siteagent_last_login', true );
+				$last_login = get_user_meta( $user->ID, 'msh_last_login', true );
 				if ( $last_login ) {
 					$days_since = ( time() - strtotime( $last_login ) ) / DAY_IN_SECONDS;
 					if ( $days_since < (int) $input['inactive_days'] ) {
@@ -140,20 +140,20 @@ class Module_Users extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-user
+	// Ability: msh_get-user
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_get-user ability.
+	 * Register the msh_get-user ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_user(): void {
 		$this->register(
-			'siteagent/get-user',
+			'my-site-hand/get-user',
 			[
-				'label'               => __( 'Get User', 'siteagent' ),
-				'description'         => __( 'Get a WordPress user profile (password hash never included).', 'siteagent' ),
+				'label'               => __( 'Get User', 'my-site-hand' ),
+				'description'         => __( 'Get a WordPress user profile (password hash never included).', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'user_id' ],
@@ -178,7 +178,7 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-user.
+	 * Execute msh_get-user.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -187,7 +187,7 @@ class Module_Users extends Module_Base {
 		$user = get_user_by( 'id', absint( $input['user_id'] ) );
 
 		if ( ! $user ) {
-			return $this->error( __( 'User not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'User not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$post_count = count_user_posts( $user->ID );
@@ -222,20 +222,20 @@ class Module_Users extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_create-user
+	// Ability: msh_create-user
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_create-user ability.
+	 * Register the msh_create-user ability.
 	 *
 	 * @return void
 	 */
 	private function register_create_user(): void {
 		$this->register(
-			'siteagent/create-user',
+			'my-site-hand/create-user',
 			[
-				'label'               => __( 'Create User', 'siteagent' ),
-				'description'         => __( 'Create a new WordPress user with a secure auto-generated password.', 'siteagent' ),
+				'label'               => __( 'Create User', 'my-site-hand' ),
+				'description'         => __( 'Create a new WordPress user with a secure auto-generated password.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'username', 'email', 'role' ],
@@ -264,7 +264,7 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_create-user.
+	 * Execute msh_create-user.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -280,7 +280,7 @@ class Module_Users extends Module_Base {
 			return $this->error(
 				sprintf(
 					/* translators: %s: role name */
-					__( 'Role "%s" does not exist.', 'siteagent' ),
+					__( 'Role "%s" does not exist.', 'my-site-hand' ),
 					$role
 				),
 				'invalid_role'
@@ -289,10 +289,10 @@ class Module_Users extends Module_Base {
 
 		// Check username/email not taken.
 		if ( username_exists( $username ) ) {
-			return $this->error( __( 'Username already exists.', 'siteagent' ), 'username_exists' );
+			return $this->error( __( 'Username already exists.', 'my-site-hand' ), 'username_exists' );
 		}
 		if ( email_exists( $email ) ) {
-			return $this->error( __( 'Email address already in use.', 'siteagent' ), 'email_exists' );
+			return $this->error( __( 'Email address already in use.', 'my-site-hand' ), 'email_exists' );
 		}
 
 		// Generate secure password.
@@ -332,20 +332,20 @@ class Module_Users extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_update-user-role
+	// Ability: msh_update-user-role
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_update-user-role ability.
+	 * Register the msh_update-user-role ability.
 	 *
 	 * @return void
 	 */
 	private function register_update_user_role(): void {
 		$this->register(
-			'siteagent/update-user-role',
+			'my-site-hand/update-user-role',
 			[
-				'label'               => __( 'Update User Role', 'siteagent' ),
-				'description'         => __( 'Change a WordPress user\'s role.', 'siteagent' ),
+				'label'               => __( 'Update User Role', 'my-site-hand' ),
+				'description'         => __( 'Change a WordPress user\'s role.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'user_id', 'role' ],
@@ -370,7 +370,7 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_update-user-role.
+	 * Execute msh_update-user-role.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -381,7 +381,7 @@ class Module_Users extends Module_Base {
 
 		$target_user = get_user_by( 'id', $target_user_id );
 		if ( ! $target_user ) {
-			return $this->error( __( 'User not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'User not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		// Validate role exists.
@@ -390,7 +390,7 @@ class Module_Users extends Module_Base {
 			return $this->error(
 				sprintf(
 					/* translators: %s: role name */
-					__( 'Role "%s" does not exist.', 'siteagent' ),
+					__( 'Role "%s" does not exist.', 'my-site-hand' ),
 					$new_role
 				),
 				'invalid_role'
@@ -402,7 +402,7 @@ class Module_Users extends Module_Base {
 			$current_user = wp_get_current_user();
 			if ( ! in_array( 'administrator', $current_user->roles, true ) ) {
 				return $this->error(
-					__( 'Only administrators can demote other administrators.', 'siteagent' ),
+					__( 'Only administrators can demote other administrators.', 'my-site-hand' ),
 					'insufficient_permissions'
 				);
 			}
@@ -419,20 +419,20 @@ class Module_Users extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_list-roles
+	// Ability: msh_list-roles
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_list-roles ability.
+	 * Register the msh_list-roles ability.
 	 *
 	 * @return void
 	 */
 	private function register_list_roles(): void {
 		$this->register(
-			'siteagent/list-roles',
+			'my-site-hand/list-roles',
 			[
-				'label'            => __( 'List Roles', 'siteagent' ),
-				'description'      => __( 'List all registered WordPress roles and their capabilities.', 'siteagent' ),
+				'label'            => __( 'List Roles', 'my-site-hand' ),
+				'description'      => __( 'List all registered WordPress roles and their capabilities.', 'my-site-hand' ),
 				'execute_callback' => [ $this, 'execute_list_roles' ],
 				'annotations'      => [
 					'readonly' => true,
@@ -443,7 +443,7 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_list-roles.
+	 * Execute msh_list-roles.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<int, array<string, mixed>>
@@ -465,20 +465,20 @@ class Module_Users extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-user-stats
+	// Ability: msh_get-user-stats
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_get-user-stats ability.
+	 * Register the msh_get-user-stats ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_user_stats(): void {
 		$this->register(
-			'siteagent/get-user-stats',
+			'my-site-hand/get-user-stats',
 			[
-				'label'               => __( 'User Stats', 'siteagent' ),
-				'description'         => __( 'Get aggregate user statistics including counts by role and registration trends.', 'siteagent' ),
+				'label'               => __( 'User Stats', 'my-site-hand' ),
+				'description'         => __( 'Get aggregate user statistics including counts by role and registration trends.', 'my-site-hand' ),
 				'permission_callback' => static function ( int $user_id ) {
 					if ( $user_id > 0 ) {
 						$user = get_user_by( 'id', $user_id );
@@ -496,14 +496,14 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-user-stats.
+	 * Execute msh_get-user-stats.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
 	 */
 	public function execute_get_user_stats( array $input ): array {
 		$cache_key = 'user_stats';
-		$cached    = get_transient( 'siteagent_' . $cache_key );
+		$cached    = get_transient( 'MSH_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -539,7 +539,7 @@ class Module_Users extends Module_Base {
 			'registered_this_week'  => $registered_week,
 		];
 
-		set_transient( 'siteagent_' . $cache_key, $stats, 15 * MINUTE_IN_SECONDS );
+		set_transient( 'MSH_' . $cache_key, $stats, 15 * MINUTE_IN_SECONDS );
 
 		return $stats;
 	}
@@ -566,4 +566,7 @@ class Module_Users extends Module_Base {
 		];
 	}
 }
+
+
+
 

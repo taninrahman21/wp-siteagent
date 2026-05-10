@@ -2,23 +2,23 @@
 /**
  * Tools page template.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$siteagent_plugin   = \WP_SiteAgent\Plugin::get_instance();
-$siteagent_registry = $siteagent_plugin->get_abilities_registry();
-$siteagent_nonce    = wp_create_nonce( 'siteagent_admin' );
+$msh_plugin   = \MySiteHand\Plugin::get_instance();
+$msh_registry = $msh_plugin->get_abilities_registry();
+$msh_nonce    = wp_create_nonce( 'msh_admin' );
 ?>
 <div class="sa-wrap">
-	<?php require SITEAGENT_PATH . 'templates/partials/header.php'; ?>
+	<?php require MSH_PATH . 'templates/partials/header.php'; ?>
 
 	<div class="sa-main-content">
 		<div class="sa-container">
 			<div class="sa-page-header">
-				<h2><?php esc_html_e( 'Diagnostics & Tools', 'siteagent' ); ?></h2>
-				<p class="sa-page-desc"><?php esc_html_e( 'System health checks, connection tests, and troubleshooting utilities for your MCP server.', 'siteagent' ); ?></p>
+				<h2><?php echo esc_html__( 'Diagnostics & Tools', 'my-site-hand' ); ?></h2>
+				<p class="sa-page-desc"><?php echo esc_html__( 'System health checks, connection tests, and troubleshooting utilities for your MCP server.', 'my-site-hand' ); ?></p>
 			</div>
 
 			<div class="sa-tools-grid" style="display: grid; grid-template-columns: 1fr; gap: 32px;">
@@ -26,7 +26,7 @@ $siteagent_nonce    = wp_create_nonce( 'siteagent_admin' );
 				<!-- System Environment -->
 				<div class="sa-card">
 					<div class="sa-card-header">
-						<h3><?php esc_html_e( 'System Environment', 'siteagent' ); ?></h3>
+						<h3><?php echo esc_html__( 'System Environment', 'my-site-hand' ); ?></h3>
 					</div>
 					<div class="sa-card-body sa-card--no-pad">
 						<div class="sa-check-list">
@@ -35,13 +35,13 @@ $siteagent_nonce    = wp_create_nonce( 'siteagent_admin' );
 									<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sa-bg); display: flex; align-items: center; justify-content: center; color: var(--sa-text-muted);">
 										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
 									</div>
-									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'PHP Version', 'siteagent' ); ?></span>
+									<span style="font-weight:600; font-size: 14px;"><?php echo esc_html__( 'PHP Version', 'my-site-hand' ); ?></span>
 								</div>
 								<div style="display: flex; align-items: center; gap: 12px;">
 									<code style="background: var(--sa-bg); padding: 4px 8px; border-radius: 4px;"><?php echo esc_html( PHP_VERSION ); ?></code>
-									<?php $siteagent_php_pass = version_compare( PHP_VERSION, '8.1', '>=' ); ?>
-									<span class="sa-badge sa-badge--<?php echo $siteagent_php_pass ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
-										<?php echo $siteagent_php_pass ? esc_html__( 'Pass', 'siteagent' ) : esc_html__( 'Critical', 'siteagent' ); ?>
+									<?php $msh_php_pass = version_compare( PHP_VERSION, '8.1', '>=' ); ?>
+									<span class="sa-badge sa-badge--<?php echo $msh_php_pass ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
+										<?php echo $msh_php_pass ? esc_html__( 'Pass', 'my-site-hand' ) : esc_html__( 'Critical', 'my-site-hand' ); ?>
 									</span>
 								</div>
 							</div>
@@ -51,13 +51,13 @@ $siteagent_nonce    = wp_create_nonce( 'siteagent_admin' );
 									<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sa-bg); display: flex; align-items: center; justify-content: center; color: var(--sa-text-muted);">
 										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
 									</div>
-									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'WordPress Version', 'siteagent' ); ?></span>
+									<span style="font-weight:600; font-size: 14px;"><?php echo esc_html__( 'WordPress Version', 'my-site-hand' ); ?></span>
 								</div>
 								<div style="display: flex; align-items: center; gap: 12px;">
 									<code style="background: var(--sa-bg); padding: 4px 8px; border-radius: 4px;"><?php echo esc_html( get_bloginfo( 'version' ) ); ?></code>
-									<?php $siteagent_wp_pass = version_compare( get_bloginfo( 'version' ), '6.0', '>=' ); ?>
-									<span class="sa-badge sa-badge--<?php echo $siteagent_wp_pass ? 'success' : 'warning'; ?>" style="min-width: 80px; text-align: center;">
-										<?php echo $siteagent_wp_pass ? esc_html__( 'Pass', 'siteagent' ) : esc_html__( 'Warn', 'siteagent' ); ?>
+									<?php $msh_wp_pass = version_compare( get_bloginfo( 'version' ), '6.0', '>=' ); ?>
+									<span class="sa-badge sa-badge--<?php echo $msh_wp_pass ? 'success' : 'warning'; ?>" style="min-width: 80px; text-align: center;">
+										<?php echo $msh_wp_pass ? esc_html__( 'Pass', 'my-site-hand' ) : esc_html__( 'Warn', 'my-site-hand' ); ?>
 									</span>
 								</div>
 							</div>
@@ -67,12 +67,12 @@ $siteagent_nonce    = wp_create_nonce( 'siteagent_admin' );
 									<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sa-bg); display: flex; align-items: center; justify-content: center; color: var(--sa-text-muted);">
 										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
 									</div>
-									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'HTTPS Status', 'siteagent' ); ?></span>
+									<span style="font-weight:600; font-size: 14px;"><?php echo esc_html__( 'HTTPS Status', 'my-site-hand' ); ?></span>
 								</div>
 								<div style="display: flex; align-items: center; gap: 12px;">
-									<span style="font-size: 13px; color: var(--sa-text-secondary);"><?php echo is_ssl() ? esc_html__( 'Encrypted', 'siteagent' ) : esc_html__( 'Unsecured', 'siteagent' ); ?></span>
+									<span style="font-size: 13px; color: var(--sa-text-secondary);"><?php echo is_ssl() ? esc_html__( 'Encrypted', 'my-site-hand' ) : esc_html__( 'Unsecured', 'my-site-hand' ); ?></span>
 									<span class="sa-badge sa-badge--<?php echo is_ssl() ? 'success' : 'warning'; ?>" style="min-width: 80px; text-align: center;">
-										<?php echo is_ssl() ? esc_html__( 'Pass', 'siteagent' ) : esc_html__( 'Warn', 'siteagent' ); ?>
+										<?php echo is_ssl() ? esc_html__( 'Pass', 'my-site-hand' ) : esc_html__( 'Warn', 'my-site-hand' ); ?>
 									</span>
 								</div>
 							</div>
@@ -82,18 +82,18 @@ $siteagent_nonce    = wp_create_nonce( 'siteagent_admin' );
 									<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sa-bg); display: flex; align-items: center; justify-content: center; color: var(--sa-text-muted);">
 										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
 									</div>
-									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'Abilities Registry', 'siteagent' ); ?></span>
+									<span style="font-weight:600; font-size: 14px;"><?php echo esc_html__( 'Abilities Registry', 'my-site-hand' ); ?></span>
 								</div>
 								<div style="display: flex; align-items: center; gap: 12px;">
 									<span style="font-size: 13px; color: var(--sa-text-secondary);"><?php
 										printf(
 											/* translators: %d: number of registered abilities */
-											esc_html__( '%d registered', 'siteagent' ),
-											count( $siteagent_registry->get_all() )
+											esc_html__( '%d registered', 'my-site-hand' ),
+											count( $msh_registry->get_all() )
 										); ?></span>
-									<?php $siteagent_reg_pass = count( $siteagent_registry->get_all() ) > 0; ?>
-									<span class="sa-badge sa-badge--<?php echo $siteagent_reg_pass ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
-										<?php echo $siteagent_reg_pass ? esc_html__( 'Pass', 'siteagent' ) : esc_html__( 'Empty', 'siteagent' ); ?>
+									<?php $msh_reg_pass = count( $msh_registry->get_all() ) > 0; ?>
+									<span class="sa-badge sa-badge--<?php echo $msh_reg_pass ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
+										<?php echo $msh_reg_pass ? esc_html__( 'Pass', 'my-site-hand' ) : esc_html__( 'Empty', 'my-site-hand' ); ?>
 									</span>
 								</div>
 							</div>
@@ -103,17 +103,17 @@ $siteagent_nonce    = wp_create_nonce( 'siteagent_admin' );
 									<div style="width: 32px; height: 32px; border-radius: 50%; background: var(--sa-bg); display: flex; align-items: center; justify-content: center; color: var(--sa-text-muted);">
 										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
 									</div>
-									<span style="font-weight:600; font-size: 14px;"><?php esc_html_e( 'Database Schema', 'siteagent' ); ?></span>
+									<span style="font-weight:600; font-size: 14px;"><?php echo esc_html__( 'Database Schema', 'my-site-hand' ); ?></span>
 								</div>
 								<div style="display: flex; align-items: center; gap: 12px;">
 									<?php
 									global $wpdb;
 									// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-									$siteagent_table_exists = (bool) $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->prefix . 'siteagent_audit_log' ) );
+									$msh_table_exists = (bool) $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->prefix . 'msh_audit_log' ) );
 									?>
-									<span style="font-size: 13px; color: var(--sa-text-secondary);"><?php echo $siteagent_table_exists ? esc_html__( 'Synchronized', 'siteagent' ) : esc_html__( 'Incomplete', 'siteagent' ); ?></span>
-									<span class="sa-badge sa-badge--<?php echo $siteagent_table_exists ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
-										<?php echo $siteagent_table_exists ? esc_html__( 'Pass', 'siteagent' ) : esc_html__( 'Error', 'siteagent' ); ?>
+									<span style="font-size: 13px; color: var(--sa-text-secondary);"><?php echo $msh_table_exists ? esc_html__( 'Synchronized', 'my-site-hand' ) : esc_html__( 'Incomplete', 'my-site-hand' ); ?></span>
+									<span class="sa-badge sa-badge--<?php echo $msh_table_exists ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
+										<?php echo $msh_table_exists ? esc_html__( 'Pass', 'my-site-hand' ) : esc_html__( 'Error', 'my-site-hand' ); ?>
 									</span>
 								</div>
 							</div>
@@ -125,21 +125,21 @@ $siteagent_nonce    = wp_create_nonce( 'siteagent_admin' );
 				<div style="display:grid; grid-template-columns: 1fr 1fr; gap:32px;">
 					<div class="sa-card">
 						<div class="sa-card-header">
-							<h3><?php esc_html_e( 'Connection Tests', 'siteagent' ); ?></h3>
+							<h3><?php echo esc_html__( 'Connection Tests', 'my-site-hand' ); ?></h3>
 						</div>
 						<div class="sa-card-body" style="padding: 24px;">
 							<div class="sa-test-box" style="margin-bottom: 24px;">
-								<strong style="display: block; margin-bottom: 8px;"><?php esc_html_e( 'REST API Loopback', 'siteagent' ); ?></strong>
-								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary); line-height: 1.5;"><?php esc_html_e( 'Validates that your server can communicate with its own MCP endpoints.', 'siteagent' ); ?></p>
-								<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" style="width: 100%;" onclick="siteagent.runDiagnostic('loopback')">
-									<?php esc_html_e( 'Run Loopback Test', 'siteagent' ); ?>
+								<strong style="display: block; margin-bottom: 8px;"><?php echo esc_html__( 'REST API Loopback', 'my-site-hand' ); ?></strong>
+								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary); line-height: 1.5;"><?php echo esc_html__( 'Validates that your server can communicate with its own MCP endpoints.', 'my-site-hand' ); ?></p>
+								<button type="button" class="sa-btn sa-btn--primary sa-btn--sm" style="width: 100%;" onclick="msh.runDiagnostic('loopback')">
+									<?php echo esc_html__( 'Run Loopback Test', 'my-site-hand' ); ?>
 								</button>
 							</div>
 							<div class="sa-test-box">
-								<strong style="display: block; margin-bottom: 8px;"><?php esc_html_e( 'MCP Discovery', 'siteagent' ); ?></strong>
-								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary); line-height: 1.5;"><?php esc_html_e( 'Simulates a client handshake to verify tool registration and metadata.', 'siteagent' ); ?></p>
-								<button type="button" class="sa-btn sa-btn--ghost sa-btn--sm" style="width: 100%;" onclick="siteagent.runDiagnostic('discovery')">
-									<?php esc_html_e( 'Simulate Discovery', 'siteagent' ); ?>
+								<strong style="display: block; margin-bottom: 8px;"><?php echo esc_html__( 'MCP Discovery', 'my-site-hand' ); ?></strong>
+								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary); line-height: 1.5;"><?php echo esc_html__( 'Simulates a client handshake to verify tool registration and metadata.', 'my-site-hand' ); ?></p>
+								<button type="button" class="sa-btn sa-btn--ghost sa-btn--sm" style="width: 100%;" onclick="msh.runDiagnostic('discovery')">
+									<?php echo esc_html__( 'Simulate Discovery', 'my-site-hand' ); ?>
 								</button>
 							</div>
 						</div>
@@ -147,23 +147,23 @@ $siteagent_nonce    = wp_create_nonce( 'siteagent_admin' );
 
 					<div class="sa-card">
 						<div class="sa-card-header">
-							<h3><?php esc_html_e( 'System Recovery', 'siteagent' ); ?></h3>
+							<h3><?php echo esc_html__( 'System Recovery', 'my-site-hand' ); ?></h3>
 						</div>
 						<div class="sa-card-body" style="padding: 24px;">
 							<div style="margin-bottom: 24px;">
-								<strong style="display: block; margin-bottom: 4px;"><?php esc_html_e( 'Ability Cache', 'siteagent' ); ?></strong>
-								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary);"><?php esc_html_e( 'Clear registry cache and force-scan all active modules.', 'siteagent' ); ?></p>
-								<button type="button" class="sa-btn sa-btn--ghost sa-btn--sm" style="width: 100%;" onclick="siteagent.fixAction('regen_cache')">
+								<strong style="display: block; margin-bottom: 4px;"><?php echo esc_html__( 'Ability Cache', 'my-site-hand' ); ?></strong>
+								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary);"><?php echo esc_html__( 'Clear registry cache and force-scan all active modules.', 'my-site-hand' ); ?></p>
+								<button type="button" class="sa-btn sa-btn--ghost sa-btn--sm" style="width: 100%;" onclick="msh.fixAction('regen_cache')">
 									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-									<?php esc_html_e( 'Regenerate Registry', 'siteagent' ); ?>
+									<?php echo esc_html__( 'Regenerate Registry', 'my-site-hand' ); ?>
 								</button>
 							</div>
 							<div>
-								<strong style="display: block; margin-bottom: 4px;"><?php esc_html_e( 'Database Repair', 'siteagent' ); ?></strong>
-								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary);"><?php esc_html_e( 'Verify and re-create any missing plugin tables or columns.', 'siteagent' ); ?></p>
-								<button type="button" class="sa-btn sa-btn--ghost sa-btn--sm" style="width: 100%;" onclick="siteagent.fixAction('repair_tables')">
+								<strong style="display: block; margin-bottom: 4px;"><?php echo esc_html__( 'Database Repair', 'my-site-hand' ); ?></strong>
+								<p style="margin:0 0 16px; font-size:13px; color:var(--sa-text-secondary);"><?php echo esc_html__( 'Verify and re-create any missing plugin tables or columns.', 'my-site-hand' ); ?></p>
+								<button type="button" class="sa-btn sa-btn--ghost sa-btn--sm" style="width: 100%;" onclick="msh.fixAction('repair_tables')">
 									<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-									<?php esc_html_e( 'Repair Tables', 'siteagent' ); ?>
+									<?php echo esc_html__( 'Repair Tables', 'my-site-hand' ); ?>
 								</button>
 							</div>
 						</div>
@@ -173,7 +173,10 @@ $siteagent_nonce    = wp_create_nonce( 'siteagent_admin' );
 			</div>
 		</div>
 
-		<?php require SITEAGENT_PATH . 'templates/partials/footer.php'; ?>
+		<?php require MSH_PATH . 'templates/partials/footer.php'; ?>
 	</div>
 </div>
+
+
+
 

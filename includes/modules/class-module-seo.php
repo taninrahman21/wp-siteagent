@@ -2,10 +2,10 @@
 /**
  * SEO module — analysis and optimization abilities.
  *
- * @package WP_SiteAgent
+ * @package MySiteHand
  */
 
-namespace WP_SiteAgent\Modules;
+namespace MySiteHand\Modules;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -29,12 +29,12 @@ class Module_Seo extends Module_Base {
 	 */
 	public function get_ability_names(): array {
 		return [
-			'siteagent/analyze-seo',
-			'siteagent/set-meta-description',
-			'siteagent/set-focus-keyword',
-			'siteagent/bulk-seo-audit',
-			'siteagent/get-sitemap-urls',
-			'siteagent/check-broken-links',
+			'my-site-hand/analyze-seo',
+			'my-site-hand/set-meta-description',
+			'my-site-hand/set-focus-keyword',
+			'my-site-hand/bulk-seo-audit',
+			'my-site-hand/get-sitemap-urls',
+			'my-site-hand/check-broken-links',
 		];
 	}
 
@@ -51,20 +51,20 @@ class Module_Seo extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_analyze-seo
+	// Ability: msh_analyze-seo
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_analyze-seo ability.
+	 * Register the msh_analyze-seo ability.
 	 *
 	 * @return void
 	 */
 	private function register_analyze_seo(): void {
 		$this->register(
-			'siteagent/analyze-seo',
+			'my-site-hand/analyze-seo',
 			[
-				'label'            => __( 'Analyze SEO', 'siteagent' ),
-				'description'      => __( 'Analyze the SEO health of a post — keyword density, heading structure, link ratios, meta description, and more.', 'siteagent' ),
+				'label'            => __( 'Analyze SEO', 'my-site-hand' ),
+				'description'      => __( 'Analyze the SEO health of a post — keyword density, heading structure, link ratios, meta description, and more.', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'required'   => [ 'post_id' ],
@@ -83,7 +83,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_analyze-seo.
+	 * Execute msh_analyze-seo.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -93,14 +93,14 @@ class Module_Seo extends Module_Base {
 		$keyword = sanitize_text_field( $input['keyword'] ?? '' );
 
 		$cache_key = "seo_analysis_{$post_id}_" . md5( $keyword );
-		$cached    = get_transient( 'siteagent_' . $cache_key );
+		$cached    = get_transient( 'MSH_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
 
 		$post = get_post( $post_id );
 		if ( ! $post ) {
-			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$content       = $post->post_content;
@@ -195,43 +195,43 @@ class Module_Seo extends Module_Base {
 
 		if ( 'missing' === $meta_desc_status ) {
 			/* translators: No meta description error */
-			$issues[]      = __( 'No meta description set.', 'siteagent' );
-			$suggestions[] = __( 'Add a 120-160 character meta description.', 'siteagent' );
+			$issues[]      = __( 'No meta description set.', 'my-site-hand' );
+			$suggestions[] = __( 'Add a 120-160 character meta description.', 'my-site-hand' );
 		} elseif ( 'too_short' === $meta_desc_status ) {
 			/* translators: Meta description too short error */
-			$issues[]      = __( 'Meta description is too short.', 'siteagent' );
-			$suggestions[] = __( 'Expand meta description to 120-160 characters.', 'siteagent' );
+			$issues[]      = __( 'Meta description is too short.', 'my-site-hand' );
+			$suggestions[] = __( 'Expand meta description to 120-160 characters.', 'my-site-hand' );
 		} elseif ( 'too_long' === $meta_desc_status ) {
 			/* translators: Meta description too long error */
-			$issues[]      = __( 'Meta description is too long and may be truncated in SERPs.', 'siteagent' );
+			$issues[]      = __( 'Meta description is too long and may be truncated in SERPs.', 'my-site-hand' );
 		}
 
 		if ( ! empty( $keyword ) && ! $keyword_in_meta ) {
 			/* translators: Focus keyword missing from meta description error */
-			$issues[]      = __( 'Focus keyword missing from meta description.', 'siteagent' );
+			$issues[]      = __( 'Focus keyword missing from meta description.', 'my-site-hand' );
 			/* translators: Suggestion to add focus keyword to meta description */
-			$suggestions[] = __( 'Add focus keyword to meta description.', 'siteagent' );
+			$suggestions[] = __( 'Add focus keyword to meta description.', 'my-site-hand' );
 		}
 
 		if ( $images_missing_alt > 0 ) {
 			/* translators: %d: number of images missing alt text */
-			$issues[]      = sprintf( _n( '%d image is missing alt text.', '%d images are missing alt text.', $images_missing_alt, 'siteagent' ), $images_missing_alt );
+			$issues[]      = sprintf( _n( '%d image is missing alt text.', '%d images are missing alt text.', $images_missing_alt, 'my-site-hand' ), $images_missing_alt );
 			/* translators: Suggestion to add alt text to images */
-			$suggestions[] = __( 'Add descriptive alt text to all images.', 'siteagent' );
+			$suggestions[] = __( 'Add descriptive alt text to all images.', 'my-site-hand' );
 		}
 
 		if ( empty( $headings['H2'] ) && $word_count > 300 ) {
 			/* translators: No H2 headings error */
-			$issues[]      = __( 'No H2 headings found in a long article.', 'siteagent' );
+			$issues[]      = __( 'No H2 headings found in a long article.', 'my-site-hand' );
 			/* translators: Suggestion to add H2 headings */
-			$suggestions[] = __( 'Add H2 subheadings to organize content.', 'siteagent' );
+			$suggestions[] = __( 'Add H2 subheadings to organize content.', 'my-site-hand' );
 		}
 
 		if ( $word_count < 300 ) {
 			/* translators: Content too short error */
-			$issues[]      = __( 'Content is too short (under 300 words).', 'siteagent' );
+			$issues[]      = __( 'Content is too short (under 300 words).', 'my-site-hand' );
 			/* translators: Suggestion to expand content */
-			$suggestions[] = __( 'Expand content to at least 300 words.', 'siteagent' );
+			$suggestions[] = __( 'Expand content to at least 300 words.', 'my-site-hand' );
 		}
 
 		// Build Yoast score if available.
@@ -266,26 +266,26 @@ class Module_Seo extends Module_Base {
 			'yoast_score'                 => $yoast_score,
 		];
 
-		set_transient( 'siteagent_' . $cache_key, $analysis, HOUR_IN_SECONDS );
+		set_transient( 'MSH_' . $cache_key, $analysis, HOUR_IN_SECONDS );
 
 		return $analysis;
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_set-meta-description
+	// Ability: msh_set-meta-description
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_set-meta-description ability.
+	 * Register the msh_set-meta-description ability.
 	 *
 	 * @return void
 	 */
 	private function register_set_meta_description(): void {
 		$this->register(
-			'siteagent/set-meta-description',
+			'my-site-hand/set-meta-description',
 			[
-				'label'               => __( 'Set Meta Description', 'siteagent' ),
-				'description'         => __( 'Set the SEO meta description for a post. Works with Yoast, RankMath, or raw meta.', 'siteagent' ),
+				'label'               => __( 'Set Meta Description', 'my-site-hand' ),
+				'description'         => __( 'Set the SEO meta description for a post. Works with Yoast, RankMath, or raw meta.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'post_id', 'meta_description' ],
@@ -311,7 +311,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_set-meta-description.
+	 * Execute msh_set-meta-description.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -321,7 +321,7 @@ class Module_Seo extends Module_Base {
 		$description = substr( sanitize_text_field( $input['meta_description'] ), 0, 160 );
 
 		if ( ! get_post( $post_id ) ) {
-			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$seo_plugin = $this->detect_seo_plugin();
@@ -334,11 +334,11 @@ class Module_Seo extends Module_Base {
 			update_post_meta( $post_id, 'rank_math_description', $description );
 			$plugin_used = 'rankmath';
 		} else {
-			update_post_meta( $post_id, '_siteagent_meta_description', $description );
+			update_post_meta( $post_id, '_msh_meta_description', $description );
 		}
 
 		// Clear SEO analysis cache.
-		delete_transient( 'siteagent_seo_analysis_' . $post_id . '_' );
+		delete_transient( 'msh_seo_analysis_' . $post_id . '_' );
 
 		return [
 			'updated'          => true,
@@ -349,20 +349,20 @@ class Module_Seo extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_set-focus-keyword
+	// Ability: msh_set-focus-keyword
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_set-focus-keyword ability.
+	 * Register the msh_set-focus-keyword ability.
 	 *
 	 * @return void
 	 */
 	private function register_set_focus_keyword(): void {
 		$this->register(
-			'siteagent/set-focus-keyword',
+			'my-site-hand/set-focus-keyword',
 			[
-				'label'               => __( 'Set Focus Keyword', 'siteagent' ),
-				'description'         => __( 'Set the SEO focus keyword for a post. Works with Yoast or RankMath.', 'siteagent' ),
+				'label'               => __( 'Set Focus Keyword', 'my-site-hand' ),
+				'description'         => __( 'Set the SEO focus keyword for a post. Works with Yoast or RankMath.', 'my-site-hand' ),
 				'input_schema'        => [
 					'type'       => 'object',
 					'required'   => [ 'post_id', 'keyword' ],
@@ -388,7 +388,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_set-focus-keyword.
+	 * Execute msh_set-focus-keyword.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -398,7 +398,7 @@ class Module_Seo extends Module_Base {
 		$keyword = sanitize_text_field( $input['keyword'] );
 
 		if ( ! get_post( $post_id ) ) {
-			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		$seo_plugin = $this->detect_seo_plugin();
@@ -411,7 +411,7 @@ class Module_Seo extends Module_Base {
 			update_post_meta( $post_id, 'rank_math_focus_keyword', $keyword );
 			$plugin_used = 'rankmath';
 		} else {
-			update_post_meta( $post_id, '_siteagent_focus_keyword', $keyword );
+			update_post_meta( $post_id, '_msh_focus_keyword', $keyword );
 		}
 
 		return [
@@ -422,20 +422,20 @@ class Module_Seo extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_bulk-seo-audit
+	// Ability: msh_bulk-seo-audit
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_bulk-seo-audit ability.
+	 * Register the msh_bulk-seo-audit ability.
 	 *
 	 * @return void
 	 */
 	private function register_bulk_seo_audit(): void {
 		$this->register(
-			'siteagent/bulk-seo-audit',
+			'my-site-hand/bulk-seo-audit',
 			[
-				'label'            => __( 'Bulk SEO Audit', 'siteagent' ),
-				'description'      => __( 'Run SEO audit across multiple posts and return sorted results (worst first).', 'siteagent' ),
+				'label'            => __( 'Bulk SEO Audit', 'my-site-hand' ),
+				'description'      => __( 'Run SEO audit across multiple posts and return sorted results (worst first).', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'properties' => [
@@ -454,7 +454,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_bulk-seo-audit.
+	 * Execute msh_bulk-seo-audit.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -510,20 +510,20 @@ class Module_Seo extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_get-sitemap-urls
+	// Ability: msh_get-sitemap-urls
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_get-sitemap-urls ability.
+	 * Register the msh_get-sitemap-urls ability.
 	 *
 	 * @return void
 	 */
 	private function register_get_sitemap_urls(): void {
 		$this->register(
-			'siteagent/get-sitemap-urls',
+			'my-site-hand/get-sitemap-urls',
 			[
-				'label'            => __( 'Get Sitemap URLs', 'siteagent' ),
-				'description'      => __( 'Get sitemap URLs for this WordPress site (Yoast, RankMath, or WordPress core).', 'siteagent' ),
+				'label'            => __( 'Get Sitemap URLs', 'my-site-hand' ),
+				'description'      => __( 'Get sitemap URLs for this WordPress site (Yoast, RankMath, or WordPress core).', 'my-site-hand' ),
 				'execute_callback' => [ $this, 'execute_get_sitemap_urls' ],
 				'annotations'      => [
 					'readonly' => true,
@@ -534,7 +534,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_get-sitemap-urls.
+	 * Execute msh_get-sitemap-urls.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -564,20 +564,20 @@ class Module_Seo extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: siteagent_check-broken-links
+	// Ability: msh_check-broken-links
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the siteagent_check-broken-links ability.
+	 * Register the msh_check-broken-links ability.
 	 *
 	 * @return void
 	 */
 	private function register_check_broken_links(): void {
 		$this->register(
-			'siteagent/check-broken-links',
+			'my-site-hand/check-broken-links',
 			[
-				'label'            => __( 'Check Broken Links', 'siteagent' ),
-				'description'      => __( 'Check all outgoing links in a post for broken URLs (returns HTTP status for each).', 'siteagent' ),
+				'label'            => __( 'Check Broken Links', 'my-site-hand' ),
+				'description'      => __( 'Check all outgoing links in a post for broken URLs (returns HTTP status for each).', 'my-site-hand' ),
 				'input_schema'     => [
 					'type'       => 'object',
 					'required'   => [ 'post_id' ],
@@ -595,7 +595,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute siteagent_check-broken-links.
+	 * Execute msh_check-broken-links.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -605,7 +605,7 @@ class Module_Seo extends Module_Base {
 		$post    = get_post( $post_id );
 
 		if ( ! $post ) {
-			return $this->error( __( 'Post not found.', 'siteagent' ), 'not_found' );
+			return $this->error( __( 'Post not found.', 'my-site-hand' ), 'not_found' );
 		}
 
 		preg_match_all( '/href=["\']([^"\'#]+)["\']/', $post->post_content, $matches );
@@ -621,7 +621,7 @@ class Module_Seo extends Module_Base {
 
 			$response = wp_remote_head( esc_url_raw( $url ), [
 				'timeout'    => 10,
-				'user-agent' => 'WP SiteAgent Link Checker/1.0',
+				'user-agent' => 'WP my-site-hand Link Checker/1.0',
 				'sslverify'  => false,
 			] );
 
@@ -679,7 +679,7 @@ class Module_Seo extends Module_Base {
 		if ( 'rankmath' === $seo_plugin ) {
 			return (string) get_post_meta( $post_id, 'rank_math_description', true );
 		}
-		return (string) get_post_meta( $post_id, '_siteagent_meta_description', true );
+		return (string) get_post_meta( $post_id, '_msh_meta_description', true );
 	}
 
 	/**
@@ -700,4 +700,7 @@ class Module_Seo extends Module_Base {
 		return $syllables;
 	}
 }
+
+
+
 
