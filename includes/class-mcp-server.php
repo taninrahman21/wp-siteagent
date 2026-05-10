@@ -379,7 +379,7 @@ class MCP_Server {
 			'version' => MSH_VERSION,
 		];
 
-		return apply_filters( 'msh_server_info', $info );
+		return apply_filters( 'my_site_hand_server_info', $info );
 	}
 
 	/**

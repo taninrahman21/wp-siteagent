@@ -86,7 +86,6 @@ class Admin
 	 */
 	public function register_menus(): void
 	{
-		// Robot/AI SVG icon as base64 encoded data URI.
 		$icon = 'data:image/svg+xml;base64,' . base64_encode('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7H4a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2M7 14a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m10 0a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2m-5 2a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2 2 2 0 0 1 2-2z"/></svg>');
 
 		// Main menu page.
@@ -218,7 +217,7 @@ class Admin
 			'msh-admin',
 			'mshAdmin',
 			[
-				'nonce' => wp_create_nonce('msh_admin'),
+				'nonce' => wp_create_nonce('my_site_hand_admin'),
 				'restNonce' => wp_create_nonce('wp_rest'),
 				'ajaxUrl' => admin_url('admin-ajax.php'),
 				'restUrl' => rest_url('my-site-hand/v1/'),

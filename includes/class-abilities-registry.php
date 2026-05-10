@@ -150,9 +150,9 @@ class Abilities_Registry {
 		}
 
 		// Apply input filter.
-		$validated_input = apply_filters( 'msh_input', $validated_input, $name );
+		$validated_input = apply_filters( 'my_site_hand_input', $validated_input, $name );
 
-		do_action( 'msh_before_execute', $name, $validated_input, $user_id );
+		do_action( 'my_site_hand_before_execute', $name, $validated_input, $user_id );
 
 		// Execute the ability.
 		try {
@@ -166,9 +166,9 @@ class Abilities_Registry {
 		}
 
 		// Apply result filter.
-		$result = apply_filters( 'msh_result', $result, $name );
+		$result = apply_filters( 'my_site_hand_result', $result, $name );
 
-		do_action( 'msh_after_execute', $name, $result, $user_id );
+		do_action( 'my_site_hand_after_execute', $name, $result, $user_id );
 
 		return $result;
 	}
@@ -199,7 +199,7 @@ class Abilities_Registry {
 			}
 		);
 
-		return apply_filters( 'msh_mcp_public_abilities', $public );
+		return apply_filters( 'my_site_hand_mcp_public_abilities', $public );
 	}
 
 	/**

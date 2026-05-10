@@ -62,12 +62,6 @@ Yes, to use the automated connection feature, you need Node.js installed on your
 = Can I use this with Cursor or VS Code? =
 Absolutely. The Dashboard provides the MCP Server URL which you can paste directly into Cursor or any IDE that supports MCP.
 
-== Screenshots ==
-
-1. **Dashboard**: Automated setup steps for Windows, Mac, and Linux.
-2. **Abilities Browser**: A full catalog of tools your AI agent can use.
-3. **Token Manager**: Secure token generation with granular ability selection.
-4. **Audit Log**: Detailed history of every AI-powered action.
 
 == Changelog ==
 

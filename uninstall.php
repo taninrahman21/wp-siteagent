@@ -11,9 +11,9 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // Only delete data if the user opted in.
-$msh_delete = get_option( 'msh_delete_data_on_uninstall', false );
+$my_site_hand_delete = get_option( 'msh_delete_data_on_uninstall', false );
 
-if ( ! $msh_delete ) {
+if ( ! $my_site_hand_delete ) {
 	return;
 }
 
@@ -28,7 +28,7 @@ $wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}msh_audit_log`" );
 $wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}msh_rate_limits`" );
 
 // Delete all plugin options.
-$msh_options = [
+$my_site_hand_options = [
 	'msh_version',
 	'msh_enabled',
 	'msh_display_name',
@@ -41,8 +41,8 @@ $msh_options = [
 	'msh_delete_data_on_uninstall',
 ];
 
-foreach ( $msh_options as $msh_option ) {
-	delete_option( $msh_option );
+foreach ( $my_site_hand_options as $my_site_hand_option ) {
+	delete_option( $my_site_hand_option );
 }
 
 // Delete all my-site-hand transients.
@@ -54,9 +54,5 @@ $wpdb->query(
 );
 
 // Remove cron schedule.
-wp_clear_scheduled_hook( 'msh_cleanup_logs' );
-wp_clear_scheduled_hook( 'msh_cleanup_rate_limits' );
-
-
-
-
+wp_clear_scheduled_hook( 'my_site_hand_cleanup_logs' );
+wp_clear_scheduled_hook( 'my_site_hand_cleanup_expired_tokens' );

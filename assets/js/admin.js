@@ -31,7 +31,7 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: new URLSearchParams({
-					action: 'msh_toggle_ability',
+					action: 'my_site_hand_toggle_ability',
 					ability_name: name,
 					is_enabled: isEnabled ? 1 : 0,
 					nonce: cfg.nonce
@@ -97,12 +97,12 @@
 		 * Copy the MCP config snippet for the active client.
 		 */
 		copyMcpConfig: function () {
-			const activeTab = document.querySelector('.sa-tab-btn--active');
+			const activeTab = document.querySelector('.msh-tab-btn--active');
 			if (!activeTab) return;
 			
 			const client = activeTab.getAttribute('data-client');
-			const codeId = 'sa-mcp-config-code-' + client;
-			const textId = 'sa-copy-config-text-' + client;
+			const codeId = 'msh-mcp-config-code-' + client;
+			const textId = 'msh-copy-config-text-' + client;
 			
 			const el = document.getElementById(codeId);
 			if (!el) return;
@@ -124,13 +124,13 @@
 		 */
 		switchClientTab: function (client) {
 			// Update buttons
-			document.querySelectorAll('.sa-tab-btn').forEach(btn => {
-				btn.classList.toggle('sa-tab-btn--active', btn.getAttribute('data-client') === client);
+			document.querySelectorAll('.msh-tab-btn').forEach(btn => {
+				btn.classList.toggle('msh-tab-btn--active', btn.getAttribute('data-client') === client);
 			});
 
 			// Update content
-			document.querySelectorAll('.sa-tab-content').forEach(content => {
-				content.classList.toggle('sa-tab-content--active', content.getAttribute('data-client') === client);
+			document.querySelectorAll('.msh-tab-content').forEach(content => {
+				content.classList.toggle('msh-tab-content--active', content.getAttribute('data-client') === client);
 			});
 		},
 
@@ -138,11 +138,11 @@
 		 * Clear all my-site-hand caches via REST API.
 		 */
 		clearCache: function () {
-			const btn = document.getElementById('sa-clear-cache-btn');
-			const result = document.getElementById('sa-cache-result');
+			const btn = document.getElementById('msh-clear-cache-btn');
+			const result = document.getElementById('msh-cache-result');
 
 			if (btn) btn.disabled = true;
-			if (result) { result.textContent = i18n.saving || 'Clearing…'; result.classList.add('sa-inline-result--visible'); }
+			if (result) { result.textContent = i18n.saving || 'Clearing…'; result.classList.add('msh-inline-result--visible'); }
 
 			fetch(restUrl + 'cache/clear', {
 				method: 'POST',
@@ -152,7 +152,7 @@
 			.then(data => {
 				if (result) result.textContent = data.message || (i18n.cacheCleared || 'Cache cleared!');
 				setTimeout(() => {
-					if (result) result.classList.remove('sa-inline-result--visible');
+					if (result) result.classList.remove('msh-inline-result--visible');
 				}, 3000);
 			})
 			.catch(() => {
@@ -181,7 +181,7 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: new URLSearchParams({
-					action: 'msh_danger_action',
+					action: 'my_site_hand_danger_action',
 					danger_action: action,
 					nonce: nonce || cfg.nonce
 				})
@@ -209,7 +209,7 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: new URLSearchParams({
-					action: 'msh_save_option',
+					action: 'my_site_hand_save_option',
 					option_name: optionName,
 					option_value: value,
 					nonce: cfg.nonce
@@ -234,7 +234,7 @@
 				method: 'POST',
 				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 				body: new URLSearchParams({
-					action: 'msh_toggle_module',
+					action: 'my_site_hand_toggle_module',
 					module_slug: slug,
 					is_enabled: isEnabled ? 1 : 0,
 					nonce: cfg.nonce
@@ -271,11 +271,11 @@
 		 * @private
 		 */
 		_showToast: function (message, type = 'success') {
-			const existing = document.getElementById('sa-toast');
+			const existing = document.getElementById('msh-toast');
 			if (existing) existing.remove();
 
 			const toast = document.createElement('div');
-			toast.id = 'sa-toast';
+			toast.id = 'msh-toast';
 			toast.textContent = message;
 			Object.assign(toast.style, {
 				position: 'fixed',
@@ -290,7 +290,7 @@
 				fontFamily: "'Inter', sans-serif",
 				boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
 				zIndex: '999999',
-				animation: 'sa-fade-in 0.15s ease-out',
+				animation: 'msh-fade-in 0.15s ease-out',
 				cursor: 'pointer'
 			});
 
@@ -316,7 +316,7 @@
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: new URLSearchParams({
-				action: 'msh_run_diagnostic',
+				action: 'my_site_hand_run_diagnostic',
 				test: test,
 				nonce: cfg.nonce
 			})
@@ -347,7 +347,7 @@
 			method: 'POST',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: new URLSearchParams({
-				action: 'msh_fix_action',
+				action: 'my_site_hand_fix_action',
 				fix_action: action,
 				nonce: cfg.nonce
 			})
@@ -368,7 +368,7 @@
 	 * ---------------------------------------------------------------------- */
 	document.addEventListener('DOMContentLoaded', function () {
 		// Override WordPress admin background to match our dark theme.
-		const wrap = document.querySelector('.sa-wrap');
+		const wrap = document.querySelector('.msh-wrap');
 		if (wrap) {
 			const wpBody = document.getElementById('wpbody-content');
 			if (wpBody) {
@@ -382,7 +382,7 @@
 
 		// Close modals on overlay click.
 		document.addEventListener('click', function (e) {
-			if (e.target && e.target.classList.contains('sa-modal-overlay')) {
+			if (e.target && e.target.classList.contains('msh-modal-overlay')) {
 				const modal = e.target;
 				modal.style.display = 'none';
 			}
@@ -391,7 +391,7 @@
 		// Close modals on Escape.
 		document.addEventListener('keydown', function (e) {
 			if (e.key === 'Escape') {
-				const modal = document.querySelector('.sa-modal-overlay[style*="flex"], .sa-modal-overlay[style*="block"]');
+				const modal = document.querySelector('.msh-modal-overlay[style*="flex"], .msh-modal-overlay[style*="block"]');
 				if (modal) modal.style.display = 'none';
 			}
 		});
@@ -403,7 +403,3 @@
 	// Register WordPress AJAX actions via PHP (see class-plugin.php boot).
 
 }());
-
-
-
-

@@ -65,16 +65,16 @@ add_action(
 	'plugins_loaded',
 	function () {
 		// Initialize the core plugin instance.
-		$msh_plugin = MySiteHand\Plugin::get_instance();
-		$msh_plugin->boot();
+		$my_site_hand_plugin = MySiteHand\Plugin::get_instance();
+		$my_site_hand_plugin->boot();
 
 		// One-time fix to ensure all modules are enabled on first run.
 		if (!get_option('msh_modules_restored_v1')) {
-			$msh_default_modules = ['content', 'seo', 'diagnostics', 'media', 'users'];
+			$my_site_hand_default_modules = ['content', 'seo', 'diagnostics', 'media', 'users'];
 			if (class_exists('WooCommerce')) {
-				$msh_default_modules[] = 'woocommerce';
+				$my_site_hand_default_modules[] = 'woocommerce';
 			}
-			update_option('msh_enabled_modules', $msh_default_modules);
+			update_option('msh_enabled_modules', $my_site_hand_default_modules);
 			update_option('msh_modules_restored_v1', 1);
 		}
 	}

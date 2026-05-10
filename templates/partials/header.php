@@ -8,9 +8,9 @@
 defined('ABSPATH') || exit;
 
 // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-$msh_current_page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : 'my-site-hand';
+$my_site_hand_current_page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : 'my-site-hand';
 
-$msh_nav_items = [
+$my_site_hand_nav_items = [
 	'my-site-hand' => [
 		'label' => __('Dashboard', 'my-site-hand'),
 		'icon' => '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>',
@@ -33,18 +33,19 @@ $msh_nav_items = [
 	],
 ];
 ?>
-<header class="sa-header">
-	<div class="sa-header-brand">
-		<div class="sa-header-title">
+<header class="msh-header">
+	<div class="msh-header-brand">
+		<img src="<?php echo esc_url(MSH_URL . 'assets/logo.png'); ?>" alt="My Site Hand" class="msh-header-logo">
+		<div class="msh-header-title">
 			<h1>My Site Hand</h1>
 		</div>
 	</div>
 
-	<nav class="sa-nav">
-		<?php foreach ($msh_nav_items as $msh_page => $msh_item): ?>
-			<a href="<?php echo esc_url(admin_url('admin.php?page=' . $msh_page)); ?>"
-				class="sa-nav-link <?php echo $msh_current_page === $msh_page ? 'sa-nav-link--active' : ''; ?>">
-				<span class="sa-nav-icon"><?php echo wp_kses($msh_item['icon'], [
+	<nav class="msh-nav">
+		<?php foreach ($my_site_hand_nav_items as $my_site_hand_page => $my_site_hand_item): ?>
+			<a href="<?php echo esc_url(admin_url('admin.php?page=' . $my_site_hand_page)); ?>"
+				class="msh-nav-link <?php echo $my_site_hand_current_page === $my_site_hand_page ? 'msh-nav-link--active' : ''; ?>">
+				<span class="msh-nav-icon"><?php echo wp_kses($my_site_hand_item['icon'], [
 					'svg' => [
 						'width' => [],
 						'height' => [],
@@ -70,6 +71,7 @@ $msh_nav_items = [
 						'y1' => [],
 						'x2' => [],
 						'y2' => [],
+						'stroke' => [],
 					],
 					'circle' => [
 						'cx' => [],
@@ -77,15 +79,15 @@ $msh_nav_items = [
 						'r' => [],
 					],
 				]); ?></span>
-				<span class="sa-nav-label"><?php echo esc_html($msh_item['label']); ?></span>
+				<span class="msh-nav-label"><?php echo esc_html($my_site_hand_item['label']); ?></span>
 			</a>
 		<?php endforeach; ?>
 	</nav>
 
-	<div class="sa-header-actions">
+	<div class="msh-header-actions">
 		<a href="https://github.com/taninrahman21/my-site-hand#readme" target="_blank"
-			class="sa-btn sa-btn--primary sa-btn--sm"
-			style="background: var(--sa-primary); color: #fff; border: none; padding: 10px 20px; border-radius: 100px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+			class="msh-btn msh-btn--primary msh-btn--sm"
+			style="background: var(--msh-primary); color: #fff; border: none; padding: 10px 20px; border-radius: 100px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
 			<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
 				stroke-linecap="round" stroke-linejoin="round">
 				<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>

@@ -34,8 +34,8 @@ class Deactivator {
 	 */
 	private static function unschedule_cron(): void {
 		$hooks = [
-			'msh_cleanup_logs',
-			'msh_cleanup_expired_tokens',
+			'my_site_hand_cleanup_logs',
+			'my_site_hand_cleanup_expired_tokens',
 		];
 
 		foreach ( $hooks as $hook ) {

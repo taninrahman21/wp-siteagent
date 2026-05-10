@@ -38,15 +38,15 @@
 		switchClientTab: function (client) {
 			const tabs = ['claude', 'cursor'];
 			tabs.forEach(t => {
-				const el = document.getElementById('sa-client-tab-' + t);
+				const el = document.getElementById('msh-client-tab-' + t);
 				if (el) {
-					if (t === client) el.classList.add('sa-os-tab--active');
-					else el.classList.remove('sa-os-tab--active');
+					if (t === client) el.classList.add('msh-os-tab--active');
+					else el.classList.remove('msh-os-tab--active');
 				}
 			});
 
-			const claudePanel = document.getElementById('sa-claude-panel');
-			const cursorPanel = document.getElementById('sa-cursor-panel');
+			const claudePanel = document.getElementById('msh-claude-panel');
+			const cursorPanel = document.getElementById('msh-cursor-panel');
 
 			if (client === 'claude') {
 				if (claudePanel) claudePanel.style.display = 'block';
@@ -57,10 +57,10 @@
 
 				// Populate Cursor fields if token exists.
 				if (generatedToken) {
-					const urlInput = document.getElementById('sa-cursor-url');
+					const urlInput = document.getElementById('msh-cursor-url');
 					if (urlInput) urlInput.value = cfg.mcpEndpoint || '';
 
-					const authInput = document.getElementById('sa-cursor-auth');
+					const authInput = document.getElementById('msh-cursor-auth');
 					if (authInput) authInput.value = 'Bearer ' + generatedToken;
 				}
 			}
@@ -71,7 +71,7 @@
 		 * Open the generate token modal.
 		 */
 		openGenerateModal: function () {
-			const modal = document.getElementById('sa-generate-modal');
+			const modal = document.getElementById('msh-generate-modal');
 			if (!modal) return;
 
 			// Reset form state.
@@ -81,7 +81,7 @@
 
 			// Focus label input after animation.
 			setTimeout(() => {
-				const label = document.getElementById('sa-token-label');
+				const label = document.getElementById('msh-token-label');
 				if (label) label.focus();
 			}, 150);
 		},
@@ -90,7 +90,7 @@
 		 * Close the generate token modal.
 		 */
 		closeModal: function () {
-			const modal = document.getElementById('sa-generate-modal');
+			const modal = document.getElementById('msh-generate-modal');
 			if (modal) modal.style.display = 'none';
 
 			// Reload to show new/revoked tokens in table.
@@ -103,17 +103,17 @@
 		 * Submit token generation request.
 		 */
 		generateToken: function () {
-			const label = document.getElementById('sa-token-label')?.value?.trim();
+			const label = document.getElementById('msh-token-label')?.value?.trim();
 
 			if (!label) {
 				if (window.msh && window.msh._showToast) {
 					window.msh._showToast('Label is required.', 'error');
 				}
-				document.getElementById('sa-token-label')?.focus();
+				document.getElementById('msh-token-label')?.focus();
 				return;
 			}
 
-			const expiresAt = document.getElementById('sa-token-expires')?.value || null;
+			const expiresAt = document.getElementById('msh-token-expires')?.value || null;
 
 			// Collect checked abilities.
 			const abilityCheckboxes = document.querySelectorAll('input[name="abilities[]"]:checked');
@@ -126,7 +126,7 @@
 				expires_at: expiresAt || null
 			};
 
-			const btn = document.getElementById('sa-submit-token');
+			const btn = document.getElementById('msh-submit-token');
 			if (btn) { btn.disabled = true; btn.textContent = i18n.saving || 'Generating…'; }
 
 			fetch(restUrl + 'tokens', {
@@ -164,16 +164,16 @@
 			// Update tab styles.
 			const tabs = ['windows', 'mac', 'linux'];
 			tabs.forEach(t => {
-				const el = document.getElementById('sa-os-tab-' + t);
+				const el = document.getElementById('msh-os-tab-' + t);
 				if (el) {
-					if (t === os) el.classList.add('sa-os-tab--active');
-					else el.classList.remove('sa-os-tab--active');
+					if (t === os) el.classList.add('msh-os-tab--active');
+					else el.classList.remove('msh-os-tab--active');
 				}
 			});
 
 			// Update commands if token exists.
-			const step1Input = document.getElementById('sa-claude-step-1');
-			const step2Input = document.getElementById('sa-claude-step-2');
+			const step1Input = document.getElementById('msh-claude-step-1');
+			const step2Input = document.getElementById('msh-claude-step-2');
 
 			if (step1Input) {
 				step1Input.value = (os === 'mac' ? 'sudo ' : '') + 'npm install -g mcp-remote';
@@ -241,12 +241,12 @@
 		 */
 		_revealToken: function (token) {
 			// Hide the generate form / button.
-			const form = document.getElementById('sa-generate-token-form');
+			const form = document.getElementById('msh-generate-token-form');
 			if (form) {
-				const exemptIds = ['sa-confirm-copied', 'sa-copy-token-btn', 'sa-copy-claude-btn'];
+				const exemptIds = ['msh-confirm-copied', 'msh-copy-token-btn', 'msh-copy-claude-btn'];
 				Array.from(form.elements).forEach(el => {
 					// Exempt everything inside the reveal area OR specific IDs.
-					if (el.closest('.sa-token-reveal') || exemptIds.includes(el.id)) {
+					if (el.closest('.msh-token-reveal') || exemptIds.includes(el.id)) {
 						el.disabled = false;
 					} else {
 						el.disabled = true;
@@ -254,20 +254,20 @@
 				});
 			}
 
-			const submitBtn = document.getElementById('sa-submit-token');
+			const submitBtn = document.getElementById('msh-submit-token');
 			if (submitBtn) submitBtn.style.display = 'none';
 
-			const revealArea = document.getElementById('sa-token-reveal');
+			const revealArea = document.getElementById('msh-token-reveal');
 			if (revealArea) revealArea.style.display = 'block';
 
-			const tokenEl = document.getElementById('sa-new-token-value');
+			const tokenEl = document.getElementById('msh-new-token-value');
 			if (tokenEl) tokenEl.textContent = token;
 
 			// Attach copy handlers programmatically
-			const tokenBtn = document.getElementById('sa-copy-token-btn');
+			const tokenBtn = document.getElementById('msh-copy-token-btn');
 			if (tokenBtn) {
 				tokenBtn.onclick = () => {
-					window.msh.copyText('sa-new-token-value');
+					window.msh.copyText('msh-new-token-value');
 				};
 			}
 
@@ -275,10 +275,10 @@
 			this.switchOsTab(window.mshTokens.selectedOs || detectOs());
 
 			// Show done button; enable when checkbox is checked.
-			const doneBtn = document.getElementById('sa-close-after-copy');
+			const doneBtn = document.getElementById('msh-close-after-copy');
 			if (doneBtn) doneBtn.style.display = 'inline-flex';
 
-			const checkbox = document.getElementById('sa-confirm-copied');
+			const checkbox = document.getElementById('msh-confirm-copied');
 			if (checkbox) {
 				checkbox.addEventListener('change', function () {
 					if (doneBtn) doneBtn.disabled = !this.checked;
@@ -289,10 +289,10 @@
 			this.switchOsTab(window.mshTokens.selectedOs || detectOs());
 
 			// Also populate Cursor fields for immediate use if user switches.
-			const urlInput = document.getElementById('sa-cursor-url');
+			const urlInput = document.getElementById('msh-cursor-url');
 			if (urlInput) urlInput.value = cfg.mcpEndpoint || '';
 
-			const authInput = document.getElementById('sa-cursor-auth');
+			const authInput = document.getElementById('msh-cursor-auth');
 			if (authInput) authInput.value = 'Bearer ' + token;
 		},
 
@@ -304,7 +304,7 @@
 		_resetModal: function () {
 			generatedToken = null;
 
-			const form = document.getElementById('sa-generate-token-form');
+			const form = document.getElementById('msh-generate-token-form');
 			if (form) form.reset();
 
 			// Reset client and OS selection.
@@ -312,25 +312,25 @@
 			this.switchOsTab(detectOs());
 
 			// Clear Cursor fields.
-			const cursorUrl = document.getElementById('sa-cursor-url');
+			const cursorUrl = document.getElementById('msh-cursor-url');
 			if (cursorUrl) cursorUrl.value = '';
-			const cursorAuth = document.getElementById('sa-cursor-auth');
+			const cursorAuth = document.getElementById('msh-cursor-auth');
 			if (cursorAuth) cursorAuth.value = '';
 
-			const step1 = document.getElementById('sa-claude-step-1');
+			const step1 = document.getElementById('msh-claude-step-1');
 			if (step1) step1.value = 'npm install -g mcp-remote';
 
-			const step2 = document.getElementById('sa-claude-step-2');
+			const step2 = document.getElementById('msh-claude-step-2');
 			if (step2) step2.value = '';
 
 
-			const reveal = document.getElementById('sa-token-reveal');
+			const reveal = document.getElementById('msh-token-reveal');
 			if (reveal) reveal.style.display = 'none';
 
-			const submitBtn = document.getElementById('sa-submit-token');
+			const submitBtn = document.getElementById('msh-submit-token');
 			if (submitBtn) { submitBtn.style.display = 'inline-flex'; submitBtn.disabled = false; submitBtn.textContent = 'Generate Token'; }
 
-			const doneBtn = document.getElementById('sa-close-after-copy');
+			const doneBtn = document.getElementById('msh-close-after-copy');
 			if (doneBtn) { doneBtn.style.display = 'none'; doneBtn.disabled = true; }
 
 			// Re-enable form elements.
@@ -341,7 +341,3 @@
 	};
 
 }());
-
-
-
-

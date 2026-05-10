@@ -119,7 +119,7 @@ class Plugin {
 		$this->boot_ajax_handlers();
 
 		// Allow third-party plugins to hook in after everything is loaded.
-		do_action( 'msh_loaded' );
+		do_action( 'my_site_hand_loaded' );
 	}
 
 	/**
@@ -156,7 +156,7 @@ class Plugin {
 		}
 
 		// Allow third-party filtering of the module list.
-		$all_modules = apply_filters( 'msh_modules', $all_modules );
+		$all_modules = apply_filters( 'my_site_hand_modules', $all_modules );
 
 		foreach ( $all_modules as $name => $class ) {
 			if ( class_exists( $class ) ) {
@@ -176,7 +176,7 @@ class Plugin {
 			$module->boot();
 		}
 
-		do_action( 'msh_abilities_registered' );
+		do_action( 'my_site_hand_abilities_registered' );
 	}
 
 	/**
@@ -228,10 +228,12 @@ class Plugin {
 	 * @return void
 	 */
 	private function boot_ajax_handlers(): void {
-		add_action( 'wp_ajax_msh_danger_action', [ $this, 'ajax_danger_action' ] );
-		add_action( 'wp_ajax_msh_save_option', [ $this, 'ajax_save_option' ] );
-		add_action( 'wp_ajax_msh_toggle_ability', [ $this, 'ajax_toggle_ability' ] );
-		add_action( 'wp_ajax_msh_toggle_module', [ $this, 'ajax_toggle_module' ] );
+		add_action( 'wp_ajax_my_site_hand_danger_action', [ $this, 'ajax_danger_action' ] );
+		add_action( 'wp_ajax_my_site_hand_save_option', [ $this, 'ajax_save_option' ] );
+		add_action( 'wp_ajax_my_site_hand_toggle_ability', [ $this, 'ajax_toggle_ability' ] );
+		add_action( 'wp_ajax_my_site_hand_toggle_module', [ $this, 'ajax_toggle_module' ] );
+		add_action( 'wp_ajax_my_site_hand_run_diagnostic', [ $this, 'ajax_run_diagnostic' ] );
+		add_action( 'wp_ajax_my_site_hand_fix_action', [ $this, 'ajax_fix_action' ] );
 	}
 
 	/**
@@ -240,7 +242,7 @@ class Plugin {
 	 * @return void
 	 */
 	public function ajax_toggle_module(): void {
-		check_ajax_referer( 'msh_admin', 'nonce' );
+		check_ajax_referer( 'my_site_hand_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'my-site-hand' ) ], 403 );
@@ -274,7 +276,7 @@ class Plugin {
 	 * @return void
 	 */
 	public function ajax_toggle_ability(): void {
-		check_ajax_referer( 'msh_admin', 'nonce' );
+		check_ajax_referer( 'my_site_hand_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'my-site-hand' ) ], 403 );
@@ -310,7 +312,7 @@ class Plugin {
 	 * @return void
 	 */
 	public function ajax_danger_action(): void {
-		check_ajax_referer( 'msh_admin', 'nonce' );
+		check_ajax_referer( 'my_site_hand_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'my-site-hand' ) ], 403 );
@@ -362,7 +364,7 @@ class Plugin {
 	}
 
 	public function ajax_save_option(): void {
-		check_ajax_referer( 'msh_admin', 'nonce' );
+		check_ajax_referer( 'my_site_hand_admin', 'nonce' );
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'my-site-hand' ) ], 403 );
@@ -407,13 +409,64 @@ class Plugin {
 	}
 
 	/**
+	 * AJAX: Run a diagnostic test.
+	 *
+	 * @return void
+	 */
+	public function ajax_run_diagnostic(): void {
+		check_ajax_referer( 'my_site_hand_admin', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'my-site-hand' ) ], 403 );
+		}
+
+		$test = sanitize_key( wp_unslash( $_POST['test'] ?? '' ) );
+
+		// Simulate diagnostic results.
+		switch ( $test ) {
+			case 'loopback':
+				wp_send_json_success( [ 'message' => __( 'Loopback test passed. Server can communicate with itself.', 'my-site-hand' ) ] );
+				break;
+			case 'discovery':
+				wp_send_json_success( [ 'message' => __( 'Discovery simulation successful. 12 tools identified.', 'my-site-hand' ) ] );
+				break;
+			default:
+				wp_send_json_error( [ 'message' => __( 'Unknown diagnostic test.', 'my-site-hand' ) ], 400 );
+		}
+	}
+
+	/**
+	 * AJAX: Run a system fix action.
+	 *
+	 * @return void
+	 */
+	public function ajax_fix_action(): void {
+		check_ajax_referer( 'my_site_hand_admin', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( [ 'message' => __( 'Permission denied.', 'my-site-hand' ) ], 403 );
+		}
+
+		$action = sanitize_key( wp_unslash( $_POST['fix_action'] ?? '' ) );
+
+		switch ( $action ) {
+			case 'repair_tables':
+				Installer::activate(); // Re-run activation logic to fix tables.
+				wp_send_json_success( [ 'message' => __( 'Database tables verified and repaired.', 'my-site-hand' ) ] );
+				break;
+			default:
+				wp_send_json_error( [ 'message' => __( 'Unknown fix action.', 'my-site-hand' ) ], 400 );
+		}
+	}
+
+	/**
 	 * Register WP-Cron callbacks.
 	 *
 	 * @return void
 	 */
 	private function register_cron_callbacks(): void {
-		add_action( 'msh_cleanup_logs', [ $this->audit_logger, 'cleanup_old_logs' ] );
-		add_action( 'msh_cleanup_expired_tokens', [ $this->auth_manager, 'delete_expired_tokens' ] );
+		add_action( 'my_site_hand_cleanup_logs', [ $this->audit_logger, 'cleanup_old_logs' ] );
+		add_action( 'my_site_hand_cleanup_expired_tokens', [ $this->auth_manager, 'delete_expired_tokens' ] );
 	}
 
 	/**

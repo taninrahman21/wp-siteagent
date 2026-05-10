@@ -398,7 +398,7 @@ class Rest_Controller {
 	 */
 	public function export_audit_log( \WP_REST_Request $request ): void {
 		$nonce = $request->get_param( 'nonce' );
-		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'msh_admin' ) ) {
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'my_site_hand_admin' ) ) {
 			wp_die( esc_html__( 'Security check failed.', 'my-site-hand' ) );
 		}
 

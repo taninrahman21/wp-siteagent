@@ -129,12 +129,12 @@ class Installer {
 	 * @return void
 	 */
 	private static function schedule_cron(): void {
-		if ( ! wp_next_scheduled( 'msh_cleanup_logs' ) ) {
-			wp_schedule_event( time(), 'daily', 'msh_cleanup_logs' );
+		if ( ! wp_next_scheduled( 'my_site_hand_cleanup_logs' ) ) {
+			wp_schedule_event( time(), 'daily', 'my_site_hand_cleanup_logs' );
 		}
 
-		if ( ! wp_next_scheduled( 'msh_cleanup_expired_tokens' ) ) {
-			wp_schedule_event( time(), 'daily', 'msh_cleanup_expired_tokens' );
+		if ( ! wp_next_scheduled( 'my_site_hand_cleanup_expired_tokens' ) ) {
+			wp_schedule_event( time(), 'daily', 'my_site_hand_cleanup_expired_tokens' );
 		}
 	}
 }

@@ -27,13 +27,13 @@ class Rate_Limiter {
 		global $wpdb;
 
 		$hourly_limit = (int) apply_filters(
-			'msh_hourly_limit',
+			'my_site_hand_hourly_limit',
 			(int) get_option( 'msh_hourly_limit', 200 ),
 			$token_id
 		);
 
 		$daily_limit = (int) apply_filters(
-			'msh_daily_limit',
+			'my_site_hand_daily_limit',
 			(int) get_option( 'msh_daily_limit', 2000 ),
 			$token_id
 		);
@@ -133,13 +133,13 @@ class Rate_Limiter {
 		global $wpdb;
 
 		$hourly_limit = (int) apply_filters(
-			'msh_hourly_limit',
+			'my_site_hand_hourly_limit',
 			(int) get_option( 'msh_hourly_limit', 200 ),
 			$token_id
 		);
 
 		$daily_limit = (int) apply_filters(
-			'msh_daily_limit',
+			'my_site_hand_daily_limit',
 			(int) get_option( 'msh_daily_limit', 2000 ),
 			$token_id
 		);

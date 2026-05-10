@@ -36,7 +36,7 @@
 			this.switchOs(this.selectedOs);
 
 			// Listen for token input.
-			const tokenInput = document.getElementById('sa-dash-token');
+			const tokenInput = document.getElementById('msh-dash-token');
 			if (tokenInput) {
 				tokenInput.addEventListener('input', () => this.updateCommands());
 			}
@@ -53,16 +53,16 @@
 			// Update tab styles.
 			const tabs = ['claude', 'cursor'];
 			tabs.forEach(t => {
-				const el = document.getElementById('sa-dash-client-tab-' + t);
+				const el = document.getElementById('msh-dash-client-tab-' + t);
 				if (el) {
-					if (t === client) el.classList.add('sa-tab-btn--active');
-					else el.classList.remove('sa-tab-btn--active');
+					if (t === client) el.classList.add('msh-tab-btn--active');
+					else el.classList.remove('msh-tab-btn--active');
 				}
 			});
 
 			// Toggle panels.
-			const claudePanel = document.getElementById('sa-dash-claude-panel');
-			const cursorPanel = document.getElementById('sa-dash-cursor-panel');
+			const claudePanel = document.getElementById('msh-dash-claude-panel');
+			const cursorPanel = document.getElementById('msh-dash-cursor-panel');
 
 			if (client === 'claude') {
 				if (claudePanel) claudePanel.style.display = 'block';
@@ -86,10 +86,10 @@
 			// Update tab styles.
 			const tabs = ['windows', 'mac', 'linux'];
 			tabs.forEach(t => {
-				const el = document.getElementById('sa-dash-os-tab-' + t);
+				const el = document.getElementById('msh-dash-os-tab-' + t);
 				if (el) {
-					if (t === os) el.classList.add('sa-os-tab--active');
-					else el.classList.remove('sa-os-tab--active');
+					if (t === os) el.classList.add('msh-os-tab--active');
+					else el.classList.remove('msh-os-tab--active');
 				}
 			});
 
@@ -100,12 +100,12 @@
 		 * Update the generated commands and fields based on the token and selection.
 		 */
 		updateCommands: function () {
-			const token = document.getElementById('sa-dash-token')?.value?.trim() || '';
+			const token = document.getElementById('msh-dash-token')?.value?.trim() || '';
 			const endpoint = cfg.mcpEndpoint || '';
 
 			if (this.selectedClient === 'claude') {
-				const step1Input = document.getElementById('sa-dash-claude-step-1');
-				const step2Input = document.getElementById('sa-dash-claude-step-2');
+				const step1Input = document.getElementById('msh-dash-claude-step-1');
+				const step2Input = document.getElementById('msh-dash-claude-step-2');
 
 				if (step1Input) {
 					step1Input.value = (this.selectedOs === 'mac' ? 'sudo ' : '') + 'npm install -g mcp-remote';
@@ -132,7 +132,7 @@
 				}
 			} else {
 				// Cursor / IDEs
-				const authInput = document.getElementById('sa-dash-cursor-auth');
+				const authInput = document.getElementById('msh-dash-cursor-auth');
 				if (authInput) {
 					authInput.value = token ? 'Bearer ' + token : '';
 				}
@@ -146,7 +146,3 @@
 	});
 
 }());
-
-
-
-
