@@ -169,35 +169,35 @@ class Admin
 	public function enqueue_assets(string $hook): void
 	{
 		// Check if we're on a my-site-hand page.
-		$is_msh_page = str_contains($hook, 'my-site-hand');
+		$is_mysitehand_page = str_contains($hook, 'my-site-hand');
 
-		if (!$is_msh_page) {
+		if (!$is_mysitehand_page) {
 			return;
 		}
 
 		// Admin CSS.
 		wp_enqueue_style(
-			'msh-admin',
-			MSH_URL . 'assets/css/admin.css',
+			'mysitehand-admin',
+			MYSITEHAND_URL . 'assets/css/admin.css',
 			[],
-			MSH_VERSION
+			MYSITEHAND_VERSION
 		);
 
 		// Admin JS.
 		wp_enqueue_script(
-			'msh-admin',
-			MSH_URL . 'assets/js/admin.js',
+			'mysitehand-admin',
+			MYSITEHAND_URL . 'assets/js/admin.js',
 			[],
-			MSH_VERSION,
+			MYSITEHAND_VERSION,
 			true
 		);
 
 		// Token Manager JS.
 		wp_enqueue_script(
 			'msh-token-manager',
-			MSH_URL . 'assets/js/token-manager.js',
-			['msh-admin'],
-			MSH_VERSION,
+			MYSITEHAND_URL . 'assets/js/token-manager.js',
+			['mysitehand-admin'],
+			MYSITEHAND_VERSION,
 			true
 		);
 
@@ -205,24 +205,24 @@ class Admin
 		if ('toplevel_page_my-site-hand' === $hook) {
 			wp_enqueue_script(
 				'msh-dashboard-connect',
-				MSH_URL . 'assets/js/dashboard-connect.js',
-				['msh-admin'],
-				MSH_VERSION,
+				MYSITEHAND_URL . 'assets/js/dashboard-connect.js',
+				['mysitehand-admin'],
+				MYSITEHAND_VERSION,
 				true
 			);
 		}
 
 		// Localized data for JavaScript.
 		wp_localize_script(
-			'msh-admin',
-			'mshAdmin',
+			'mysitehand-admin',
+			'mysitehandAdmin',
 			[
 				'nonce' => wp_create_nonce('my_site_hand_admin'),
 				'restNonce' => wp_create_nonce('wp_rest'),
 				'ajaxUrl' => admin_url('admin-ajax.php'),
 				'restUrl' => rest_url('my-site-hand/v1/'),
 				'mcpEndpoint' => rest_url('my-site-hand/v1/mcp/streamable'),
-				'pluginUrl' => MSH_URL,
+				'pluginUrl' => MYSITEHAND_URL,
 				'i18n' => [
 					'copied' => __('Copied!', 'my-site-hand'),
 					'confirmRevoke' => __('Are you sure you want to revoke this token?', 'my-site-hand'),
@@ -243,32 +243,32 @@ class Admin
 	public function register_settings(): void
 	{
 		register_setting(
-			'msh_settings',
-			'msh_enabled',
+			'mysitehand_settings',
+			'mysitehand_enabled',
 			['sanitize_callback' => 'rest_sanitize_boolean']
 		);
 
 		register_setting(
-			'msh_settings',
-			'msh_display_name',
+			'mysitehand_settings',
+			'mysitehand_display_name',
 			['sanitize_callback' => 'sanitize_text_field']
 		);
 
 		register_setting(
-			'msh_settings',
-			'msh_hourly_limit',
+			'mysitehand_settings',
+			'mysitehand_hourly_limit',
 			['sanitize_callback' => 'absint']
 		);
 
 		register_setting(
-			'msh_settings',
-			'msh_daily_limit',
+			'mysitehand_settings',
+			'mysitehand_daily_limit',
 			['sanitize_callback' => 'absint']
 		);
 
 		register_setting(
-			'msh_settings',
-			'msh_enabled_modules',
+			'mysitehand_settings',
+			'mysitehand_enabled_modules',
 			[
 				'sanitize_callback' => static function ($value) {
 					return is_array($value) ? array_map('sanitize_key', $value) : [];
@@ -277,20 +277,20 @@ class Admin
 		);
 
 		register_setting(
-			'msh_settings',
-			'msh_cache_ttl',
+			'mysitehand_settings',
+			'mysitehand_cache_ttl',
 			['sanitize_callback' => 'absint']
 		);
 
 		register_setting(
-			'msh_settings',
-			'msh_log_retention_days',
+			'mysitehand_settings',
+			'mysitehand_log_retention_days',
 			['sanitize_callback' => 'absint']
 		);
 
 		register_setting(
-			'msh_settings',
-			'msh_log_level',
+			'mysitehand_settings',
+			'mysitehand_log_level',
 			[
 				'sanitize_callback' => static function ($value) {
 					return in_array($value, ['all', 'errors-only', 'none'], true) ? $value : 'all';
@@ -299,8 +299,8 @@ class Admin
 		);
 
 		register_setting(
-			'msh_settings',
-			'msh_delete_data_on_uninstall',
+			'mysitehand_settings',
+			'mysitehand_delete_data_on_uninstall',
 			['sanitize_callback' => 'rest_sanitize_boolean']
 		);
 	}
@@ -319,7 +319,7 @@ class Admin
 		if (!current_user_can('manage_options')) {
 			wp_die(esc_html__('You do not have permission to access this page.', 'my-site-hand'));
 		}
-		require MSH_PATH . 'templates/admin/dashboard.php';
+		require MYSITEHAND_PATH . 'templates/admin/dashboard.php';
 	}
 
 	/**
@@ -332,7 +332,7 @@ class Admin
 		if (!current_user_can('manage_options')) {
 			wp_die(esc_html__('You do not have permission to access this page.', 'my-site-hand'));
 		}
-		require MSH_PATH . 'templates/admin/abilities.php';
+		require MYSITEHAND_PATH . 'templates/admin/abilities.php';
 	}
 
 	/**
@@ -345,7 +345,7 @@ class Admin
 		if (!current_user_can('manage_options')) {
 			wp_die(esc_html__('You do not have permission to access this page.', 'my-site-hand'));
 		}
-		require MSH_PATH . 'templates/admin/tokens.php';
+		require MYSITEHAND_PATH . 'templates/admin/tokens.php';
 	}
 
 	/**
@@ -358,7 +358,7 @@ class Admin
 		if (!current_user_can('manage_options')) {
 			wp_die(esc_html__('You do not have permission to access this page.', 'my-site-hand'));
 		}
-		require MSH_PATH . 'templates/admin/audit-log.php';
+		require MYSITEHAND_PATH . 'templates/admin/audit-log.php';
 	}
 
 	/**
@@ -371,7 +371,7 @@ class Admin
 		if (!current_user_can('manage_options')) {
 			wp_die(esc_html__('You do not have permission to access this page.', 'my-site-hand'));
 		}
-		require MSH_PATH . 'templates/admin/settings.php';
+		require MYSITEHAND_PATH . 'templates/admin/settings.php';
 	}
 
 	/**
@@ -384,7 +384,7 @@ class Admin
 		if (!current_user_can('manage_options')) {
 			wp_die(esc_html__('You do not have permission to access this page.', 'my-site-hand'));
 		}
-		require MSH_PATH . 'templates/admin/tools.php';
+		require MYSITEHAND_PATH . 'templates/admin/tools.php';
 	}
 
 	/**

@@ -31,7 +31,6 @@ class Module_Users extends Module_Base {
 		return [
 			'my-site-hand/list-users',
 			'my-site-hand/get-user',
-			'my-site-hand/create-user',
 			'my-site-hand/update-user-role',
 			'my-site-hand/list-roles',
 			'my-site-hand/get-user-stats',
@@ -44,18 +43,17 @@ class Module_Users extends Module_Base {
 	public function register_abilities(): void {
 		$this->register_list_users();
 		$this->register_get_user();
-		$this->register_create_user();
 		$this->register_update_user_role();
 		$this->register_list_roles();
 		$this->register_get_user_stats();
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_list-users
+	// Ability: mysitehand_list-users
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_list-users ability.
+	 * Register the mysitehand_list-users ability.
 	 *
 	 * @return void
 	 */
@@ -93,7 +91,7 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_list-users.
+	 * Execute mysitehand_list-users.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -121,7 +119,7 @@ class Module_Users extends Module_Base {
 		foreach ( $users as $user ) {
 			// Filter by inactive days if requested.
 			if ( ! empty( $input['inactive_days'] ) ) {
-				$last_login = get_user_meta( $user->ID, 'msh_last_login', true );
+				$last_login = get_user_meta( $user->ID, 'mysitehand_last_login', true );
 				if ( $last_login ) {
 					$days_since = ( time() - strtotime( $last_login ) ) / DAY_IN_SECONDS;
 					if ( $days_since < (int) $input['inactive_days'] ) {
@@ -140,11 +138,11 @@ class Module_Users extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-user
+	// Ability: mysitehand_get-user
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_get-user ability.
+	 * Register the mysitehand_get-user ability.
 	 *
 	 * @return void
 	 */
@@ -178,7 +176,7 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-user.
+	 * Execute mysitehand_get-user.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -222,121 +220,11 @@ class Module_Users extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_create-user
+	// Ability: mysitehand_update-user-role
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_create-user ability.
-	 *
-	 * @return void
-	 */
-	private function register_create_user(): void {
-		$this->register(
-			'my-site-hand/create-user',
-			[
-				'label'               => __( 'Create User', 'my-site-hand' ),
-				'description'         => __( 'Create a new WordPress user with a secure auto-generated password.', 'my-site-hand' ),
-				'input_schema'        => [
-					'type'       => 'object',
-					'required'   => [ 'username', 'email', 'role' ],
-					'properties' => [
-						'username'          => [ 'type' => 'string' ],
-						'email'             => [ 'type' => 'string' ],
-						'role'              => [ 'type' => 'string' ],
-						'first_name'        => [ 'type' => 'string' ],
-						'last_name'         => [ 'type' => 'string' ],
-						'send_notification' => [ 'type' => 'boolean', 'default' => true ],
-					],
-				],
-				'permission_callback' => static function ( int $user_id ) {
-					if ( $user_id > 0 ) {
-						$user = get_user_by( 'id', $user_id );
-						return $user && $user->has_cap( 'create_users' );
-					}
-					return current_user_can( 'create_users' );
-				},
-				'execute_callback'    => [ $this, 'execute_create_user' ],
-				'annotations'         => [
-					'meta' => [ 'mcp' => [ 'public' => true ] ],
-				],
-			]
-		);
-	}
-
-	/**
-	 * Execute msh_create-user.
-	 *
-	 * @param array<string, mixed> $input Validated input.
-	 * @return array<string, mixed>|\WP_Error
-	 */
-	public function execute_create_user( array $input ): array|\WP_Error {
-		$username = sanitize_user( $input['username'] );
-		$email    = sanitize_email( $input['email'] );
-		$role     = sanitize_text_field( $input['role'] );
-
-		// Validate role exists.
-		$wp_roles = wp_roles();
-		if ( ! isset( $wp_roles->roles[ $role ] ) ) {
-			return $this->error(
-				sprintf(
-					/* translators: %s: role name */
-					__( 'Role "%s" does not exist.', 'my-site-hand' ),
-					$role
-				),
-				'invalid_role'
-			);
-		}
-
-		// Check username/email not taken.
-		if ( username_exists( $username ) ) {
-			return $this->error( __( 'Username already exists.', 'my-site-hand' ), 'username_exists' );
-		}
-		if ( email_exists( $email ) ) {
-			return $this->error( __( 'Email address already in use.', 'my-site-hand' ), 'email_exists' );
-		}
-
-		// Generate secure password.
-		$password = wp_generate_password( 24, true, true );
-
-		$user_data = [
-			'user_login' => $username,
-			'user_email' => $email,
-			'user_pass'  => $password,
-			'role'       => $role,
-		];
-
-		if ( ! empty( $input['first_name'] ) ) {
-			$user_data['first_name'] = sanitize_text_field( $input['first_name'] );
-		}
-		if ( ! empty( $input['last_name'] ) ) {
-			$user_data['last_name'] = sanitize_text_field( $input['last_name'] );
-		}
-
-		$user_id = wp_insert_user( $user_data );
-
-		if ( is_wp_error( $user_id ) ) {
-			return $user_id;
-		}
-
-		// Send notification if requested.
-		if ( $input['send_notification'] ?? true ) {
-			wp_new_user_notification( $user_id, null, 'both' );
-		}
-
-		return [
-			'user_id'  => $user_id,
-			'username' => $username,
-			'email'    => $email,
-			'role'     => $role,
-		];
-	}
-
-	// -------------------------------------------------------------------------
-	// Ability: msh_update-user-role
-	// -------------------------------------------------------------------------
-
-	/**
-	 * Register the msh_update-user-role ability.
+	 * Register the mysitehand_update-user-role ability.
 	 *
 	 * @return void
 	 */
@@ -370,7 +258,7 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_update-user-role.
+	 * Execute mysitehand_update-user-role.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -419,11 +307,11 @@ class Module_Users extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_list-roles
+	// Ability: mysitehand_list-roles
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_list-roles ability.
+	 * Register the mysitehand_list-roles ability.
 	 *
 	 * @return void
 	 */
@@ -443,7 +331,7 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_list-roles.
+	 * Execute mysitehand_list-roles.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<int, array<string, mixed>>
@@ -465,11 +353,11 @@ class Module_Users extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-user-stats
+	// Ability: mysitehand_get-user-stats
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_get-user-stats ability.
+	 * Register the mysitehand_get-user-stats ability.
 	 *
 	 * @return void
 	 */
@@ -496,14 +384,14 @@ class Module_Users extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-user-stats.
+	 * Execute mysitehand_get-user-stats.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
 	 */
 	public function execute_get_user_stats( array $input ): array {
 		$cache_key = 'user_stats';
-		$cached    = get_transient( 'MSH_' . $cache_key );
+		$cached    = get_transient( 'MYSITEHAND_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -539,7 +427,7 @@ class Module_Users extends Module_Base {
 			'registered_this_week'  => $registered_week,
 		];
 
-		set_transient( 'MSH_' . $cache_key, $stats, 15 * MINUTE_IN_SECONDS );
+		set_transient( 'MYSITEHAND_' . $cache_key, $stats, 15 * MINUTE_IN_SECONDS );
 
 		return $stats;
 	}

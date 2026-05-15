@@ -37,7 +37,7 @@ class Auth_Manager {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->insert(
-			$wpdb->prefix . 'msh_tokens',
+			$wpdb->prefix . 'mysitehand_tokens',
 			[
 				'token_hash' => $token_hash,
 				'label'      => sanitize_text_field( $label ),
@@ -76,7 +76,7 @@ class Auth_Manager {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$token = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->prefix}msh_tokens WHERE token_hash = %s AND is_active = 1",
+				"SELECT * FROM {$wpdb->prefix}mysitehand_tokens WHERE token_hash = %s AND is_active = 1",
 				$token_hash
 			),
 			ARRAY_A
@@ -97,7 +97,7 @@ class Auth_Manager {
 		// Update last_used timestamp.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->update(
-			$wpdb->prefix . 'msh_tokens',
+			$wpdb->prefix . 'mysitehand_tokens',
 			[ 'last_used' => current_time( 'mysql' ) ],
 			[ 'id' => $token['id'] ],
 			[ '%s' ],
@@ -123,7 +123,7 @@ class Auth_Manager {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$token = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->prefix}msh_tokens WHERE id = %d",
+				"SELECT * FROM {$wpdb->prefix}mysitehand_tokens WHERE id = %d",
 				$token_id
 			),
 			ARRAY_A
@@ -140,7 +140,7 @@ class Auth_Manager {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$result = $wpdb->update(
-			$wpdb->prefix . 'msh_tokens',
+			$wpdb->prefix . 'mysitehand_tokens',
 			[ 'is_active' => 0 ],
 			[ 'id' => $token_id ],
 			[ '%d' ],
@@ -163,7 +163,7 @@ class Auth_Manager {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$token = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT * FROM {$wpdb->prefix}msh_tokens WHERE id = %d",
+				"SELECT * FROM {$wpdb->prefix}mysitehand_tokens WHERE id = %d",
 				$token_id
 			),
 			ARRAY_A
@@ -179,7 +179,7 @@ class Auth_Manager {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return false !== $wpdb->delete(
-			$wpdb->prefix . 'msh_tokens',
+			$wpdb->prefix . 'mysitehand_tokens',
 			[ 'id' => $token_id ],
 			[ '%d' ]
 		);
@@ -197,14 +197,14 @@ class Auth_Manager {
 		if ( 0 === $user_id ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$tokens = $wpdb->get_results(
-				"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}msh_tokens ORDER BY created_at DESC",
+				"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}mysitehand_tokens ORDER BY created_at DESC",
 				ARRAY_A
 			);
 		} else {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$tokens = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}msh_tokens WHERE user_id = %d ORDER BY created_at DESC",
+					"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}mysitehand_tokens WHERE user_id = %d ORDER BY created_at DESC",
 					$user_id
 				),
 				ARRAY_A
@@ -236,7 +236,7 @@ class Auth_Manager {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->prefix}msh_tokens WHERE is_active = 1 AND expires_at IS NOT NULL AND expires_at BETWEEN %s AND %s",
+				"SELECT COUNT(*) FROM {$wpdb->prefix}mysitehand_tokens WHERE is_active = 1 AND expires_at IS NOT NULL AND expires_at BETWEEN %s AND %s",
 				current_time( 'mysql', 1 ),
 				gmdate( 'Y-m-d H:i:s', strtotime( '+' . $days . ' days', current_time( 'timestamp', 1 ) ) )
 			)
@@ -253,7 +253,7 @@ class Auth_Manager {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$result = $wpdb->query(
-			"DELETE FROM {$wpdb->prefix}msh_tokens WHERE expires_at IS NOT NULL AND expires_at < NOW()"
+			"DELETE FROM {$wpdb->prefix}mysitehand_tokens WHERE expires_at IS NOT NULL AND expires_at < NOW()"
 		);
 
 		return (int) $result;
@@ -321,7 +321,7 @@ class Auth_Manager {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$token = $wpdb->get_row(
 			$wpdb->prepare(
-				"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}msh_tokens WHERE id = %d",
+				"SELECT id, label, user_id, abilities, expires_at, last_used, is_active, created_at FROM {$wpdb->prefix}mysitehand_tokens WHERE id = %d",
 				$token_id
 			),
 			ARRAY_A
@@ -344,7 +344,7 @@ class Auth_Manager {
 	public function delete_all_tokens(): int {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		return (int) $wpdb->query( "DELETE FROM {$wpdb->prefix}msh_tokens" );
+		return (int) $wpdb->query( "DELETE FROM {$wpdb->prefix}mysitehand_tokens" );
 	}
 }
 

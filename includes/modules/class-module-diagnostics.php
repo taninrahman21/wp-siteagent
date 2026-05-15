@@ -53,11 +53,11 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_site-health-report
+	// Ability: mysitehand_site-health-report
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_site-health-report ability.
+	 * Register the mysitehand_site-health-report ability.
 	 *
 	 * @return void
 	 */
@@ -84,14 +84,14 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_site-health-report.
+	 * Execute mysitehand_site-health-report.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
 	 */
 	public function execute_site_health_report( array $input ): array {
 		$cache_key = 'site_health_report';
-		$cached    = get_transient( 'MSH_' . $cache_key );
+		$cached    = get_transient( 'MYSITEHAND_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -234,17 +234,17 @@ class Module_Diagnostics extends Module_Base {
 			],
 		];
 
-		set_transient( 'MSH_' . $cache_key, $report, 15 * MINUTE_IN_SECONDS );
+		set_transient( 'MYSITEHAND_' . $cache_key, $report, 15 * MINUTE_IN_SECONDS );
 
 		return $report;
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_list-plugin-updates
+	// Ability: mysitehand_list-plugin-updates
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_list-plugin-updates ability.
+	 * Register the mysitehand_list-plugin-updates ability.
 	 *
 	 * @return void
 	 */
@@ -271,7 +271,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_list-plugin-updates.
+	 * Execute mysitehand_list-plugin-updates.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -301,11 +301,11 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-error-logs
+	// Ability: mysitehand_get-error-logs
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_get-error-logs ability.
+	 * Register the mysitehand_get-error-logs ability.
 	 *
 	 * @return void
 	 */
@@ -338,7 +338,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-error-logs.
+	 * Execute mysitehand_get-error-logs.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -377,11 +377,11 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_list-cron-jobs
+	// Ability: mysitehand_list-cron-jobs
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_list-cron-jobs ability.
+	 * Register the mysitehand_list-cron-jobs ability.
 	 *
 	 * @return void
 	 */
@@ -408,7 +408,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_list-cron-jobs.
+	 * Execute mysitehand_list-cron-jobs.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -446,7 +446,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-site-options
+	// Ability: mysitehand_get-site-options
 	// -------------------------------------------------------------------------
 
 	/**
@@ -474,7 +474,7 @@ class Module_Diagnostics extends Module_Base {
 	];
 
 	/**
-	 * Register the msh_get-site-options ability.
+	 * Register the mysitehand_get-site-options ability.
 	 *
 	 * @return void
 	 */
@@ -511,7 +511,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-site-options.
+	 * Execute mysitehand_get-site-options.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -533,11 +533,11 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_list-transients
+	// Ability: mysitehand_list-transients
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_list-transients ability.
+	 * Register the mysitehand_list-transients ability.
 	 *
 	 * @return void
 	 */
@@ -571,7 +571,7 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_list-transients.
+	 * Execute mysitehand_list-transients.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -619,11 +619,11 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-db-table-sizes
+	// Ability: mysitehand_get-db-table-sizes
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_get-db-table-sizes ability.
+	 * Register the mysitehand_get-db-table-sizes ability.
 	 *
 	 * @return void
 	 */
@@ -650,14 +650,14 @@ class Module_Diagnostics extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-db-table-sizes.
+	 * Execute mysitehand_get-db-table-sizes.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
 	 */
 	public function execute_get_db_table_sizes( array $input ): array {
 		$cache_key = 'db_table_sizes';
-		$cached    = get_transient( 'MSH_' . $cache_key );
+		$cached    = get_transient( 'MYSITEHAND_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -691,7 +691,7 @@ class Module_Diagnostics extends Module_Base {
 			'total_mb'   => round( array_sum( array_column( $result, 'size_mb' ) ), 2 ),
 		];
 
-		set_transient( 'MSH_' . $cache_key, $response, HOUR_IN_SECONDS );
+		set_transient( 'MYSITEHAND_' . $cache_key, $response, HOUR_IN_SECONDS );
 
 		return $response;
 	}

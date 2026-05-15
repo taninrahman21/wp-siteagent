@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <footer class="msh-footer">
 	<div class="msh-footer-left">
-		<strong>My Site Hand <?php echo esc_html( MSH_VERSION ); ?></strong>
+		<strong>My Site Hand <?php echo esc_html( MYSITEHAND_VERSION ); ?></strong>
 		<span class="msh-footer-sep">&bull;</span>
 		<a href="https://modelcontextprotocol.io" target="_blank" rel="noopener noreferrer"><?php echo esc_html__( 'MCP Specification', 'my-site-hand' ); ?></a>
 	</div>

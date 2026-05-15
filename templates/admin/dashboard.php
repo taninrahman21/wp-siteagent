@@ -18,7 +18,7 @@ $my_site_hand_abilities = $my_site_hand_registry->get_all();
 $my_site_hand_recent_logs = $my_site_hand_audit->get_logs(['per_page' => 5, 'page' => 1]);
 $my_site_hand_mcp_endpoint = rest_url('my-site-hand/v1/mcp/streamable');
 $my_site_hand_site_url = get_site_url();
-$my_site_hand_is_enabled = (bool) get_option('msh_enabled', true);
+$my_site_hand_is_enabled = (bool) get_option('mysitehand_enabled', true);
 $my_site_hand_modules = $my_site_hand_plugin->get_modules();
 $my_site_hand_enabled_mods = $my_site_hand_plugin->get_enabled_modules();
 
@@ -34,7 +34,7 @@ $my_site_hand_public_count = count($my_site_hand_registry->get_mcp_public());
 ?>
 <div class="msh-wrap">
 
-	<?php require MSH_PATH . 'templates/partials/header.php'; ?>
+	<?php require MYSITEHAND_PATH . 'templates/partials/header.php'; ?>
 
 	<div class="msh-main-content">
 		<div class="msh-container">
@@ -427,5 +427,5 @@ $my_site_hand_public_count = count($my_site_hand_registry->get_mcp_public());
 
 	</div>
 
-	<?php require MSH_PATH . 'templates/partials/footer.php'; ?>
+	<?php require MYSITEHAND_PATH . 'templates/partials/footer.php'; ?>
 </div>

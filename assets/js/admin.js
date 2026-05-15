@@ -5,13 +5,13 @@
  * log row expansion, and audit filter helpers.
  */
 
-/* global mshAdmin */
+/* global mysitehandAdmin */
 
 'use strict';
 
 (function () {
 
-	const cfg = window.mshAdmin || {};
+	const cfg = window.mysitehandAdmin || {};
 	const restUrl = cfg.restUrl || '';
 	const restNonce = cfg.restNonce || '';
 	const i18n = cfg.i18n || {};

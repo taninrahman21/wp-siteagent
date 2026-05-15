@@ -12,7 +12,7 @@ $my_site_hand_registry = $my_site_hand_plugin->get_abilities_registry();
 $my_site_hand_nonce    = wp_create_nonce( 'my_site_hand_admin' );
 ?>
 <div class="msh-wrap">
-	<?php require MSH_PATH . 'templates/partials/header.php'; ?>
+	<?php require MYSITEHAND_PATH . 'templates/partials/header.php'; ?>
 
 	<div class="msh-main-content">
 		<div class="msh-container">
@@ -109,7 +109,7 @@ $my_site_hand_nonce    = wp_create_nonce( 'my_site_hand_admin' );
 									<?php
 									global $wpdb;
 									// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-									$my_site_hand_table_exists = (bool) $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->prefix . 'msh_audit_log' ) );
+									$my_site_hand_table_exists = (bool) $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->prefix . 'mysitehand_audit_log' ) );
 									?>
 									<span style="font-size: 13px; color: var(--msh-text-secondary);"><?php echo $my_site_hand_table_exists ? esc_html__( 'Synchronized', 'my-site-hand' ) : esc_html__( 'Incomplete', 'my-site-hand' ); ?></span>
 									<span class="msh-badge msh-badge--<?php echo $my_site_hand_table_exists ? 'success' : 'error'; ?>" style="min-width: 80px; text-align: center;">
@@ -173,6 +173,6 @@ $my_site_hand_nonce    = wp_create_nonce( 'my_site_hand_admin' );
 			</div>
 		</div>
 
-		<?php require MSH_PATH . 'templates/partials/footer.php'; ?>
+		<?php require MYSITEHAND_PATH . 'templates/partials/footer.php'; ?>
 	</div>
 </div>

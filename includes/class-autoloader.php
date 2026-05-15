@@ -36,7 +36,7 @@ class Autoloader {
 	 * @return void
 	 */
 	public static function register(): void {
-		self::$base_dir = MSH_PATH;
+		self::$base_dir = MYSITEHAND_PATH;
 		spl_autoload_register( [ self::class, 'load_class' ] );
 	}
 

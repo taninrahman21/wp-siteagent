@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Audit Logger class.
  *
- * Logs every ability execution to the custom msh_audit_log table,
+ * Logs every ability execution to the custom mysitehand_audit_log table,
  * with full input/output capture, IP address, timing, and token info.
  */
 class Audit_Logger {
@@ -34,7 +34,7 @@ class Audit_Logger {
 	public function log( array $data ): int|false {
 		global $wpdb;
 
-		$log_level = get_option( 'msh_log_level', 'all' );
+		$log_level = get_option( 'mysitehand_log_level', 'all' );
 
 		// Skip logging if level is 'none'.
 		if ( 'none' === $log_level ) {
@@ -62,7 +62,7 @@ class Audit_Logger {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$result = $wpdb->insert(
-			$wpdb->prefix . 'msh_audit_log',
+			$wpdb->prefix . 'mysitehand_audit_log',
 			[
 				'token_id'      => isset( $data['token_id'] ) ? (int) $data['token_id'] : null,
 				'user_id'       => isset( $data['user_id'] ) ? (int) $data['user_id'] : null,
@@ -141,12 +141,12 @@ class Audit_Logger {
 		$where_sql = $where ? 'WHERE ' . implode( ' AND ', $where ) : '';
 
 		if ( $where ) {
-			$query = "SELECT COUNT(*) FROM {$wpdb->prefix}msh_audit_log $where_sql";
+			$query = "SELECT COUNT(*) FROM {$wpdb->prefix}mysitehand_audit_log $where_sql";
 			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 			$total = (int) $wpdb->get_var( $wpdb->prepare( $query, ...$values ) );
 		} else {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-			$total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}msh_audit_log" );
+			$total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->prefix}mysitehand_audit_log" );
 		}
 
 		// Fetch rows.
@@ -154,7 +154,7 @@ class Audit_Logger {
 		$query_values[] = $per_page;
 		$query_values[] = $offset;
 
-		$query = "SELECT * FROM {$wpdb->prefix}msh_audit_log $where_sql ORDER BY executed_at DESC LIMIT %d OFFSET %d";
+		$query = "SELECT * FROM {$wpdb->prefix}mysitehand_audit_log $where_sql ORDER BY executed_at DESC LIMIT %d OFFSET %d";
 		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter
 		$logs = $wpdb->get_results( $wpdb->prepare( $query, ...$query_values ), ARRAY_A );
 
@@ -173,12 +173,12 @@ class Audit_Logger {
 	public function cleanup_old_logs(): int {
 		global $wpdb;
 
-		$days = (int) get_option( 'msh_log_retention_days', 30 );
+		$days = (int) get_option( 'mysitehand_log_retention_days', 30 );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return (int) $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$wpdb->prefix}msh_audit_log WHERE executed_at < DATE_SUB(NOW(), INTERVAL %d DAY)",
+				"DELETE FROM {$wpdb->prefix}mysitehand_audit_log WHERE executed_at < DATE_SUB(NOW(), INTERVAL %d DAY)",
 				$days
 			)
 		);
@@ -200,37 +200,37 @@ class Audit_Logger {
 		// Calls today.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$calls_today = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}msh_audit_log WHERE DATE(executed_at) = CURDATE()"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}mysitehand_audit_log WHERE DATE(executed_at) = CURDATE()"
 		);
 
 		// Calls this week.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$calls_week = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}msh_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}mysitehand_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)"
 		);
 
 		// Calls yesterday.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$calls_yesterday = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}msh_audit_log WHERE DATE(executed_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}mysitehand_audit_log WHERE DATE(executed_at) = DATE_SUB(CURDATE(), INTERVAL 1 DAY)"
 		);
 
 		// Calls this month.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$calls_month = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}msh_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}mysitehand_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
 		);
 
 		// Errors in last 24h.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$errors_24h = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}msh_audit_log WHERE result_status = 'error' AND executed_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}mysitehand_audit_log WHERE result_status = 'error' AND executed_at >= DATE_SUB(NOW(), INTERVAL 24 HOUR)"
 		);
 
 		// Top 5 abilities.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$top_abilities = $wpdb->get_results(
-			"SELECT ability_name, COUNT(*) as count FROM {$wpdb->prefix}msh_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) GROUP BY ability_name ORDER BY count DESC LIMIT 5",
+			"SELECT ability_name, COUNT(*) as count FROM {$wpdb->prefix}mysitehand_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) GROUP BY ability_name ORDER BY count DESC LIMIT 5",
 			ARRAY_A
 		);
 
@@ -238,14 +238,14 @@ class Audit_Logger {
 		$total_month  = max( 1, $calls_month );
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$errors_month = (int) $wpdb->get_var(
-			"SELECT COUNT(*) FROM {$wpdb->prefix}msh_audit_log WHERE result_status = 'error' AND executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
+			"SELECT COUNT(*) FROM {$wpdb->prefix}mysitehand_audit_log WHERE result_status = 'error' AND executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)"
 		);
 		$error_rate = round( ( $errors_month / $total_month ) * 100, 2 );
 
 		// Average duration.
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$avg_duration = (float) $wpdb->get_var(
-			"SELECT AVG(duration_ms) FROM {$wpdb->prefix}msh_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) AND duration_ms IS NOT NULL"
+			"SELECT AVG(duration_ms) FROM {$wpdb->prefix}mysitehand_audit_log WHERE executed_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) AND duration_ms IS NOT NULL"
 		);
 
 		$stats = [
@@ -272,7 +272,7 @@ class Audit_Logger {
 	public function delete_all_logs(): int {
 		global $wpdb;
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		return (int) $wpdb->query( "DELETE FROM {$wpdb->prefix}msh_audit_log" );
+		return (int) $wpdb->query( "DELETE FROM {$wpdb->prefix}mysitehand_audit_log" );
 	}
 
 	/**

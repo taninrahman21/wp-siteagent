@@ -69,7 +69,7 @@ abstract class Module_Base {
 	 */
 	protected function is_enabled(): bool {
 		$default = [ 'content', 'seo', 'diagnostics', 'media', 'users', 'woocommerce' ];
-		$enabled = get_option( 'msh_enabled_modules', $default );
+		$enabled = get_option( 'mysitehand_enabled_modules', $default );
 
 		// If it's set but empty, we still want to default to enabled for core functionality
 		if ( empty( $enabled ) ) {

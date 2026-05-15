@@ -74,7 +74,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-list-products
+	// Ability: mysitehand_woo-list-products
 	// -------------------------------------------------------------------------
 
 	/**
@@ -185,7 +185,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-get-product
+	// Ability: mysitehand_woo-get-product
 	// -------------------------------------------------------------------------
 
 	/**
@@ -288,7 +288,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-update-product
+	// Ability: mysitehand_woo-update-product
 	// -------------------------------------------------------------------------
 
 	/**
@@ -385,7 +385,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-create-product
+	// Ability: mysitehand_woo-create-product
 	// -------------------------------------------------------------------------
 
 	/**
@@ -466,7 +466,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-delete-product
+	// Ability: mysitehand_woo-delete-product
 	// -------------------------------------------------------------------------
 
 	/**
@@ -529,7 +529,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-list-orders
+	// Ability: mysitehand_woo-list-orders
 	// -------------------------------------------------------------------------
 
 	/**
@@ -631,7 +631,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-get-order
+	// Ability: mysitehand_woo-get-order
 	// -------------------------------------------------------------------------
 
 	/**
@@ -726,7 +726,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-update-order-status
+	// Ability: mysitehand_woo-update-order-status
 	// -------------------------------------------------------------------------
 
 	/**
@@ -790,7 +790,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-store-summary
+	// Ability: mysitehand_woo-store-summary
 	// -------------------------------------------------------------------------
 
 	/**
@@ -845,7 +845,7 @@ class Module_Woocommerce extends Module_Base {
 		};
 
 		$cache_key = 'woo_store_summary_' . $period;
-		$cached    = get_transient( 'MSH_' . $cache_key );
+		$cached    = get_transient( 'MYSITEHAND_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -914,13 +914,13 @@ class Module_Woocommerce extends Module_Base {
 			'from'                => $date_from,
 		];
 
-		set_transient( 'MSH_' . $cache_key, $summary, 15 * MINUTE_IN_SECONDS );
+		set_transient( 'MYSITEHAND_' . $cache_key, $summary, 15 * MINUTE_IN_SECONDS );
 
 		return $summary;
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-list-coupons
+	// Ability: mysitehand_woo-list-coupons
 	// -------------------------------------------------------------------------
 
 	/**
@@ -990,7 +990,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-create-coupon
+	// Ability: mysitehand_woo-create-coupon
 	// -------------------------------------------------------------------------
 
 	/**
@@ -1067,7 +1067,7 @@ class Module_Woocommerce extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_woo-list-customers
+	// Ability: mysitehand_woo-list-customers
 	// -------------------------------------------------------------------------
 
 	/**

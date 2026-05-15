@@ -57,11 +57,11 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_list-posts
+	// Ability: mysitehand_list-posts
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_list-posts ability.
+	 * Register the mysitehand_list-posts ability.
 	 *
 	 * @return void
 	 */
@@ -98,7 +98,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_list-posts.
+	 * Execute mysitehand_list-posts.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -153,11 +153,11 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-post
+	// Ability: mysitehand_get-post
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_get-post ability.
+	 * Register the mysitehand_get-post ability.
 	 *
 	 * @return void
 	 */
@@ -184,7 +184,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-post.
+	 * Execute mysitehand_get-post.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -250,11 +250,11 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_create-post
+	// Ability: mysitehand_create-post
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_create-post ability.
+	 * Register the mysitehand_create-post ability.
 	 *
 	 * @return void
 	 */
@@ -296,7 +296,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_create-post.
+	 * Execute mysitehand_create-post.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -361,11 +361,11 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_update-post
+	// Ability: mysitehand_update-post
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_update-post ability.
+	 * Register the mysitehand_update-post ability.
 	 *
 	 * @return void
 	 */
@@ -412,7 +412,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_update-post.
+	 * Execute mysitehand_update-post.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -487,11 +487,11 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_delete-post
+	// Ability: mysitehand_delete-post
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_delete-post ability.
+	 * Register the mysitehand_delete-post ability.
 	 *
 	 * @return void
 	 */
@@ -527,7 +527,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_delete-post.
+	 * Execute mysitehand_delete-post.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -554,11 +554,11 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_bulk-update-posts
+	// Ability: mysitehand_bulk-update-posts
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_bulk-update-posts ability.
+	 * Register the mysitehand_bulk-update-posts ability.
 	 *
 	 * @return void
 	 */
@@ -601,7 +601,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_bulk-update-posts.
+	 * Execute mysitehand_bulk-update-posts.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -635,11 +635,11 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_list-post-types
+	// Ability: mysitehand_list-post-types
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_list-post-types ability.
+	 * Register the mysitehand_list-post-types ability.
 	 *
 	 * @return void
 	 */
@@ -659,7 +659,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_list-post-types.
+	 * Execute mysitehand_list-post-types.
 	 *
 	 * @param array<string, mixed> $input Validated input (unused).
 	 * @return array<int, array<string, mixed>>
@@ -684,11 +684,11 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_list-taxonomies
+	// Ability: mysitehand_list-taxonomies
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_list-taxonomies ability.
+	 * Register the mysitehand_list-taxonomies ability.
 	 *
 	 * @return void
 	 */
@@ -714,7 +714,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_list-taxonomies.
+	 * Execute mysitehand_list-taxonomies.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<int, array<string, mixed>>
@@ -744,11 +744,11 @@ class Module_Content extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-post-revisions
+	// Ability: mysitehand_get-post-revisions
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_get-post-revisions ability.
+	 * Register the mysitehand_get-post-revisions ability.
 	 *
 	 * @return void
 	 */
@@ -776,7 +776,7 @@ class Module_Content extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-post-revisions.
+	 * Execute mysitehand_get-post-revisions.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error

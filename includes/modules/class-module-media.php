@@ -51,11 +51,11 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_list-media
+	// Ability: mysitehand_list-media
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_list-media ability.
+	 * Register the mysitehand_list-media ability.
 	 *
 	 * @return void
 	 */
@@ -86,7 +86,7 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_list-media.
+	 * Execute mysitehand_list-media.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -130,11 +130,11 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-unattached-media
+	// Ability: mysitehand_get-unattached-media
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_get-unattached-media ability.
+	 * Register the mysitehand_get-unattached-media ability.
 	 *
 	 * @return void
 	 */
@@ -160,7 +160,7 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-unattached-media.
+	 * Execute mysitehand_get-unattached-media.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -173,11 +173,11 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_update-media-alt-text
+	// Ability: mysitehand_update-media-alt-text
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_update-media-alt-text ability.
+	 * Register the mysitehand_update-media-alt-text ability.
 	 *
 	 * @return void
 	 */
@@ -211,7 +211,7 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_update-media-alt-text.
+	 * Execute mysitehand_update-media-alt-text.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -234,11 +234,11 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_bulk-update-alt-text
+	// Ability: mysitehand_bulk-update-alt-text
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_bulk-update-alt-text ability.
+	 * Register the mysitehand_bulk-update-alt-text ability.
 	 *
 	 * @return void
 	 */
@@ -282,7 +282,7 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_bulk-update-alt-text.
+	 * Execute mysitehand_bulk-update-alt-text.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -316,11 +316,11 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-large-media
+	// Ability: mysitehand_get-large-media
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_get-large-media ability.
+	 * Register the mysitehand_get-large-media ability.
 	 *
 	 * @return void
 	 */
@@ -346,7 +346,7 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-large-media.
+	 * Execute mysitehand_get-large-media.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -397,11 +397,11 @@ class Module_Media extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-media-library-stats
+	// Ability: mysitehand_get-media-library-stats
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_get-media-library-stats ability.
+	 * Register the mysitehand_get-media-library-stats ability.
 	 *
 	 * @return void
 	 */
@@ -421,14 +421,14 @@ class Module_Media extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-media-library-stats.
+	 * Execute mysitehand_get-media-library-stats.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
 	 */
 	public function execute_get_media_library_stats( array $input ): array {
 		$cache_key = 'media_library_stats';
-		$cached    = get_transient( 'MSH_' . $cache_key );
+		$cached    = get_transient( 'MYSITEHAND_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -495,7 +495,7 @@ class Module_Media extends Module_Base {
 			'unattached'        => $unattached,
 		];
 
-		set_transient( 'MSH_' . $cache_key, $stats, 30 * MINUTE_IN_SECONDS );
+		set_transient( 'MYSITEHAND_' . $cache_key, $stats, 30 * MINUTE_IN_SECONDS );
 
 		return $stats;
 	}

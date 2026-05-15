@@ -27,7 +27,7 @@ class Installer {
 		self::set_default_options();
 		self::schedule_cron();
 		flush_rewrite_rules();
-		update_option( 'msh_db_version', MSH_DB_VERSION );
+		update_option( 'mysitehand_db_version', MYSITEHAND_DB_VERSION );
 	}
 
 	/**
@@ -42,8 +42,8 @@ class Installer {
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		// Table: msh_tokens.
-		$table_tokens = $wpdb->prefix . 'msh_tokens';
+		// Table: mysitehand_tokens.
+		$table_tokens = $wpdb->prefix . 'mysitehand_tokens';
 		$sql_tokens   = "CREATE TABLE {$table_tokens} (
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			token_hash VARCHAR(64) NOT NULL,
@@ -61,8 +61,8 @@ class Installer {
 
 		dbDelta( $sql_tokens );
 
-		// Table: msh_audit_log.
-		$table_audit = $wpdb->prefix . 'msh_audit_log';
+		// Table: mysitehand_audit_log.
+		$table_audit = $wpdb->prefix . 'mysitehand_audit_log';
 		$sql_audit   = "CREATE TABLE {$table_audit} (
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			token_id BIGINT(20) UNSIGNED DEFAULT NULL,
@@ -83,8 +83,8 @@ class Installer {
 
 		dbDelta( $sql_audit );
 
-		// Table: msh_rate_limits.
-		$table_rate = $wpdb->prefix . 'msh_rate_limits';
+		// Table: mysitehand_rate_limits.
+		$table_rate = $wpdb->prefix . 'mysitehand_rate_limits';
 		$sql_rate   = "CREATE TABLE {$table_rate} (
 			id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			token_id BIGINT(20) UNSIGNED NOT NULL,
@@ -105,15 +105,15 @@ class Installer {
 	 */
 	private static function set_default_options(): void {
 		$defaults = [
-			'msh_hourly_limit'           => 200,
-			'msh_daily_limit'            => 2000,
-			'msh_log_retention_days'     => 30,
-			'msh_enabled_modules'        => [ 'content', 'seo', 'diagnostics', 'media', 'users' ],
-			'msh_cache_ttl'              => 3600,
-			'msh_enabled'                => true,
-			'msh_display_name'           => get_bloginfo( 'name' ) . ' Agent',
-			'msh_log_level'              => 'all',
-			'msh_delete_data_on_uninstall' => false,
+			'mysitehand_hourly_limit'           => 200,
+			'mysitehand_daily_limit'            => 2000,
+			'mysitehand_log_retention_days'     => 30,
+			'mysitehand_enabled_modules'        => [ 'content', 'seo', 'diagnostics', 'media', 'users' ],
+			'mysitehand_cache_ttl'              => 3600,
+			'mysitehand_enabled'                => true,
+			'mysitehand_display_name'           => get_bloginfo( 'name' ) . ' Agent',
+			'mysitehand_log_level'              => 'all',
+			'mysitehand_delete_data_on_uninstall' => false,
 		];
 
 		foreach ( $defaults as $option => $value ) {

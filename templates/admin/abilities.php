@@ -21,7 +21,7 @@ $my_site_hand_module_labels = [
 ];
 ?>
 <div class="msh-wrap">
-	<?php require MSH_PATH . 'templates/partials/header.php'; ?>
+	<?php require MYSITEHAND_PATH . 'templates/partials/header.php'; ?>
 
 	<div class="msh-main-content">
 		<div class="msh-container">
@@ -32,7 +32,7 @@ $my_site_hand_module_labels = [
 						<?php echo esc_html__('Abilities', 'my-site-hand'); ?></h2>
 					<div style="font-size: 13px; color: var(--msh-text-muted); margin-top: 4px;">
 						<?php
-						$my_site_hand_disabled_abs = (array) get_option('msh_disabled_abilities', []);
+						$my_site_hand_disabled_abs = (array) get_option('mysitehand_disabled_abilities', []);
 						$my_site_hand_public_abs = $my_site_hand_registry->get_mcp_public();
 						$my_site_hand_public_count = count($my_site_hand_public_abs);
 						$my_site_hand_disabled_count = count(array_intersect(array_keys($my_site_hand_abilities), $my_site_hand_disabled_abs));
@@ -136,6 +136,6 @@ $my_site_hand_module_labels = [
 			</div>
 		</div>
 
-		<?php require MSH_PATH . 'templates/partials/footer.php'; ?>
+		<?php require MYSITEHAND_PATH . 'templates/partials/footer.php'; ?>
 	</div>
 </div>

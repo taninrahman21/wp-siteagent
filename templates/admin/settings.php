@@ -20,7 +20,7 @@ $my_site_hand_all_modules = [
 ];
 ?>
 <div class="msh-wrap">
-	<?php require MSH_PATH . 'templates/partials/header.php'; ?>
+	<?php require MYSITEHAND_PATH . 'templates/partials/header.php'; ?>
 
 	<div class="msh-main-content">
 		<div class="msh-container">
@@ -30,7 +30,7 @@ $my_site_hand_all_modules = [
 			</div>
 
 			<form method="post" action="options.php">
-			<?php settings_fields( 'msh_settings' ); ?>
+			<?php settings_fields( 'mysitehand_settings' ); ?>
 
 			<div class="msh-dashboard-body">
 
@@ -47,7 +47,7 @@ $my_site_hand_all_modules = [
 									<span class="msh-setting-desc"><?php esc_html_e( 'Activate the Model Context Protocol server for this site. Disabling this will shut down the endpoint for all agents.', 'my-site-hand' ); ?></span>
 								</div>
 								<label class="msh-switch">
-									<input type="checkbox" name="msh_enabled" value="1" <?php checked( get_option( 'msh_enabled', true ) ); ?> onchange="msh.saveOption('msh_enabled', this.checked)" />
+									<input type="checkbox" name="mysitehand_enabled" value="1" <?php checked( get_option( 'mysitehand_enabled', true ) ); ?> onchange="msh.saveOption('mysitehand_enabled', this.checked)" />
 									<span class="msh-slider"></span>
 								</label>
 							</div>
@@ -56,10 +56,10 @@ $my_site_hand_all_modules = [
 								<div class="msh-setting-info" style="padding-top: 8px;">
 									<span class="msh-setting-title"><?php esc_html_e( 'Agent Display Name', 'my-site-hand' ); ?></span>
 									<span class="msh-setting-desc"><?php esc_html_e( 'The localized name that AI clients (like Claude or Cursor) will see during initialization.', 'my-site-hand' ); ?></span>
-									<input type="text" id="msh_display_name" name="msh_display_name"
-										value="<?php echo esc_attr( get_option( 'msh_display_name', '' ) ); ?>"
+									<input type="text" id="mysitehand_display_name" name="mysitehand_display_name"
+										value="<?php echo esc_attr( get_option( 'mysitehand_display_name', '' ) ); ?>"
 										class="msh-input" style="margin-top: 12px; max-width: 400px;" placeholder="<?php esc_attr_e( 'e.g. My Website Agent', 'my-site-hand' ); ?>"
-										onblur="msh.saveOption('msh_display_name', this.value)" />
+										onblur="msh.saveOption('mysitehand_display_name', this.value)" />
 								</div>
 							</div>
 						</div>
@@ -93,7 +93,7 @@ $my_site_hand_all_modules = [
 										<?php endif; ?>
 									</div>
 									<label class="msh-switch">
-										<input type="checkbox" name="msh_enabled_modules[]" value="<?php echo esc_attr( $my_site_hand_slug ); ?>" <?php checked( $my_site_hand_is_active ); ?> <?php echo ! $my_site_hand_wc_available ? 'disabled' : ''; ?> 
+										<input type="checkbox" name="mysitehand_enabled_modules[]" value="<?php echo esc_attr( $my_site_hand_slug ); ?>" <?php checked( $my_site_hand_is_active ); ?> <?php echo ! $my_site_hand_wc_available ? 'disabled' : ''; ?> 
 											onchange="msh.toggleModule('<?php echo esc_js( $my_site_hand_slug ); ?>', this.checked)" />
 										<span class="msh-slider"></span>
 									</label>
@@ -113,14 +113,14 @@ $my_site_hand_all_modules = [
 						<div class="msh-card-body">
 							<div class="msh-form-group">
 								<span class="msh-setting-title"><?php esc_html_e( 'Hourly Limit', 'my-site-hand' ); ?></span>
-								<input type="number" name="msh_hourly_limit" value="<?php echo esc_attr( get_option( 'msh_hourly_limit', 200 ) ); ?>" class="msh-input" style="margin-top: 8px;" 
-									onblur="msh.saveOption('msh_hourly_limit', this.value)" />
+								<input type="number" name="mysitehand_hourly_limit" value="<?php echo esc_attr( get_option( 'mysitehand_hourly_limit', 200 ) ); ?>" class="msh-input" style="margin-top: 8px;" 
+									onblur="msh.saveOption('mysitehand_hourly_limit', this.value)" />
 								<p class="msh-hint"><?php esc_html_e( 'Calls allowed per hour per token.', 'my-site-hand' ); ?></p>
 							</div>
 							<div class="msh-form-group" style="margin-top: 20px;">
 								<span class="msh-setting-title"><?php esc_html_e( 'Daily Limit', 'my-site-hand' ); ?></span>
-								<input type="number" name="msh_daily_limit" value="<?php echo esc_attr( get_option( 'msh_daily_limit', 2000 ) ); ?>" class="msh-input" style="margin-top: 8px;" 
-									onblur="msh.saveOption('msh_daily_limit', this.value)" />
+								<input type="number" name="mysitehand_daily_limit" value="<?php echo esc_attr( get_option( 'mysitehand_daily_limit', 2000 ) ); ?>" class="msh-input" style="margin-top: 8px;" 
+									onblur="msh.saveOption('mysitehand_daily_limit', this.value)" />
 								<p class="msh-hint"><?php esc_html_e( 'Calls allowed per day per token.', 'my-site-hand' ); ?></p>
 							</div>
 						</div>
@@ -135,8 +135,8 @@ $my_site_hand_all_modules = [
 							<div class="msh-form-group">
 								<span class="msh-setting-title"><?php esc_html_e( 'Cache TTL', 'my-site-hand' ); ?></span>
 								<div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
-									<input type="number" name="msh_cache_ttl" value="<?php echo esc_attr( get_option( 'msh_cache_ttl', 3600 ) ); ?>" class="msh-input" 
-										onblur="msh.saveOption('msh_cache_ttl', this.value)" />
+									<input type="number" name="mysitehand_cache_ttl" value="<?php echo esc_attr( get_option( 'mysitehand_cache_ttl', 3600 ) ); ?>" class="msh-input" 
+										onblur="msh.saveOption('mysitehand_cache_ttl', this.value)" />
 									<button type="button" class="msh-btn msh-btn--ghost msh-btn--sm" onclick="msh.clearCache()"><?php esc_html_e( 'Flush', 'my-site-hand' ); ?></button>
 								</div>
 								<p class="msh-hint"><?php esc_html_e( 'Results TTL (seconds).', 'my-site-hand' ); ?></p>
@@ -153,17 +153,17 @@ $my_site_hand_all_modules = [
 							<div class="msh-form-group">
 								<span class="msh-setting-title"><?php esc_html_e( 'Retention', 'my-site-hand' ); ?></span>
 								<div style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
-									<input type="number" name="msh_log_retention_days" value="<?php echo esc_attr( get_option( 'msh_log_retention_days', 30 ) ); ?>" class="msh-input" style="width: 80px;" 
-										onblur="msh.saveOption('msh_log_retention_days', this.value)" />
+									<input type="number" name="mysitehand_log_retention_days" value="<?php echo esc_attr( get_option( 'mysitehand_log_retention_days', 30 ) ); ?>" class="msh-input" style="width: 80px;" 
+										onblur="msh.saveOption('mysitehand_log_retention_days', this.value)" />
 									<span style="font-size: 13px; color: var(--msh-text-muted);"><?php esc_html_e( 'days', 'my-site-hand' ); ?></span>
 								</div>
 							</div>
 							<div class="msh-form-group" style="margin-top: 20px;">
 								<span class="msh-setting-title"><?php esc_html_e( 'Detail Level', 'my-site-hand' ); ?></span>
-								<select name="msh_log_level" class="msh-select" style="margin-top: 8px;" onchange="msh.saveOption('msh_log_level', this.value)">
-									<option value="all" <?php selected( get_option( 'msh_log_level', 'all' ), 'all' ); ?>><?php esc_html_e( 'Detailed (All calls)', 'my-site-hand' ); ?></option>
-									<option value="errors-only" <?php selected( get_option( 'msh_log_level' ), 'errors-only' ); ?>><?php esc_html_e( 'Errors Only', 'my-site-hand' ); ?></option>
-									<option value="none" <?php selected( get_option( 'msh_log_level' ), 'none' ); ?>><?php esc_html_e( 'Off', 'my-site-hand' ); ?></option>
+								<select name="mysitehand_log_level" class="msh-select" style="margin-top: 8px;" onchange="msh.saveOption('mysitehand_log_level', this.value)">
+									<option value="all" <?php selected( get_option( 'mysitehand_log_level', 'all' ), 'all' ); ?>><?php esc_html_e( 'Detailed (All calls)', 'my-site-hand' ); ?></option>
+									<option value="errors-only" <?php selected( get_option( 'mysitehand_log_level' ), 'errors-only' ); ?>><?php esc_html_e( 'Errors Only', 'my-site-hand' ); ?></option>
+									<option value="none" <?php selected( get_option( 'mysitehand_log_level' ), 'none' ); ?>><?php esc_html_e( 'Off', 'my-site-hand' ); ?></option>
 								</select>
 							</div>
 						</div>
@@ -184,8 +184,8 @@ $my_site_hand_all_modules = [
 							<div style="display: flex; justify-content: space-between; align-items: center;">
 								<span class="msh-setting-title" style="margin-bottom: 0; font-size: 13px;"><?php esc_html_e( 'Auto-Cleanup', 'my-site-hand' ); ?></span>
 								<label class="msh-switch">
-									<input type="checkbox" name="msh_delete_data_on_uninstall" value="1" <?php checked( get_option( 'msh_delete_data_on_uninstall', false ) ); ?> 
-										onchange="msh.saveOption('msh_delete_data_on_uninstall', this.checked)" />
+									<input type="checkbox" name="mysitehand_delete_data_on_uninstall" value="1" <?php checked( get_option( 'mysitehand_delete_data_on_uninstall', false ) ); ?> 
+										onchange="msh.saveOption('mysitehand_delete_data_on_uninstall', this.checked)" />
 									<span class="msh-slider"></span>
 								</label>
 							</div>
@@ -201,6 +201,6 @@ $my_site_hand_all_modules = [
 			</form>
 		</div>
 
-		<?php require MSH_PATH . 'templates/partials/footer.php'; ?>
+		<?php require MYSITEHAND_PATH . 'templates/partials/footer.php'; ?>
 	</div>
 </div>

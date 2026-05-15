@@ -12,14 +12,14 @@ $my_site_hand_auth = $my_site_hand_plugin->get_auth_manager();
 $my_site_hand_registry = $my_site_hand_plugin->get_abilities_registry();
 $my_site_hand_tokens = $my_site_hand_auth->list_tokens(0);
 
-$my_site_hand_disabled_abs = (array) get_option('msh_disabled_abilities', []);
+$my_site_hand_disabled_abs = (array) get_option('mysitehand_disabled_abilities', []);
 $my_site_hand_all_abilities = $my_site_hand_registry->get_all();
 $my_site_hand_abilities = array_filter($my_site_hand_all_abilities, function ($my_site_hand_ability) use ($my_site_hand_disabled_abs) {
 	return !in_array($my_site_hand_ability['name'], $my_site_hand_disabled_abs, true);
 });
 ?>
 <div class="msh-wrap">
-	<?php require MSH_PATH . 'templates/partials/header.php'; ?>
+	<?php require MYSITEHAND_PATH . 'templates/partials/header.php'; ?>
 
 	<div class="msh-main-content">
 		<div class="msh-container">
@@ -145,7 +145,7 @@ $my_site_hand_abilities = array_filter($my_site_hand_all_abilities, function ($m
 			</div>
 		</div>
 
-		<?php require MSH_PATH . 'templates/partials/footer.php'; ?>
+		<?php require MYSITEHAND_PATH . 'templates/partials/footer.php'; ?>
 	</div>
 
 	<!-- Generate Token Modal -->

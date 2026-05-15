@@ -28,13 +28,13 @@ class Rate_Limiter {
 
 		$hourly_limit = (int) apply_filters(
 			'my_site_hand_hourly_limit',
-			(int) get_option( 'msh_hourly_limit', 200 ),
+			(int) get_option( 'mysitehand_hourly_limit', 200 ),
 			$token_id
 		);
 
 		$daily_limit = (int) apply_filters(
 			'my_site_hand_daily_limit',
-			(int) get_option( 'msh_daily_limit', 2000 ),
+			(int) get_option( 'mysitehand_daily_limit', 2000 ),
 			$token_id
 		);
 
@@ -100,7 +100,7 @@ class Rate_Limiter {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO {$wpdb->prefix}msh_rate_limits (token_id, window_key, request_count, window_start)
+				"INSERT INTO {$wpdb->prefix}mysitehand_rate_limits (token_id, window_key, request_count, window_start)
 				VALUES (%d, %s, 1, %s)
 				ON DUPLICATE KEY UPDATE request_count = request_count + 1",
 				$token_id,
@@ -113,7 +113,7 @@ class Rate_Limiter {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->query(
 			$wpdb->prepare(
-				"INSERT INTO {$wpdb->prefix}msh_rate_limits (token_id, window_key, request_count, window_start)
+				"INSERT INTO {$wpdb->prefix}mysitehand_rate_limits (token_id, window_key, request_count, window_start)
 				VALUES (%d, %s, 1, %s)
 				ON DUPLICATE KEY UPDATE request_count = request_count + 1",
 				$token_id,
@@ -134,13 +134,13 @@ class Rate_Limiter {
 
 		$hourly_limit = (int) apply_filters(
 			'my_site_hand_hourly_limit',
-			(int) get_option( 'msh_hourly_limit', 200 ),
+			(int) get_option( 'mysitehand_hourly_limit', 200 ),
 			$token_id
 		);
 
 		$daily_limit = (int) apply_filters(
 			'my_site_hand_daily_limit',
-			(int) get_option( 'msh_daily_limit', 2000 ),
+			(int) get_option( 'mysitehand_daily_limit', 2000 ),
 			$token_id
 		);
 
@@ -150,7 +150,7 @@ class Rate_Limiter {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$hourly_used = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT request_count FROM {$wpdb->prefix}msh_rate_limits WHERE token_id = %d AND window_key = %s",
+				"SELECT request_count FROM {$wpdb->prefix}mysitehand_rate_limits WHERE token_id = %d AND window_key = %s",
 				$token_id,
 				$hourly_key
 			)
@@ -159,7 +159,7 @@ class Rate_Limiter {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$daily_used = (int) $wpdb->get_var(
 			$wpdb->prepare(
-				"SELECT request_count FROM {$wpdb->prefix}msh_rate_limits WHERE token_id = %d AND window_key = %s",
+				"SELECT request_count FROM {$wpdb->prefix}mysitehand_rate_limits WHERE token_id = %d AND window_key = %s",
 				$token_id,
 				$daily_key
 			)
@@ -188,7 +188,7 @@ class Rate_Limiter {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		$wpdb->delete(
-			$wpdb->prefix . 'msh_rate_limits',
+			$wpdb->prefix . 'mysitehand_rate_limits',
 			[ 'token_id' => $token_id ],
 			[ '%d' ]
 		);
@@ -206,7 +206,7 @@ class Rate_Limiter {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		return (int) $wpdb->query(
-			"DELETE FROM {$wpdb->prefix}msh_rate_limits WHERE window_start < DATE_SUB(NOW(), INTERVAL 2 DAY)"
+			"DELETE FROM {$wpdb->prefix}mysitehand_rate_limits WHERE window_start < DATE_SUB(NOW(), INTERVAL 2 DAY)"
 		);
 	}
 }

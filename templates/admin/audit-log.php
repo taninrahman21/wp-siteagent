@@ -43,7 +43,7 @@ $my_site_hand_ability_names = array_keys( $my_site_hand_registry->get_all() );
 $my_site_hand_nonce       = wp_create_nonce( 'my_site_hand_admin' );
 ?>
 <div class="msh-wrap">
-	<?php require MSH_PATH . 'templates/partials/header.php'; ?>
+	<?php require MYSITEHAND_PATH . 'templates/partials/header.php'; ?>
 
 	<div class="msh-main-content">
 		<div class="msh-container">
@@ -240,6 +240,6 @@ $my_site_hand_nonce       = wp_create_nonce( 'my_site_hand_admin' );
 			<?php endif; ?>
 		</div>
 
-		<?php require MSH_PATH . 'templates/partials/footer.php'; ?>
+		<?php require MYSITEHAND_PATH . 'templates/partials/footer.php'; ?>
 	</div>
 </div>

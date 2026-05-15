@@ -255,7 +255,7 @@ class Plugin {
 			wp_send_json_error( [ 'message' => __( 'Missing module slug.', 'my-site-hand' ) ], 400 );
 		}
 
-		$enabled = (array) get_option( 'msh_enabled_modules', [] );
+		$enabled = (array) get_option( 'mysitehand_enabled_modules', [] );
 
 		if ( $is_enabled ) {
 			if ( ! in_array( $module_slug, $enabled, true ) ) {
@@ -265,7 +265,7 @@ class Plugin {
 			$enabled = array_diff( $enabled, [ $module_slug ] );
 		}
 
-		update_option( 'msh_enabled_modules', array_values( array_unique( $enabled ) ) );
+		update_option( 'mysitehand_enabled_modules', array_values( array_unique( $enabled ) ) );
 
 		wp_send_json_success( [ 'saved' => true, 'is_enabled' => $is_enabled ] );
 	}
@@ -289,7 +289,7 @@ class Plugin {
 			wp_send_json_error( [ 'message' => __( 'Missing ability name.', 'my-site-hand' ) ], 400 );
 		}
 
-		$disabled = (array) get_option( 'msh_disabled_abilities', [] );
+		$disabled = (array) get_option( 'mysitehand_disabled_abilities', [] );
 
 		if ( $is_enabled ) {
 			// Remove from disabled list.
@@ -301,7 +301,7 @@ class Plugin {
 			}
 		}
 
-		update_option( 'msh_disabled_abilities', array_values( array_unique( $disabled ) ) );
+		update_option( 'mysitehand_disabled_abilities', array_values( array_unique( $disabled ) ) );
 
 		wp_send_json_success( [ 'saved' => true, 'is_enabled' => $is_enabled ] );
 	}
@@ -347,7 +347,7 @@ class Plugin {
 				// Delete all plugin options.
 				global $wpdb;
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-				$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'msh_%'" );
+				$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE 'mysitehand_%'" );
 
 				// Clear logs and tokens.
 				$this->audit_logger->delete_all_logs();
@@ -371,14 +371,14 @@ class Plugin {
 		}
 
 		$allowed = [
-			'msh_enabled',
-			'msh_delete_data_on_uninstall',
-			'msh_display_name',
-			'msh_hourly_limit',
-			'msh_daily_limit',
-			'msh_cache_ttl',
-			'msh_log_retention_days',
-			'msh_log_level',
+			'mysitehand_enabled',
+			'mysitehand_delete_data_on_uninstall',
+			'mysitehand_display_name',
+			'mysitehand_hourly_limit',
+			'mysitehand_daily_limit',
+			'mysitehand_cache_ttl',
+			'mysitehand_log_retention_days',
+			'mysitehand_log_level',
 		];
 
 		$option_name = sanitize_key( wp_unslash( $_POST['option_name'] ?? '' ) );
@@ -391,13 +391,13 @@ class Plugin {
 		$option_value = wp_unslash( $_POST['option_value'] ?? '' );
 
 		// Sanitize based on option type.
-		if ( in_array( $option_name, [ 'msh_enabled', 'msh_delete_data_on_uninstall' ], true ) ) {
+		if ( in_array( $option_name, [ 'mysitehand_enabled', 'mysitehand_delete_data_on_uninstall' ], true ) ) {
 			$option_value = rest_sanitize_boolean( $option_value );
-		} elseif ( in_array( $option_name, [ 'msh_hourly_limit', 'msh_daily_limit', 'msh_cache_ttl', 'msh_log_retention_days' ], true ) ) {
+		} elseif ( in_array( $option_name, [ 'mysitehand_hourly_limit', 'mysitehand_daily_limit', 'mysitehand_cache_ttl', 'mysitehand_log_retention_days' ], true ) ) {
 			$option_value = absint( $option_value );
-		} elseif ( 'msh_display_name' === $option_name ) {
+		} elseif ( 'mysitehand_display_name' === $option_name ) {
 			$option_value = sanitize_text_field( $option_value );
-		} elseif ( 'msh_log_level' === $option_name ) {
+		} elseif ( 'mysitehand_log_level' === $option_name ) {
 			$option_value = in_array( $option_value, [ 'all', 'errors-only', 'none' ], true ) ? $option_value : 'all';
 		} else {
 			$option_value = sanitize_text_field( $option_value );
@@ -485,7 +485,7 @@ class Plugin {
 	 * @return array<string>
 	 */
 	public function get_enabled_modules(): array {
-		return (array) get_option( 'msh_enabled_modules', [ 'content', 'seo', 'diagnostics', 'media', 'users' ] );
+		return (array) get_option( 'mysitehand_enabled_modules', [ 'content', 'seo', 'diagnostics', 'media', 'users' ] );
 	}
 
 	/**

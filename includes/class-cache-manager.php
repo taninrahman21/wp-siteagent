@@ -22,7 +22,7 @@ class Cache_Manager {
 	 *
 	 * @var string
 	 */
-	private const KEY_PREFIX = 'MSH_';
+	private const KEY_PREFIX = 'MYSITEHAND_';
 
 	/**
 	 * In-request cache to avoid repeated get_transient() calls.
@@ -66,7 +66,7 @@ class Cache_Manager {
 		$full_key = self::KEY_PREFIX . $key;
 
 		if ( 0 === $ttl ) {
-			$ttl = (int) get_option( 'msh_cache_ttl', 3600 );
+			$ttl = (int) get_option( 'mysitehand_cache_ttl', 3600 );
 		}
 
 		$this->runtime_cache[ $full_key ] = $value;

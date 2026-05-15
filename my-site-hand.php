@@ -21,17 +21,17 @@ defined('ABSPATH') || exit;
 /**
  * My Site Hand (AI) Plugin Constants.
  */
-define('MSH_VERSION', '1.0.0');
-define('MSH_DB_VERSION', '1.0.0');
-define('MSH_MIN_PHP', '8.1');
-define('MSH_PATH', plugin_dir_path(__FILE__));
-define('MSH_BASENAME', plugin_basename(__FILE__));
-define('MSH_URL', plugin_dir_url(__FILE__));
+define('MYSITEHAND_VERSION', '1.0.0');
+define('MYSITEHAND_DB_VERSION', '1.0.0');
+define('MYSITEHAND_MIN_PHP', '8.1');
+define('MYSITEHAND_PATH', plugin_dir_path(__FILE__));
+define('MYSITEHAND_BASENAME', plugin_basename(__FILE__));
+define('MYSITEHAND_URL', plugin_dir_url(__FILE__));
 
 /**
  * Check minimum PHP version before doing anything else.
  */
-if (version_compare(PHP_VERSION, MSH_MIN_PHP, '<')) {
+if (version_compare(PHP_VERSION, MYSITEHAND_MIN_PHP, '<')) {
 	add_action(
 		'admin_notices',
 		function () {
@@ -41,7 +41,7 @@ if (version_compare(PHP_VERSION, MSH_MIN_PHP, '<')) {
 					sprintf(
 						/* translators: 1: required PHP version 2: current PHP version */
 						__('My Site Hand requires PHP %1$s or higher. You are running PHP %2$s. Please upgrade PHP.', 'my-site-hand'),
-						MSH_MIN_PHP,
+						MYSITEHAND_MIN_PHP,
 						PHP_VERSION
 					)
 				)
@@ -54,8 +54,8 @@ if (version_compare(PHP_VERSION, MSH_MIN_PHP, '<')) {
 /**
  * Require autoloader and vendor setup.
  */
-if (file_exists(MSH_PATH . 'vendor/autoload.php')) {
-	require_once MSH_PATH . 'vendor/autoload.php';
+if (file_exists(MYSITEHAND_PATH . 'vendor/autoload.php')) {
+	require_once MYSITEHAND_PATH . 'vendor/autoload.php';
 }
 
 /**
@@ -69,13 +69,13 @@ add_action(
 		$my_site_hand_plugin->boot();
 
 		// One-time fix to ensure all modules are enabled on first run.
-		if (!get_option('msh_modules_restored_v1')) {
+		if (!get_option('mysitehand_modules_restored_v1')) {
 			$my_site_hand_default_modules = ['content', 'seo', 'diagnostics', 'media', 'users'];
 			if (class_exists('WooCommerce')) {
 				$my_site_hand_default_modules[] = 'woocommerce';
 			}
-			update_option('msh_enabled_modules', $my_site_hand_default_modules);
-			update_option('msh_modules_restored_v1', 1);
+			update_option('mysitehand_enabled_modules', $my_site_hand_default_modules);
+			update_option('mysitehand_modules_restored_v1', 1);
 		}
 	}
 );

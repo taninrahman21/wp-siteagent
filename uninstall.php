@@ -11,7 +11,7 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 // Only delete data if the user opted in.
-$my_site_hand_delete = get_option( 'msh_delete_data_on_uninstall', false );
+$my_site_hand_delete = get_option( 'mysitehand_delete_data_on_uninstall', false );
 
 if ( ! $my_site_hand_delete ) {
 	return;
@@ -21,24 +21,24 @@ global $wpdb;
 
 // Drop custom tables.
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-$wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}msh_tokens`" );
+$wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}mysitehand_tokens`" );
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-$wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}msh_audit_log`" );
+$wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}mysitehand_audit_log`" );
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange
-$wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}msh_rate_limits`" );
+$wpdb->query( "DROP TABLE IF EXISTS `{$wpdb->prefix}mysitehand_rate_limits`" );
 
 // Delete all plugin options.
 $my_site_hand_options = [
-	'msh_version',
-	'msh_enabled',
-	'msh_display_name',
-	'msh_hourly_limit',
-	'msh_daily_limit',
-	'msh_enabled_modules',
-	'msh_cache_ttl',
-	'msh_log_retention_days',
-	'msh_log_level',
-	'msh_delete_data_on_uninstall',
+	'mysitehand_version',
+	'mysitehand_enabled',
+	'mysitehand_display_name',
+	'mysitehand_hourly_limit',
+	'mysitehand_daily_limit',
+	'mysitehand_enabled_modules',
+	'mysitehand_cache_ttl',
+	'mysitehand_log_retention_days',
+	'mysitehand_log_level',
+	'mysitehand_delete_data_on_uninstall',
 ];
 
 foreach ( $my_site_hand_options as $my_site_hand_option ) {
@@ -49,8 +49,8 @@ foreach ( $my_site_hand_options as $my_site_hand_option ) {
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 $wpdb->query(
 	"DELETE FROM `{$wpdb->options}`
-	WHERE `option_name` LIKE '_transient_MSH_%'
-	OR `option_name` LIKE '_transient_timeout_MSH_%'"
+	WHERE `option_name` LIKE '_transient_MYSITEHAND_%'
+	OR `option_name` LIKE '_transient_timeout_MYSITEHAND_%'"
 );
 
 // Remove cron schedule.

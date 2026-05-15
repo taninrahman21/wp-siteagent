@@ -35,7 +35,7 @@ $my_site_hand_nav_items = [
 ?>
 <header class="msh-header">
 	<div class="msh-header-brand">
-		<img src="<?php echo esc_url(MSH_URL . 'assets/logo.png'); ?>" alt="My Site Hand" class="msh-header-logo">
+		<img src="<?php echo esc_url(MYSITEHAND_URL . 'assets/logo.png'); ?>" alt="My Site Hand" class="msh-header-logo">
 		<div class="msh-header-title">
 			<h1>My Site Hand</h1>
 		</div>

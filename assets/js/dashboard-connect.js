@@ -6,13 +6,13 @@
  * and command generation.
  */
 
-/* global mshAdmin, msh */
+/* global mysitehandAdmin, msh */
 
 'use strict';
 
 (function () {
 
-	const cfg = window.mshAdmin || {};
+	const cfg = window.mysitehandAdmin || {};
 	const i18n = cfg.i18n || {};
 
 	// Auto-detect OS.

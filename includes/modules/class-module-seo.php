@@ -51,11 +51,11 @@ class Module_Seo extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_analyze-seo
+	// Ability: mysitehand_analyze-seo
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_analyze-seo ability.
+	 * Register the mysitehand_analyze-seo ability.
 	 *
 	 * @return void
 	 */
@@ -83,7 +83,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_analyze-seo.
+	 * Execute mysitehand_analyze-seo.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -93,7 +93,7 @@ class Module_Seo extends Module_Base {
 		$keyword = sanitize_text_field( $input['keyword'] ?? '' );
 
 		$cache_key = "seo_analysis_{$post_id}_" . md5( $keyword );
-		$cached    = get_transient( 'MSH_' . $cache_key );
+		$cached    = get_transient( 'MYSITEHAND_' . $cache_key );
 		if ( false !== $cached ) {
 			return $cached;
 		}
@@ -266,17 +266,17 @@ class Module_Seo extends Module_Base {
 			'yoast_score'                 => $yoast_score,
 		];
 
-		set_transient( 'MSH_' . $cache_key, $analysis, HOUR_IN_SECONDS );
+		set_transient( 'MYSITEHAND_' . $cache_key, $analysis, HOUR_IN_SECONDS );
 
 		return $analysis;
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_set-meta-description
+	// Ability: mysitehand_set-meta-description
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_set-meta-description ability.
+	 * Register the mysitehand_set-meta-description ability.
 	 *
 	 * @return void
 	 */
@@ -311,7 +311,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_set-meta-description.
+	 * Execute mysitehand_set-meta-description.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -334,11 +334,11 @@ class Module_Seo extends Module_Base {
 			update_post_meta( $post_id, 'rank_math_description', $description );
 			$plugin_used = 'rankmath';
 		} else {
-			update_post_meta( $post_id, '_msh_meta_description', $description );
+			update_post_meta( $post_id, '_mysitehand_meta_description', $description );
 		}
 
 		// Clear SEO analysis cache.
-		delete_transient( 'msh_seo_analysis_' . $post_id . '_' );
+		delete_transient( 'mysitehand_seo_analysis_' . $post_id . '_' );
 
 		return [
 			'updated'          => true,
@@ -349,11 +349,11 @@ class Module_Seo extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_set-focus-keyword
+	// Ability: mysitehand_set-focus-keyword
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_set-focus-keyword ability.
+	 * Register the mysitehand_set-focus-keyword ability.
 	 *
 	 * @return void
 	 */
@@ -388,7 +388,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_set-focus-keyword.
+	 * Execute mysitehand_set-focus-keyword.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -411,7 +411,7 @@ class Module_Seo extends Module_Base {
 			update_post_meta( $post_id, 'rank_math_focus_keyword', $keyword );
 			$plugin_used = 'rankmath';
 		} else {
-			update_post_meta( $post_id, '_msh_focus_keyword', $keyword );
+			update_post_meta( $post_id, '_mysitehand_focus_keyword', $keyword );
 		}
 
 		return [
@@ -422,11 +422,11 @@ class Module_Seo extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_bulk-seo-audit
+	// Ability: mysitehand_bulk-seo-audit
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_bulk-seo-audit ability.
+	 * Register the mysitehand_bulk-seo-audit ability.
 	 *
 	 * @return void
 	 */
@@ -454,7 +454,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_bulk-seo-audit.
+	 * Execute mysitehand_bulk-seo-audit.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -510,11 +510,11 @@ class Module_Seo extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_get-sitemap-urls
+	// Ability: mysitehand_get-sitemap-urls
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_get-sitemap-urls ability.
+	 * Register the mysitehand_get-sitemap-urls ability.
 	 *
 	 * @return void
 	 */
@@ -534,7 +534,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_get-sitemap-urls.
+	 * Execute mysitehand_get-sitemap-urls.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>
@@ -564,11 +564,11 @@ class Module_Seo extends Module_Base {
 	}
 
 	// -------------------------------------------------------------------------
-	// Ability: msh_check-broken-links
+	// Ability: mysitehand_check-broken-links
 	// -------------------------------------------------------------------------
 
 	/**
-	 * Register the msh_check-broken-links ability.
+	 * Register the mysitehand_check-broken-links ability.
 	 *
 	 * @return void
 	 */
@@ -595,7 +595,7 @@ class Module_Seo extends Module_Base {
 	}
 
 	/**
-	 * Execute msh_check-broken-links.
+	 * Execute mysitehand_check-broken-links.
 	 *
 	 * @param array<string, mixed> $input Validated input.
 	 * @return array<string, mixed>|\WP_Error
@@ -679,7 +679,7 @@ class Module_Seo extends Module_Base {
 		if ( 'rankmath' === $seo_plugin ) {
 			return (string) get_post_meta( $post_id, 'rank_math_description', true );
 		}
-		return (string) get_post_meta( $post_id, '_msh_meta_description', true );
+		return (string) get_post_meta( $post_id, '_mysitehand_meta_description', true );
 	}
 
 	/**

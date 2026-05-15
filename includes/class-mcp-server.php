@@ -79,6 +79,11 @@ class MCP_Server {
 	 * @return void
 	 */
 	public function register_routes(): void {
+		// This endpoint is intentionally public (permission_callback: __return_true)
+		// because authentication is handled at the application layer via MCP bearer tokens,
+		// validated inside handle_post() and handle_get() through the AuthManager class.
+		// WordPress session/cookie authentication is not applicable for machine-to-machine
+		// MCP client connections. Unauthenticated requests are rejected inside the handlers.
 		register_rest_route(
 			'my-site-hand/v1',
 			'/mcp/streamable',
@@ -375,8 +380,8 @@ class MCP_Server {
 	 */
 	private function get_server_info(): array {
 		$info = [
-			'name'    => get_option( 'msh_display_name', 'WP my-site-hand' ),
-			'version' => MSH_VERSION,
+			'name'    => get_option( 'mysitehand_display_name', 'WP my-site-hand' ),
+			'version' => MYSITEHAND_VERSION,
 		];
 
 		return apply_filters( 'my_site_hand_server_info', $info );
@@ -449,7 +454,7 @@ class MCP_Server {
 	 * Convert an internal ability name to an MCP-safe tool name.
 	 *
 	 * MCP spec requires tool names to match ^[a-zA-Z0-9_-]{1,64}$.
-	 * Internal names like "my-site-hand/list-posts" become "msh_list-posts".
+	 * Internal names like "my-site-hand/list-posts" become "mysitehand_list-posts".
 	 *
 	 * @param string $name Internal ability name.
 	 * @return string MCP-compliant tool name.
@@ -462,7 +467,7 @@ class MCP_Server {
 	 * Convert an MCP tool name back to the internal ability name.
 	 *
 	 * Reverses to_mcp_tool_name() by replacing the first underscore with a slash.
-	 * e.g. "msh_list-posts" becomes "my-site-hand/list-posts".
+	 * e.g. "mysitehand_list-posts" becomes "my-site-hand/list-posts".
 	 *
 	 * @param string $name MCP tool name from client request.
 	 * @return string Internal ability name.

@@ -5,13 +5,13 @@
  * token reveal, copy, confirmation checkbox, and token revocation.
  */
 
-/* global mshAdmin, msh */
+/* global mysitehandAdmin, msh */
 
 'use strict';
 
 (function () {
 
-	const cfg = window.mshAdmin || {};
+	const cfg = window.mysitehandAdmin || {};
 	const restUrl = cfg.restUrl || '';
 	const restNonce = cfg.restNonce || '';
 	const i18n = cfg.i18n || {};

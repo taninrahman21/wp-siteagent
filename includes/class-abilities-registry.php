@@ -188,7 +188,7 @@ class Abilities_Registry {
 	 * @return array<string, array<string, mixed>>
 	 */
 	public function get_mcp_public(): array {
-		$disabled = (array) get_option( 'msh_disabled_abilities', [] );
+		$disabled = (array) get_option( 'mysitehand_disabled_abilities', [] );
 		
 		$public = array_filter(
 			$this->abilities,

@@ -222,12 +222,12 @@ class Rest_Controller {
 	 * @return \WP_REST_Response
 	 */
 	public function get_status( \WP_REST_Request $request ): \WP_REST_Response {
-		$enabled = (bool) get_option( 'msh_enabled', true );
+		$enabled = (bool) get_option( 'mysitehand_enabled', true );
 
 		return new \WP_REST_Response(
 			[
 				'status'       => $enabled ? 'active' : 'disabled',
-				'version'      => MSH_VERSION,
+				'version'      => MYSITEHAND_VERSION,
 				'mcp_endpoint' => rest_url( 'my-site-hand/v1/mcp/streamable' ),
 				'timestamp'    => current_time( 'c' ),
 			],
