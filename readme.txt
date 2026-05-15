@@ -19,7 +19,7 @@ What makes My Site Hand special is the **Zero-Config Setup**. Instead of manuall
 ### 🚀 Key Features:
 
 *   **One-Click Automated Setup** – No manual JSON editing. Copy a single command to connect Claude Desktop automatically.
-*   **45+ Built-in Abilities** – Comprehensive tools for Content, SEO, WooCommerce, Media, and Diagnostics.
+*   **45 Built-in Abilities** – Comprehensive tools for Content, SEO, WooCommerce, Media, and Diagnostics.
 *   **Cross-Platform Support** – Dedicated automated setup steps for **Windows, macOS, and Linux**.
 *   **Native MCP Support** – Full JSON-RPC 2.0 server implementation compatible with all MCP-compliant clients.
 *   **Enterprise-Grade Security** – All tokens are SHA-256 hashed. Granular permissions ensure AI agents only access what you allow.
@@ -68,7 +68,7 @@ Absolutely. The Dashboard provides the MCP Server URL which you can paste direct
 = 1.0.0 =
 *   Official Initial Release.
 *   Automated setup for Claude Desktop using `mcp-remote`.
-*   45+ abilities across Content, SEO, and WooCommerce modules.
+*   45 abilities across Content, SEO, and WooCommerce modules.
 *   Secure hashed tokens and real-time audit logging.
 
 == External Services ==
